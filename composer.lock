@@ -4,8 +4,78 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "499ff201ed8537cc67e26201ae6954a0",
+    "content-hash": "623d6b6b9bccbd3bbe9cf89ad9c09601",
     "packages": [
+        {
+            "name": "arafat69/laravel-repository",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/arafat-dev/laravel-repository.git",
+                "reference": "f531c8e49c2e1abdea3ce304854281abd0db5f74"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/arafat-dev/laravel-repository/zipball/f531c8e49c2e1abdea3ce304854281abd0db5f74",
+                "reference": "f531c8e49c2e1abdea3ce304854281abd0db5f74",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": ">=7.0",
+                "illuminate/support": ">=7.0",
+                "php": ">=7.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Repository": "Arafat\\LaravelRepository\\RepositoryFacade"
+                    },
+                    "providers": [
+                        "Arafat\\LaravelRepository\\RepositoryServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Arafat\\LaravelRepository\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Arafat Ali",
+                    "email": "arafatali.dev@gmail.com"
+                }
+            ],
+            "description": "Laravel Repository Pattern package with built-in Artisan commands. Easily create repositories, follow clean architecture, and simplify database interactions.",
+            "homepage": "https://github.com/arafat-dev/laravel-repository",
+            "keywords": [
+                "Laravel Design Pattern",
+                "Laravel Repository",
+                "artisan command",
+                "clean architecture",
+                "design patterns",
+                "laravel",
+                "laravel artisan",
+                "laravel code generator",
+                "laravel package",
+                "laravel repository generator",
+                "laravel repository pattern",
+                "php repository pattern",
+                "repository generator",
+                "repository pattern",
+                "service repository pattern"
+            ],
+            "support": {
+                "issues": "https://github.com/arafat-dev/laravel-repository/issues",
+                "source": "https://github.com/arafat-dev/laravel-repository/tree/v2.0.0"
+            },
+            "time": "2025-09-22T19:54:33+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.14.1",
