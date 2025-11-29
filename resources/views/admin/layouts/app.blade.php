@@ -56,11 +56,11 @@
         <div class="theme-wrapper">
           <h6 class="text-muted mb-2">Light Theme:</h6>
           <a class="theme-item active" href="../demo_1/dashboard-one.html">
-            <img src="../assets/images/screenshots/light.jpg" alt="light theme">
+            <img src="{{ asset('admin/assets/images/screenshots/light.jpg') }}" alt="light theme">
           </a>
           <h6 class="text-muted mb-2">Dark Theme:</h6>
           <a class="theme-item" href="../demo_2/dashboard-one.html">
-            <img src="../assets/images/screenshots/dark.jpg" alt="light theme">
+            <img src="{{ asset('admin/assets/images/screenshots/dark.jpg') }}" alt="light theme">
           </a>
         </div>
       </div>
@@ -72,8 +72,9 @@
       <!-- partial:partials/_navbar.html -->
 
       <!-- partial -->
-
-      @yield('content')
+      <div class="page-content">
+        @yield('content')
+      </div>
 
       <!-- partial:partials/_footer.html -->
       @include('admin.layouts.partials.footer')

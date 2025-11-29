@@ -8,3 +8,6 @@ Route::controller(AdminController::class)->group(
         Route::get("/", "index")->name("admin.root");
     }
 );
+
+
+@include("admin.php");
