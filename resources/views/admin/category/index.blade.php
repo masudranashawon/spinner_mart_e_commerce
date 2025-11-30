@@ -9,7 +9,7 @@
           <h5 class="card-title">Add New Category</h5>
         </div>
         <div class="card-footer">
-          <form action="" method="post" enctype="multipart/form-data">
+          <form action="{{ route('category.store') }}" method="post" enctype="multipart/form-data">
             @csrf
 
             <div class="mb-4">
@@ -36,7 +36,7 @@
                 </div>
                 <div class="col-xl-6 mt-xl-0 mt-3">
                   <div class="w-50 h-100 d-flex align-items-center overflow-hidden">
-                    <img id="preview" src="" class="object-fit-contain">
+                    <img id="preview" src="" class="object-fit-scale">
                   </div>
                 </div>
               </div>
@@ -45,7 +45,7 @@
               @enderror
             </div>
 
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="d-flex justify-content-end"><button type="submit" class="btn btn-primary">Submit</button></div>
           </form>
         </div>
       </div>
@@ -63,7 +63,8 @@
             .addClass("border")
             .css({
               width: "6rem",
-              height: "6rem"
+              height: "6rem",
+              objectFit: "contain"
             });
         }
       });

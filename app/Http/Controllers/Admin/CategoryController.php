@@ -11,4 +11,9 @@ class CategoryController extends Controller
     {
         return view("admin.category.index");
     }
+
+    public function store(Request $request)
+    {
+        dd($request->all());
+    }
 }
