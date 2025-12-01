@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
+use App\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -12,8 +14,14 @@ class CategoryController extends Controller
         return view("admin.category.index");
     }
 
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        dd($request->all());
+        $category = (new CategoryRepository())->storeByRequest($request);
+
+        if ($category) {
+            return to_route("category.index")->withSuccess("Category created successfully");
+        } else {
+            return to_route("category.index")->withError("Category not created");
+        }
     }
 }
