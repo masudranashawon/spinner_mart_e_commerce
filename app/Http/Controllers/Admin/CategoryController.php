@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
+use App\Models\Category;
 use App\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
 
@@ -11,7 +12,9 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        return view("admin.category.index");
+        $categories = Category::latest("id")->paginate(4);
+
+        return view("admin.category.index", compact("categories"));
     }
 
     public function store(CategoryRequest $request)

@@ -2,7 +2,51 @@
 
 @section('content')
   <div class="row">
-    <div class="col-md-7">hi</div>
+    {{-- All Categories --}}
+    <div class="col-md-7">
+      <div class="card">
+        <div class="card-header">
+          <h5>All Categories</h5>
+        </div>
+        <div class="card-footer">
+          <table class="table-bordered table-srtiped data-table table">
+            <thead>
+              <tr>
+                <th>SL</th>
+                <th>Name</th>
+                <th>Slug</th>
+                <th>Image</th>
+                <th class="text-center">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @forelse($categories ?? [] as $key => $category)
+                <tr>
+                  <td>{{ $categories?->firstItem() + $key }}</td>
+                  <td>{{ $category?->name }}</td>
+                  <td>{{ $category?->slug }}</td>
+                  <td class="text-center"><img src="{{ $category?->media_id }}" alt="{{ $category?->name }}"></td>
+
+                  <td class="text-center">
+                    <button class="btn btn-primary btn-sm">Edit</button>
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                  </td>
+                </tr>
+              @empty
+                <tr class="text-center">
+                  <td colspan="5">No Category Found</td>
+                </tr>
+              @endforelse
+            </tbody>
+          </table>
+
+          {{ $categories->links() }}
+        </div>
+      </div>
+    </div>
+
+    {{-- Add new Category --}}
     <div class="col-md-5">
       <div class="card">
         <div class="card-header">

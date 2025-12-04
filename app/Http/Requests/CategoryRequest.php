@@ -27,4 +27,12 @@ class CategoryRequest extends FormRequest
             "image" => "nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:2048",
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            "image.max" => "The image size must not exceed 2MB.",
+            "image.mimes" => "Only jpeg, png, jpg, gif, webp, svg files are allowed.",
+        ];
+    }
 }
