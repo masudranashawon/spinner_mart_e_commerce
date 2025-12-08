@@ -26,11 +26,13 @@
                   <td>{{ $categories?->firstItem() + $key }}</td>
                   <td>{{ $category?->name }}</td>
                   <td>{{ $category?->slug }}</td>
-                  <td class="text-center"><img src="{{ $category?->media_id }}" alt="{{ $category?->name }}"></td>
+                  <td class="text-center"><img src="{{ $category?->thumbnail }}" alt="{{ $category?->name }}"
+                      class="object-fit-cover" style="object-fit:cover;"></td>
 
                   <td class="text-center">
-                    <button class="btn btn-primary btn-sm">Edit</button>
-                    <button class="btn btn-danger btn-sm">Delete</button>
+                    <a href="{{ route('category.edit', $category?->id) }}"><button
+                        class="btn btn-primary btn-icon btn-md"><i data-feather="edit"></i></button></a>
+                    <button class="btn btn-danger btn-icon btn-md"><i data-feather="trash-2"></i></button>
                   </td>
                 </tr>
               @empty

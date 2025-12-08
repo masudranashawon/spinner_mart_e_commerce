@@ -62,7 +62,7 @@
         </a>
         <div class="collapse" id="categories">
           <ul class="nav sub-menu">
-            <li class="nav-item">
+            <li class="nav-item {{ request()->routeIs('category.*') ? 'active' : '' }}">
               <a href="{{ route('category.index') }}" class="nav-link">Category</a>
             </li>
           </ul>
@@ -105,7 +105,7 @@
               <a href="pages/forms/advanced-elements.html" class="nav-link">Advanced Elements</a>
             </li>
             <li class="nav-item">
-              <a href="pages/forms/editors.html" class="nav-link">Editors</a>
+              <a href="" class="nav-link">Editors</a>
             </li>
             <li class="nav-item">
               <a href="pages/forms/wizard.html" class="nav-link">Wizard</a>

@@ -17,6 +17,11 @@ class CategoryController extends Controller
         return view("admin.category.index", compact("categories"));
     }
 
+    public function edit(Category $category)
+    {
+        return view("admin.category.edit", compact("category"));
+    }
+
     public function store(CategoryRequest $request)
     {
         $category = (new CategoryRepository())->storeByRequest($request);
