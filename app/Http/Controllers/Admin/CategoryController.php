@@ -17,11 +17,6 @@ class CategoryController extends Controller
         return view("admin.category.index", compact("categories"));
     }
 
-    public function edit(Category $category)
-    {
-        return view("admin.category.edit", compact("category"));
-    }
-
     public function store(CategoryRequest $request)
     {
         $category = (new CategoryRepository())->storeByRequest($request);
@@ -30,6 +25,23 @@ class CategoryController extends Controller
             return to_route("category.index")->withSuccess("Category created successfully");
         } else {
             return to_route("category.index")->withError("Category not created");
+        }
+    }
+
+    public function edit(Category $category)
+    {
+        return view("admin.category.edit", compact("category"));
+    }
+
+    public function update(CategoryRequest $request, Category $category)
+    {
+        $category =  CategoryRepository::updateByRequest($request, $category);
+
+
+        if ($category) {
+            return to_route("category.index")->withSuccess("Category updated successfully");
+        } else {
+            return to_route("category.index")->withError("Category not updated");
         }
     }
 }

@@ -21,9 +21,13 @@ class CategoryRequest extends FormRequest
      */
     public function rules(): array
     {
+        $name = $this->method() === "PUT" ? "required|string|max:255" : "required|string|max:255|unique:categories,name";
+
+        $slug = $this->method() === "PUT" ? "required|string|max:255" : "nullable|string|max:255";
+
         return [
-            "name" => "required|string|max:255|unique:categories,name",
-            "slug" => "nullable|string|max:255",
+            "name" =>  $name,
+            "slug" =>  $slug,
             "image" => "nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:2048",
         ];
     }
