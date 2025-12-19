@@ -9,7 +9,7 @@
           <h5>All Sub Categories</h5>
         </div>
         <div class="card-footer">
-          {{-- <table class="table-bordered table-srtiped data-table table">
+          <table class="table-bordered table-srtiped data-table table">
             <thead>
               <tr>
                 <th>SL</th>
@@ -22,17 +22,18 @@
             </thead>
 
             <tbody>
-              @forelse($categories ?? [] as $key => $category)
+              @forelse($subCategories ?? [] as $key => $subCategory)
                 <tr>
-                  <td>{{ $categories?->firstItem() + $key }}</td>
-                  <td>{{ $category?->name }}</td>
-                  <td>{{ $category?->slug }}</td>
-                  <td class="text-center"><img src="{{ $category?->thumbnail }}" alt="{{ $category?->name }}"
+                  <td>{{ $subCategories?->firstItem() + $key }}</td>
+                  <td>{{ $subCategory?->name }}</td>
+                  <td>{{ $subCategory?->slug }}</td>
+                  <td>{{ $subCategory?->category?->name }}</td>
+                  <td class="text-center"><img src="{{ $subCategory?->thumbnail }}" alt="{{ $subCategory?->name }}"
                       class="object-fit-cover" style="object-fit:cover;"></td>
 
                   <td class="text-center">
-                    <a href="{{ route('category.edit', $category?->id) }}"><button
-                        class="btn btn-primary btn-icon btn-md"><i data-feather="edit"></i></button></a>
+                    {{-- <a href="{{ route('subCategory.edit', $subCategory?->id) }}"><button
+                        class="btn btn-primary btn-icon btn-md"><i data-feather="edit"></i></button></a> --}}
                     <button class="btn btn-danger btn-icon btn-md"><i data-feather="trash-2"></i></button>
                   </td>
                 </tr>
@@ -44,7 +45,7 @@
             </tbody>
           </table>
 
-          {{ $categories->links() }} --}}
+          {{ $subCategories->links() }}
         </div>
       </div>
     </div>

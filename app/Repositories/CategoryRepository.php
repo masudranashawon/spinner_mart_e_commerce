@@ -25,7 +25,7 @@ class CategoryRepository extends Repository
         if ($request->hasFile("image")) {
             $categoryImage = null;
 
-            $categoryImage = (new MediaRepository())->storeByRequest($request->file("image"), "category");
+            $categoryImage = MediaRepository::storeByRequest($request->file("image"), "category");
         }
 
         return self::create([

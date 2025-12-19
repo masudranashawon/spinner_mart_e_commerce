@@ -19,7 +19,7 @@ class CategoryController extends Controller
 
     public function store(CategoryRequest $request)
     {
-        $category = (new CategoryRepository())->storeByRequest($request);
+        $category = CategoryRepository::storeByRequest($request);
 
         if ($category) {
             return to_route("category.index")->withSuccess("Category created successfully");
