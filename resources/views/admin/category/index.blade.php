@@ -9,7 +9,7 @@
           <h5>All Categories</h5>
         </div>
         <div class="card-footer">
-          <table class="table-bordered table-srtiped data-table table">
+          <table class="data-table table-hover table">
             <thead>
               <tr>
                 <th>SL</th>
@@ -23,7 +23,7 @@
             <tbody>
               @forelse($categories ?? [] as $key => $category)
                 <tr>
-                  <td>{{ $categories?->firstItem() + $key }}</td>
+                  <td>{{ $key + 1 }}</td>
                   <td>{{ $category?->name }}</td>
                   <td>{{ $category?->slug }}</td>
                   <td class="text-center"><img src="{{ $category?->thumbnail }}" alt="{{ $category?->name }}"
@@ -42,8 +42,6 @@
               @endforelse
             </tbody>
           </table>
-
-          {{ $categories->links() }}
         </div>
       </div>
     </div>

@@ -1,67 +1,21 @@
 @extends('admin.layouts.app')
-
 @section('content')
   <div class="row">
-    {{-- All Sub Categories --}}
-    <div class="col-md-7">
+
+    <div class="col-md-6 mx-auto">
       <div class="card">
         <div class="card-header">
-          <h5>All Sub Categories</h5>
+          <h5>Edit Sub Category</h5>
         </div>
         <div class="card-footer">
-          <table class="data-table table-hover table">
-            <thead>
-              <tr>
-                <th>SL</th>
-                <th>Name</th>
-                <th>Slug</th>
-                <th>Category</th>
-                <th>Image</th>
-                <th class="text-center">Action</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              @forelse($subCategories ?? [] as $key => $subCategory)
-                <tr>
-                  <td>{{ $key + 1 }}</td>
-                  <td>{{ $subCategory?->name }}</td>
-                  <td>{{ $subCategory?->slug }}</td>
-                  <td>{{ $subCategory?->category?->name }}</td>
-                  <td class="text-center"><img src="{{ $subCategory?->thumbnail }}" alt="{{ $subCategory?->name }}"
-                      class="object-fit-cover" style="object-fit:cover;"></td>
-
-                  <td class="text-center">
-                    <a href="{{ route('subCategory.edit', $subCategory?->id) }}"><button
-                        class="btn btn-primary btn-icon btn-md"><i data-feather="edit"></i></button></a>
-                    <button class="btn btn-danger btn-icon btn-md"><i data-feather="trash-2"></i></button>
-                  </td>
-                </tr>
-              @empty
-                <tr class="text-center">
-                  <td colspan="5">No Sub Category Found</td>
-                </tr>
-              @endforelse
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    {{-- Add New Sub Category --}}
-    <div class="col-md-5">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="card-title">Add New Sub Category</h5>
-        </div>
-        <div class="card-footer">
-          <form action="{{ route('subCategory.store') }}" method="post" enctype="multipart/form-data">
+          <form action="{{ route('subCategory.update', $subCategory->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
+            @method('PUT')
 
             <div class="mb-4">
               <label for="sub-category-name" class="form-label">Name</label>
               <input type="text" name="name" id="sub-category-name" class="form-control"
-                placeholder="Sub Category Name">
+                placeholder="Sub Category Name" value="{{ $subCategory->name }}">
               @error('name')
                 <span class="text-danger">{{ $message }}</span>
               @enderror
@@ -70,7 +24,7 @@
             <div class="mb-4">
               <label for="sub-category-slug" class="form-label">Slug</label>
               <input type="text" name="slug" id="sub-category-slug" class="form-control"
-                placeholder="Sub Category Slug">
+                placeholder="Sub Category Slug" value="{{ $subCategory->slug }}">
               @error('slug')
                 <span class="text-danger">{{ $message }}</span>
               @enderror
@@ -82,7 +36,7 @@
                 <option value="" selected disabled>Select a Category</option>
 
                 @foreach ($categories ?? [] as $category)
-                  <option @selected(old('category_id') == $category?->id) value="{{ $category?->id }}">{{ $category?->name }}</option>
+                  <option @selected(old('category_id', $subCategory->category_id) == $category?->id) value="{{ $category?->id }}">{{ $category?->name }}</option>
                 @endforeach
 
               </select>
@@ -99,7 +53,8 @@
                 </div>
                 <div class="col-xl-6 mt-xl-0 mt-3">
                   <div class="w-50 h-100 d-flex align-items-center overflow-hidden">
-                    <img id="preview" src="" class="object-fit-scale">
+                    <img id="preview" src="{{ $subCategory->thumbnail }}" class="object-fit-scale"
+                      style="object-fit:cover; width:3.5rem; height:3.5rem;">
                   </div>
                 </div>
               </div>
@@ -122,13 +77,7 @@
       $('#sub-category-image').on('change', function(e) {
         let file = e.target.files[0];
         if (file) {
-          $('#preview').attr('src', URL.createObjectURL(file))
-            .addClass("border")
-            .css({
-              width: "6rem",
-              height: "6rem",
-              objectFit: "contain"
-            });
+          $('#preview').attr('src', URL.createObjectURL(file));
         }
       });
     });

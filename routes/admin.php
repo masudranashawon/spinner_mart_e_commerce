@@ -17,5 +17,7 @@ Route::prefix("admin")->group(function () {
   Route::controller(SubCategoryController::class)->group(function () {
     Route::get("/sub-categories", "index")->name("subCategory.index");
     Route::post("/sub-category/store", "store")->name("subCategory.store");
+    Route::get("/sub-category/{subCategory}/edit", "edit")->name("subCategory.edit");
+    Route::put("/sub-category/{subCategory}/update", "update")->name("subCategory.update");
   });
 });

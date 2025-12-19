@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Models\Media;
 use App\Models\SubCategory;
 use Arafat\LaravelRepository\Repository;
 use Illuminate\Http\Request;
@@ -27,5 +26,17 @@ class SubCategoryRepository extends Repository
             "category_id" => $request->category_id,
             "media_id" =>  $media?->id ?? null,
         ]);
+    }
+
+    public static function updateByRequest(Request $request, SubCategory $subCategory, $media): SubCategory
+    {
+        $subCategory->update([
+            "name" => $request->name,
+            "slug" => $request->slug,
+            "category_id" => $request->category_id,
+            "media_id" =>  $media?->id ?? null,
+        ]);
+
+        return $subCategory;
     }
 }
