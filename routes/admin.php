@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use Illuminate\Support\Facades\Route;
@@ -19,5 +20,13 @@ Route::prefix("admin")->group(function () {
     Route::post("/sub-category/store", "store")->name("subCategory.store");
     Route::get("/sub-category/{subCategory}/edit", "edit")->name("subCategory.edit");
     Route::put("/sub-category/{subCategory}/update", "update")->name("subCategory.update");
+  });
+
+  // brand routes
+  Route::controller(BrandController::class)->group(function () {
+    Route::get("/brands", "index")->name("brand.index");
+    Route::post("/brand/store", "store")->name("brand.store");
+    Route::get("/brand/{brand}/edit", "edit")->name("brand.edit");
+    Route::put("/brand/{brand}/update", "update")->name("brand.update");
   });
 });

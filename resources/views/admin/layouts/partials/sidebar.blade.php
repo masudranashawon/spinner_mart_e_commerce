@@ -68,6 +68,9 @@
             <li class="nav-item {{ request()->routeIs('subCategory.*') ? 'active' : '' }}">
               <a href="{{ route('subCategory.index') }}" class="nav-link">Sub Category</a>
             </li>
+            <li class="nav-item {{ request()->routeIs('brand.*') ? 'active' : '' }}">
+              <a href="{{ route('brand.index') }}" class="nav-link">Brand</a>
+            </li>
           </ul>
         </div>
       </li>
