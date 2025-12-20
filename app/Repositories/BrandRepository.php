@@ -26,4 +26,15 @@ class BrandRepository extends Repository
             "media_id" => $media?->id ?? null,
         ]);
     }
+
+    public static function updateByRequest(Request $request, Brand $brand, $media): Brand
+    {
+        $brand->update([
+            "name" => $request->name,
+            "slug" => $request->slug,
+            "media_id" =>  $media?->id ?? null,
+        ]);
+
+        return $brand;
+    }
 }
