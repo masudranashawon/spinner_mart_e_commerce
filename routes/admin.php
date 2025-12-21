@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,5 +29,13 @@ Route::prefix("admin")->group(function () {
     Route::post("/brand/store", "store")->name("brand.store");
     Route::get("/brand/{brand}/edit", "edit")->name("brand.edit");
     Route::put("/brand/{brand}/update", "update")->name("brand.update");
+  });
+
+  // color routes
+  Route::controller(ColorController::class)->group(function () {
+    Route::get("/colors", "index")->name("color.index");
+    Route::post("/color/store", "store")->name("color.store");
+    Route::put("/color/{color}/update", "update")->name("color.update");
+    Route::delete("/color/{color}/destroy", "destroy")->name("color.destroy");
   });
 });

@@ -71,6 +71,9 @@
             <li class="nav-item {{ request()->routeIs('brand.*') ? 'active' : '' }}">
               <a href="{{ route('brand.index') }}" class="nav-link">Brand</a>
             </li>
+            <li class="nav-item {{ request()->routeIs('color.*') ? 'active' : '' }}">
+              <a href="{{ route('color.index') }}" class="nav-link">Color</a>
+            </li>
           </ul>
         </div>
       </li>
