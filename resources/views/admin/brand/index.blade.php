@@ -32,7 +32,11 @@
                   <td class="text-center">
                     <a href="{{ route('brand.edit', $brand?->id) }}"><button class="btn btn-primary btn-icon btn-md"><i
                           data-feather="edit"></i></button></a>
-                    <button class="btn btn-danger btn-icon btn-md"><i data-feather="trash-2"></i></button>
+
+                    <a href="{{ route('brand.destroy', $brand?->id) }}"
+                      class="delete-confirm btn btn-danger btn-icon btn-md">
+                      <i data-feather="trash-2"></i>
+                    </a>
                   </td>
                 </tr>
               @empty

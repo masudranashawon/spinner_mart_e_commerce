@@ -29,6 +29,7 @@ Route::prefix("admin")->group(function () {
     Route::post("/brand/store", "store")->name("brand.store");
     Route::get("/brand/{brand}/edit", "edit")->name("brand.edit");
     Route::put("/brand/{brand}/update", "update")->name("brand.update");
+    Route::delete("/brand/{brand}/destroy", "destroy")->name("brand.destroy");
   });
 
   // color routes

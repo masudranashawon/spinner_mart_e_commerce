@@ -1,12 +1,19 @@
 @extends('admin.layouts.app')
 @section('content')
   <div class="row">
-
     <div class="col-md-6 mx-auto">
       <div class="card">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between align-items-center">
           <h5>Edit Sub Category</h5>
+
+          <a href="{{ route('subCategory.index') }}"
+            class="d-flex justify-content-center align-items-center bg-primary rounded px-2 py-1 text-white">
+            <i class="link-icon" data-feather="arrow-left"></i>
+
+            <span class="ml-1">Back</span>
+          </a>
         </div>
+
         <div class="card-footer">
           <form action="{{ route('subCategory.update', $subCategory->id) }}" method="POST" enctype="multipart/form-data">
             @csrf

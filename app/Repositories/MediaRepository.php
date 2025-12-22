@@ -82,4 +82,17 @@ class MediaRepository extends Repository
 
         return $media;
     }
+
+    public static function deleteByRequest(?Media $media): void
+    {
+        if (!$media) {
+            return;
+        }
+
+        if (Storage::exists($media->src)) {
+            Storage::delete($media->src);
+        }
+
+        $media->delete();
+    }
 }

@@ -60,4 +60,17 @@ class BrandController extends Controller
             return to_route("brand.index")->withError("Brand not updated");
         }
     }
+
+    public function destroy(Brand $brand)
+    {
+        MediaRepository::deleteByRequest($brand->media);
+
+        $deleted = $brand->delete();
+
+        if ($deleted) {
+            return to_route("brand.index")->withSuccess("Brand deleted successfully");
+        } else {
+            return to_route("brand.index")->withError("Brand not deleted");
+        }
+    }
 }
