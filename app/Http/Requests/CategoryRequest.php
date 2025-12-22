@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CategoryRequest extends FormRequest
 {
@@ -21,13 +22,11 @@ class CategoryRequest extends FormRequest
      */
     public function rules(): array
     {
-        $name = $this->method() === "PUT" ? "required|string|max:255" : "required|string|max:255|unique:categories,name";
-
-        $slug = $this->method() === "PUT" ? "required|string|max:255" : "nullable|string|max:255";
+        $slug = $this->method() === "PUT" ? "required|string|max:255|unique:categories,slug," . $this->category->id : "nullable|string|max:255|unique:categories,slug";
 
         return [
-            "name" =>  $name,
-            "slug" =>  $slug,
+            'name' => "required|string|max:255",
+            'slug' =>  $slug,
             "image" => "nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:2048",
         ];
     }

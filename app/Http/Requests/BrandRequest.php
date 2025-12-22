@@ -21,12 +21,10 @@ class BrandRequest extends FormRequest
      */
     public function rules(): array
     {
-        $name = $this->method() === "PUT" ? "required|string|max:255" : "required|string|max:255|unique:brands,name";
-
-        $slug = $this->method() === "PUT" ? "required|string|max:255" : "nullable|string|max:255";
+        $slug = $this->method() === "PUT" ? "required|string|max:255|unique:brands,slug," . $this->brand->id : "nullable|string|max:255|unique:brands,slug";
 
         return [
-            "name" =>  $name,
+            "name" =>   "required|string|max:255",
             "slug" =>  $slug,
             "image" => "nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:2048",
         ];

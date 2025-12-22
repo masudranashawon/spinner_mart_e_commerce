@@ -21,12 +21,10 @@ class SubCategoryRequest extends FormRequest
      */
     public function rules(): array
     {
-        $name = $this->method() === "PUT" ? "required|string|max:255" : "required|string|max:255|unique:sub_categories,name";
-
-        $slug = $this->method() === "PUT" ? "required|string|max:255" : "nullable|string|max:255";
+        $slug = $this->method() === "PUT" ? "required|string|max:255|unique:sub_categories,slug," . $this->subCategory->id : "nullable|string|max:255|unique:sub_categories,slug";
 
         return [
-            "name" =>   $name,
+            "name" =>    "required|string|max:255",
             "slug" =>  $slug,
             "category_id" => "required|exists:categories,id",
             "image" => "nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:2048",
