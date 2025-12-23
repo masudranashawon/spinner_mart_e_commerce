@@ -37,10 +37,12 @@ class ColorController extends Controller
     public function update(Request $request, Color $color)
 
     {
-        $request->validate([
+        if ($resp = $this->toastValidate($request, [
             'name' => 'required|string|max:255',
             'color_code' => 'required|string|max:7|unique:colors,color_code,' . $color->id,
-        ]);
+        ])) {
+            return $resp; // validation fail → toast error
+        }
 
         $color->update([
             "name" => $request->name,
