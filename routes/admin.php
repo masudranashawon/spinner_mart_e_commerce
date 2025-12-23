@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,5 +39,13 @@ Route::prefix("admin")->group(function () {
     Route::post("/color/store", "store")->name("color.store");
     Route::put("/color/{color}/update", "update")->name("color.update");
     Route::delete("/color/{color}/destroy", "destroy")->name("color.destroy");
+  });
+
+  // size routes
+  Route::controller(SizeController::class)->group(function () {
+    Route::get("/sizes", "index")->name("size.index");
+    Route::post("/size/store", "store")->name("size.store");
+    Route::put("/size/{size}/update", "update")->name("size.update");
+    Route::delete("/size/{size}/destroy", "destroy")->name("size.destroy");
   });
 });

@@ -74,6 +74,9 @@
             <li class="nav-item {{ request()->routeIs('color.*') ? 'active' : '' }}">
               <a href="{{ route('color.index') }}" class="nav-link">Color</a>
             </li>
+            <li class="nav-item {{ request()->routeIs('size.*') ? 'active' : '' }}">
+              <a href="{{ route('size.index') }}" class="nav-link">Size</a>
+            </li>
           </ul>
         </div>
       </li>
