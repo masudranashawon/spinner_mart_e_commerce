@@ -39,7 +39,7 @@
                 </tr>
               @empty
                 <tr class="text-center">
-                  <td colspan="5">No Sub Category Found</td>
+                  <td colspan="6">No Sub Category Found</td>
                 </tr>
               @endforelse
             </tbody>

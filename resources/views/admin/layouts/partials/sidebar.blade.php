@@ -77,6 +77,9 @@
             <li class="nav-item {{ request()->routeIs('size.*') ? 'active' : '' }}">
               <a href="{{ route('size.index') }}" class="nav-link">Size</a>
             </li>
+            <li class="nav-item {{ request()->routeIs('tag.*') ? 'active' : '' }}">
+              <a href="{{ route('tag.index') }}" class="nav-link">Tag</a>
+            </li>
           </ul>
         </div>
       </li>

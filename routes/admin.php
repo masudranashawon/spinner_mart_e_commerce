@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SubCategoryController;
+use App\Http\Controllers\Admin\TagController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix("admin")->group(function () {
@@ -47,5 +48,13 @@ Route::prefix("admin")->group(function () {
     Route::post("/size/store", "store")->name("size.store");
     Route::put("/size/{size}/update", "update")->name("size.update");
     Route::delete("/size/{size}/destroy", "destroy")->name("size.destroy");
+  });
+
+  // tag routes
+  Route::controller(TagController::class)->group(function () {
+    Route::get("/tags", "index")->name("tag.index");
+    Route::post("/tag/store", "store")->name("tag.store");
+    Route::put("/tag/{tag}/update", "update")->name("tag.update");
+    Route::delete("/tag/{tag}/destroy", "destroy")->name("tag.destroy");
   });
 });
