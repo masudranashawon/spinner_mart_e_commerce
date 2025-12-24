@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\TagController;
@@ -56,5 +57,11 @@ Route::prefix("admin")->group(function () {
     Route::post("/tag/store", "store")->name("tag.store");
     Route::put("/tag/{tag}/update", "update")->name("tag.update");
     Route::delete("/tag/{tag}/destroy", "destroy")->name("tag.destroy");
+  });
+
+  // product routes
+  Route::controller(ProductController::class)->group(function () {
+    Route::get("/products", "index")->name("product.index");
+    Route::get("/product/create", "create")->name("product.create");
   });
 });
