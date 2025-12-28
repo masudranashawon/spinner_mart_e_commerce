@@ -1,5 +1,55 @@
 @extends('admin.layouts.app')
 
+@push('style')
+  <style>
+    .thumbnail-preview {
+      height: 7rem;
+      object-fit: contain;
+      cursor: pointer;
+    }
+
+    .gallery-item {
+      width: 7rem;
+      height: 7rem;
+      position: relative;
+      margin-right: .5rem;
+    }
+
+    .delete-icon {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    .gallery-item .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start;
+      padding: 2px;
+      border-radius: 0.25rem;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .gallery-item:hover .overlay {
+      opacity: 1;
+    }
+
+    .gallery-item .overlay button {
+      font-size: 0.7rem;
+      line-height: 1;
+      width: 2rem;
+      height: 2rem;
+      padding: 0;
+    }
+  </style>
+@endpush
+
 @section('content')
   {{-- Add new Product --}}
   <div class="card">
@@ -95,30 +145,50 @@
             placeholder="Add product additional information..." class="tinymce-editor" />
         </fieldset>
 
-        <!-- Gallery -->
+        <!-- Images -->
         <fieldset class="p-lg-4 mt-3 rounded-lg border p-3">
           <legend class="w-auto">
-            <span class="small bg-light rounded-lg px-3 py-2">Product Gallery</span>
+            <span class="small bg-light rounded-lg px-3 py-2">Product Images</span>
           </legend>
 
+          <div class="row mb-3">
+            <div class="col-12">
+              <p class="d-block w-100 mb-2">Product Thumbnail</p>
+
+              <label for="thumbnail">
+                <img src="{{ asset('/upload-picture.png') }}" class="thumbnail-preview" id="thumbnail-preview"
+                  alt="thumbnail" />
+              </label>
+
+              <input type="file" name="thumbnail" id="thumbnail" class="form-control sr-only" />
+
+              @error('thumbnail')
+                <span class="text-danger">{{ $message }}</span>
+              @enderror
+            </div>
+          </div>
+
           <div class="row">
-            <div class="col-md-3">
+            <div class="col-lg-3">
+              <p class="mb-2">Product Gallery</p>
               <div id="galleryDropArea" class="rounded border p-4 text-center" style="cursor:pointer;background:#fafafa">
                 <i data-feather="upload-cloud"></i>
+
                 <h6>Click or drop images here</h6>
-                <small>Multiple images supported (Max 5)</small>
+                <small>
+                  Max 5 images • Max 2MB per file • JPG, PNG, WEBP, GIF
+                </small>
               </div>
             </div>
 
             <!-- gallery images preview -->
-            <div class="col-md-9">
+            <div class="col-lg-9 mt-lg-0 mt-3">
               <!-- Hidden actual file input -->
               <input type="file" name="gallery_images[]" id="galleryInput" multiple accept="image/*" hidden>
-
               <!-- Visible dummy input for clicking -->
               <input type="file" id="dummyGalleryInput" multiple accept="image/*" hidden>
 
-              <div id="galleryPreview" class="d-flex flex-wrap gap-2"></div>
+              <div id="galleryPreview" class="d-flex mt-lg-4 flex-wrap gap-2"></div>
             </div>
           </div>
         </fieldset>
@@ -134,7 +204,6 @@
   </div>
 @endsection
 
-
 @push('script')
   <script src="{{ asset('admin/assets/vendors/tinymce/tinymce.min.js') }}"></script>
 
@@ -146,12 +215,27 @@
         tinymce.init({
           selector: '.tinymce-editor',
           height: 300,
-          toolbar1: 'undo redo | insert | styleselect | bold italic forecolor backcolor emoticons | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media',
+          theme: 'silver',
+          branding: false,
+          image_advtab: true,
+
           plugins: [
             'advlist autolink lists link image charmap print preview hr anchor pagebreak',
             'searchreplace wordcount visualblocks visualchars code fullscreen',
           ],
-          image_advtab: true,
+
+          toolbar: [
+            'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+            'print preview media | forecolor backcolor emoticons | codesample help'
+          ].join(' | '),
+
+          mobile: {
+            theme: 'mobile',
+            menubar: true,
+            plugins: 'autosave lists autolink',
+            toolbar: 'undo bold italic styles'
+          },
+
           content_css: []
         });
       }
@@ -167,10 +251,22 @@
 
         $('#product_sku').val(sku);
       });
+
+      //Thumbnail Preview
+      $('#thumbnail').change(function() {
+        let reader = new FileReader;
+
+        reader.onload = (e) => {
+          $('#thumbnail-preview').attr("src", e.target.result);
+        }
+
+        reader.readAsDataURL(this.files[0]);
+      })
     });
   </script>
 
   <script>
+    //Gallery Upload
     $(function() {
       const MAX_FILES = 5;
       const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
@@ -207,11 +303,20 @@
         for (let file of newFiles) {
           // Validation
           if (!file.type.startsWith('image/')) {
-            alert(`"${file.name}" is not an image!`);
+            Toast.fire({
+              icon: "error",
+              title: `"${file.name}" is not an image!`
+            });
+
             continue;
           }
+
           if (file.size > MAX_FILE_SIZE) {
-            alert(`"${file.name}" is larger than 2MB!`);
+            Toast.fire({
+              icon: "error",
+              title: `"${file.name}" is larger than 2MB!`
+            });
+
             continue;
           }
 
@@ -219,13 +324,22 @@
           const isDuplicate = selectedFiles.some(f =>
             f.name === file.name && f.size === file.size && f.lastModified === file.lastModified
           );
+
           if (isDuplicate) {
-            alert(`"${file.name}" is already added!`);
+            Toast.fire({
+              icon: "error",
+              title: `"${file.name}" is already added!`
+            });
+
             continue;
           }
 
           if (selectedFiles.length >= MAX_FILES) {
-            alert(`Maximum ${MAX_FILES} images allowed!`);
+            Toast.fire({
+              icon: "error",
+              title: `Maximum ${MAX_FILES} images allowed!`
+            });
+
             return;
           }
 
@@ -271,51 +385,4 @@
       });
     });
   </script>
-@endpush
-
-@push('style')
-  <style>
-    .gallery-item {
-      width: 7rem;
-      height: 7rem;
-      position: relative;
-      margin-right: .5rem;
-    }
-
-    .delete-icon {
-      width: 1rem;
-      height: 1rem;
-    }
-
-    .gallery-item .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      /* semi-transparent */
-      display: flex;
-      justify-content: flex-end;
-      align-items: flex-start;
-      padding: 2px;
-      border-radius: 0.25rem;
-      opacity: 0;
-      /* hidden by default */
-      transition: opacity 0.2s;
-    }
-
-    .gallery-item:hover .overlay {
-      opacity: 1;
-      /* show on hover */
-    }
-
-    .gallery-item .overlay button {
-      font-size: 0.7rem;
-      line-height: 1;
-      width: 2rem;
-      height: 2rem;
-      padding: 0;
-    }
-  </style>
 @endpush
