@@ -73,7 +73,7 @@
             <span class="small bg-light rounded-lg px-3 py-2">Product Information</span>
           </legend>
 
-          <x-input name="name" label="Product Name" placeholder="Product Name" :required="true" />
+          <x-input name="name" label="Product Name" placeholder="Product Name" />
           <x-textarea name="short_description" label="Short Description" placeholder="Short Description..." />
           <x-file name="image" label="Product Image" />
         </fieldset>
@@ -88,8 +88,7 @@
               <button type="button" id="generateSku" class="btn btn-sm btn-primary align-self-end px-2 py-1"
                 style="margin-bottom:-1.5rem; cursor:pointer; z-index:2;">Generate
                 SKU</button>
-              <x-input name="product_sku" id="product_sku" label="Product SKU" placeholder="Product SKU"
-                :required="true" />
+              <x-input name="product_sku" id="product_sku" label="Product SKU" placeholder="Product SKU" />
             </div>
 
             <div class="col-md-6">
@@ -104,7 +103,7 @@
 
           <div class="row">
             <div class="col-md-6">
-              <x-select name="category" id="category" label="Select Category" :required="true">
+              <x-select name="category" id="category" label="Select Category">
                 <option value="">Select Category</option>
                 @foreach ($categories ?? [] as $category)
                   <option value="{{ $category?->id }}">{{ $category->name }}</option>
@@ -113,7 +112,7 @@
             </div>
 
             <div class="col-md-6">
-              <x-select name="sub_category" label="Select Sub Category" :required="true">
+              <x-select name="sub_category" label="Select Sub Category">
                 <option value="">Select Sub Category</option>
                 @foreach ($subCategories ?? [] as $subCategory)
                   <option value="{{ $subCategory?->id }}">{{ $subCategory->name }}</option>
@@ -124,11 +123,11 @@
 
           <div class="row">
             <div class="col-md-6">
-              <x-input name="buying_price" label="Buying Price" placeholder="Buying Price" :required="true" />
+              <x-input name="buying_price" label="Buying Price" placeholder="Buying Price" />
             </div>
 
             <div class="col-md-6">
-              <x-input name="selling_price" label="Selling Price" placeholder="Selling Price" :required="true" />
+              <x-input name="selling_price" label="Selling Price" placeholder="Selling Price" />
             </div>
           </div>
         </fieldset>
@@ -162,9 +161,11 @@
 
               <input type="file" name="thumbnail" id="thumbnail" class="form-control sr-only" />
 
-              @error('thumbnail')
-                <span class="text-danger">{{ $message }}</span>
-              @enderror
+              <div>
+                @error('thumbnail')
+                  <span class="text-danger">{{ $message }}</span>
+                @enderror
+              </div>
             </div>
           </div>
 
@@ -221,7 +222,7 @@
 
           plugins: [
             'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-            'searchreplace wordcount visualblocks visualchars code fullscreen',
+            'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime table media'
           ],
 
           toolbar: [

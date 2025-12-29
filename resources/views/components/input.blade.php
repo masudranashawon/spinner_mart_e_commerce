@@ -15,7 +15,7 @@
     @if (!empty($required)) required @endif @if (!empty($disabled)) disabled @endif
     @if (!empty($readonly)) readonly @endif>
 
-  @error('{{ $name }}')
+  @error($name)
     <span class="text-danger">{{ $message }}</span>
   @enderror
 </div>

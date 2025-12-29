@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\SubCategory;
+use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -24,8 +26,14 @@ class ProductController extends Controller
         return view('admin.product.create', compact("categories", "subCategories", "brands"));
     }
 
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        dd($request->all());
+        $product =   ProductRepository::storeByRequest($request);
+
+        if ($product) {
+            return to_route("product.index")->withSuccess("Product created successfully");
+        } else {
+            return to_route("product.index")->withError("Product not created");
+        }
     }
 }

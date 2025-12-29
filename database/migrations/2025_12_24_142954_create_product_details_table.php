@@ -20,9 +20,7 @@ return new class extends Migration
         Schema::create('product_details', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Color::class)->nullable()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Brand::class)->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Size::class)->nullable()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Category::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(SubCategory::class)->constrained()->cascadeOnDelete();
             $table->text('short_description')->nullable();

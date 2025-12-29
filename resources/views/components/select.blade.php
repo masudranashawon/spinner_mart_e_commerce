@@ -13,7 +13,7 @@
     @if (!empty($required)) required @endif @if (!empty($disabled)) disabled @endif
     @if (!empty($multiple)) multiple @endif>{{ $slot }}</select>
 
-  @error('{{ $name }}')
+  @error($name)
     <span class="text-danger">{{ $message }}</span>
   @enderror
 </div>
