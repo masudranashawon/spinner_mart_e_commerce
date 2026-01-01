@@ -75,7 +75,12 @@
 
           <x-input name="name" label="Product Name" placeholder="Product Name" />
           <x-textarea name="short_description" label="Short Description" placeholder="Short Description..." />
-          <x-file name="image" label="Product Image" />
+
+          <x-select label="Select Tags" name="tags[]" class="tags-select-multiple" :multiple="true">
+            @foreach ($tags ?? [] as $tag)
+              <option value="{{ $tag?->id }}">{{ $tag->name }}</option>
+            @endforeach
+          </x-select>
         </fieldset>
 
         <fieldset class="p-lg-4 mt-3 rounded-lg border p-3">
@@ -263,6 +268,14 @@
 
         reader.readAsDataURL(this.files[0]);
       })
+
+
+      $(function() {
+        'use strict'
+        if ($(".tags-select-multiple").length) {
+          $(".tags-select-multiple").select2();
+        }
+      });
     });
   </script>
 

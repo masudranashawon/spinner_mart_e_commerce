@@ -16,8 +16,9 @@
   <!-- inject:css -->
   <link rel="stylesheet" href="{{ asset('admin/assets/fonts/feather-font/css/iconfont.css') }}">
   <link rel="stylesheet" href="{{ asset('admin/assets/vendors/flag-icon-css/css/flag-icon.min.css') }}">
-  <!-- endinject -->
   <link rel="stylesheet" href="{{ asset('admin/assets/vendors/sweetalert2/sweetalert2.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('admin/assets/vendors/select2/select2.min.css') }}">
+  <!-- endinject -->
   <!-- Layout styles -->
   <link rel="stylesheet" href="{{ asset('admin/assets/css/demo_1/style.css') }}">
   <!-- End layout styles -->
@@ -106,6 +107,7 @@
   <script src="{{ asset('admin/assets/vendors/sweetalert2/sweetalert2.min.js') }}"></script>
   <script src="{{ asset('admin/assets/vendors/datatables.net/jquery.dataTables.js') }}"></script>
   <script src="{{ asset('admin/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js') }}"></script>
+  <script src="{{ asset('admin/assets/vendors/select2/select2.min.js') }}"></script>
   <script src="{{ asset('admin/assets/js/template.js') }}"></script>
   <!-- endinject -->
   <!-- custom js for this page -->

@@ -14,7 +14,44 @@
     </div>
 
     <div class="card-footer">
-      <h1>Products</h1>
+      <table class="data-table table-hover table">
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Sub Category</th>
+            <th>Brand</th>
+            <th>Image</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @forelse($products ?? [] as $key => $product)
+            <tr>
+              <td>{{ $product?->sku_code }}</td>
+              <td>{{ $product?->name }}</td>
+              <td>{{ $product?->details?->category->name }}</td>
+              <td>{{ $product?->details?->subCategory->name }}</td>
+              <td>{{ $product?->details?->brand->name }}</td>
+              <td>
+                @if ($product?->status == 1)
+                  <span class="badge badge-success">Active</span>
+                @else
+                  <span class="badge badge-danger">Inactive</span>
+                @endif
+              </td>
+              <td class="text-center"><img src="{{ $product?->thumbnail }}" alt="{{ $product?->name }}"
+                  class="object-fit-cover" style="object-fit:cover;"></td>
+            </tr>
+          @empty
+            <tr class="text-center">
+              <td colspan="5">No Product Found</td>
+            </tr>
+          @endforelse
+        </tbody>
+      </table>
     </div>
   </div>
 @endsection
