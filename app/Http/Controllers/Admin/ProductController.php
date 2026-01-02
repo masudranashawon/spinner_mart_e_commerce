@@ -41,4 +41,10 @@ class ProductController extends Controller
             return to_route("product.index")->withError("Product not created");
         }
     }
+
+    public function show(Product $product)
+    {
+        // dd($product);
+        return view('admin.product.show', compact("product"));
+    }
 }
