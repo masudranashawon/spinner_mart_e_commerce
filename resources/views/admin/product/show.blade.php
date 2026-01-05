@@ -2,39 +2,30 @@
 
 @section('content')
   {{-- Product Details --}}
-  {{-- <div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-      <h5>Product Details</h5>
-
-      <a href="{{ route('product.index') }}"
-        class="d-flex justify-content-center align-items-center bg-primary rounded px-2 py-1 text-white">
-        <i class="link-icon" data-feather="arrow-left"></i>
-        <span class="ml-1">Back</span>
-      </a>
-    </div>
-
-    <div class="card-footer">
-      {{ $product }}
-    </div>
-  </div> --}}
-
-  {{-- Product Details --}}
-  <div class="container-fluid mt-4">
+  <div class="container-fluid">
+    {{--  Header --}}
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h4 class="font-weight-bold mb-0">
         {{ $product->name ?? 'Product Name' }}
       </h4>
 
-      <div>
-        <a href="" class="btn btn-sm btn-primary">
-          Edit
+      <div class="d-flex justify-content-center align-items-center">
+        <a href="{{ route('product.index') }}"
+          class="d-flex justify-content-center align-items-center bg-primary rounded px-2 py-1 text-white">
+          <i class="link-icon" data-feather="arrow-left"></i>
+          <span class="ml-1">Back</span>
         </a>
-        <a href="{{ route('product.index') }}" class="btn btn-sm btn-secondary">
-          Back
+
+        <a href="{{ route('product.index') }}"
+          class="d-flex justify-content-center align-items-center bg-secondary ml-1 rounded px-2 py-1 text-white">
+          <i class="link-icon" data-feather="edit"></i>
+          <span class="ml-1">Edit</span>
         </a>
+
       </div>
     </div>
 
+    {{-- Product Images and Info --}}
     <div class="row">
       {{-- Product Images --}}
       <div class="col-md-5">
@@ -45,20 +36,18 @@
               alt="Product Image">
 
             {{-- Gallery --}}
-            @if ($product->galleries->count())
+            @if ($productGalleries->count())
               <div class="d-flex flex-wrap">
-                @foreach ($product->galleries as $gallery)
+                @foreach ($productGalleries as $gallery)
                   <div class="mb-2 mr-2">
-                    <img src="{{ $gallery->src }}" alt="{{ $gallery->name }}" class="img-thumbnail"
-                      style="width: 80px; height: 80px; object-fit: cover;">
+                    <img src="{{ $gallery['src'] }}" alt="{{ $gallery['media_id'] }}" class="img-thumbnail"
+                      style="width: 7rem; height: 7rem; object-fit: cover;">
                   </div>
                 @endforeach
               </div>
             @else
               <p class="text-muted">No gallery images found.</p>
             @endif
-
-
           </div>
         </div>
       </div>
@@ -146,5 +135,11 @@
       </div>
     </div>
 
+    {{-- Back Button --}}
+    <a href="{{ route('product.index') }}"
+      class="d-inline-flex justify-content-start align-items-start bg-primary mt-3 rounded px-2 py-1 text-white">
+      <i class="link-icon" data-feather="arrow-left"></i>
+      <span class="ml-1">Back</span>
+    </a>
   </div>
 @endsection

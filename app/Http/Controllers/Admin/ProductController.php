@@ -44,7 +44,13 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        // dd($product);
-        return view('admin.product.show', compact("product"));
+        $productGalleries =  $product->galleries->map(function ($media) {
+            return [
+                "media_id" => $media->id,
+                "src" => $media->gallery_url, // using accessor from Media model
+            ];
+        });
+
+        return view('admin.product.show', compact("product", "productGalleries"));
     }
 }
