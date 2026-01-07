@@ -16,12 +16,11 @@
           <span class="ml-1">Back</span>
         </a>
 
-        <a href="{{ route('product.index') }}"
+        <a href="{{ route('product.edit', $product->id) }}"
           class="d-flex justify-content-center align-items-center bg-secondary ml-1 rounded px-2 py-1 text-white">
           <i class="link-icon" data-feather="edit"></i>
           <span class="ml-1">Edit</span>
         </a>
-
       </div>
     </div>
 
@@ -30,24 +29,32 @@
       {{-- Product Images --}}
       <div class="col-md-5">
         <div class="card mb-3">
-          <div class="card-body text-center">
 
-            <img src="{{ $product?->thumbnail }}" class="img-fluid mb-3 border" style="max-height: 360px;"
-              alt="Product Image">
+          <div class="row card-body text-center">
+            {{-- Product Thumbnail --}}
+            <div class="col-lg-6 border-right">
+              <h5 class="font-weight-bold mb-2">Product Thumbnail</h5>
+              <img src="{{ $product?->thumbnail }}" class="img-fluid img-thumbnail mb-3 border" style="max-height: 360px;"
+                alt="Product Image">
+            </div>
 
-            {{-- Gallery --}}
-            @if ($productGalleries->count())
-              <div class="d-flex flex-wrap">
-                @foreach ($productGalleries as $gallery)
-                  <div class="mb-2 mr-2">
-                    <img src="{{ $gallery['src'] }}" alt="{{ $gallery['media_id'] }}" class="img-thumbnail"
-                      style="width: 7rem; height: 7rem; object-fit: cover;">
-                  </div>
-                @endforeach
-              </div>
-            @else
-              <p class="text-muted">No gallery images found.</p>
-            @endif
+            {{-- Product Gallery --}}
+            <div class="col-lg-6">
+              <h5 class="font-weight-bold mb-2">Product Gallery</h5>
+
+              @if ($productGalleries->count())
+                <div class="d-flex flex-wrap">
+                  @foreach ($productGalleries as $gallery)
+                    <div class="mb-2 mr-2">
+                      <img src="{{ $gallery['src'] }}" alt="{{ $gallery['media_id'] }}" class="img-thumbnail"
+                        style="width: 7rem; height: 7rem; object-fit: cover;">
+                    </div>
+                  @endforeach
+                </div>
+              @else
+                <p class="text-muted">No gallery images found.</p>
+              @endif
+            </div>
           </div>
         </div>
       </div>

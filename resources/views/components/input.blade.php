@@ -11,7 +11,7 @@
 
   <input type="{{ $type }}" name="{{ $name }}" id="{{ $id ?? $name }}"
     class="form-control {{ $class }}" placeholder="{{ $placeholder }}"
-    @if (!empty($value)) value="{{ $value }}" @endif
+    @if (!empty($value)) value="{{ old($name, $value) }}" @endif
     @if (!empty($required)) required @endif @if (!empty($disabled)) disabled @endif
     @if (!empty($readonly)) readonly @endif>
 

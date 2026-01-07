@@ -53,4 +53,22 @@ class ProductController extends Controller
 
         return view('admin.product.show', compact("product", "productGalleries"));
     }
+
+    public function edit(Product $product)
+    {
+        $categories = Category::latest("id")->get();
+        $subCategories = SubCategory::latest("id")->get();
+        $brands = Brand::latest("id")->get();
+        $tags = Tag::latest("id")->get();
+
+        // product tags
+        $productTags =   $product->tags->pluck('id')->toArray();
+
+        return view('admin.product.edit', compact('product', 'categories', 'subCategories', 'brands', 'tags', 'productTags'));
+    }
+
+    public function update(Request $request)
+    {
+        dd($request->all());
+    }
 }
