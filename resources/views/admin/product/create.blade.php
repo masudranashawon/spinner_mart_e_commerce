@@ -216,6 +216,7 @@
   <script>
     $(document).ready(function() {
       'use strict';
+
       //Tinymce editor
       if ($(".tinymce-editor").length) {
         tinymce.init({
@@ -258,28 +259,27 @@
         $('#product_sku').val(sku);
       });
 
-      //Thumbnail Preview
-      $('#thumbnail').change(function() {
-        let reader = new FileReader;
-
-        reader.onload = (e) => {
-          $('#thumbnail-preview').attr("src", e.target.result);
-        }
-
-        reader.readAsDataURL(this.files[0]);
-      })
-
-
-      $(function() {
-        'use strict'
-        if ($(".tags-select-multiple").length) {
-          $(".tags-select-multiple").select2();
-        }
-      });
+      //Select2 for Tags
+      if ($(".tags-select-multiple").length) {
+        $(".tags-select-multiple").select2({
+          placeholder: "Select Tags"
+        });
+      }
     });
   </script>
 
   <script>
+    //Thumbnail Preview
+    $('#thumbnail').change(function() {
+      let reader = new FileReader;
+
+      reader.onload = (e) => {
+        $('#thumbnail-preview').attr("src", e.target.result);
+      }
+
+      reader.readAsDataURL(this.files[0]);
+    })
+
     //Gallery Upload
     $(function() {
       const MAX_FILES = 5;
@@ -300,7 +300,9 @@
         e.preventDefault();
         $dropArea.addClass('border-primary');
       });
+
       $dropArea.on('dragleave', () => $dropArea.removeClass('border-primary'));
+
       $dropArea.on('drop', e => {
         e.preventDefault();
         $dropArea.removeClass('border-primary');
@@ -366,7 +368,7 @@
         const reader = new FileReader();
         reader.onload = function(e) {
           const $div = $('<div class="gallery-item position-relative"></div>');
-          const $img = $(`<img src="${e.target.result}" class="w-100 h-100 border rounded")>`);
+          const $img = $(`<img src="${e.target.result}" class="w-100 h-100 border rounded" alt="gallery-image" />`);
 
           var $overlay = $(
             `<div class="overlay d-flex justify-content-end align-items-start"><button type="button" class = "btn btn-sm btn-danger rounded-circle p-1"> <i class="delete-icon" data-feather="trash-2"></i></button ></div>`

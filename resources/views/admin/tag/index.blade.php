@@ -89,12 +89,12 @@
               <label for="edit-tag-name" class="col-form-label">Tag Name</label>
               <input type="text" class="form-control" id="edit-tag-name" name="name">
             </div>
+            <div class="d-flex justify-content-end my-4">
+              <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Update Tag</button>
+            </div>
+          </form>
         </div>
-        <div class="d-flex justify-content-end my-4">
-          <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Update Tag</button>
-        </div>
-        </form>
       </div>
     </div>
   </div>

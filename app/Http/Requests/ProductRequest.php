@@ -21,7 +21,9 @@ class ProductRequest extends FormRequest
      */
     public function rules(): array
     {
-        $sku = $this->method() === "PUT" ? "required|string|max:255|unique:products,sku_code," . $this->sku_code->id : "required|string|max:255|unique:products,sku_code";
+
+        $sku = $this->method() === "PUT" ? "required|string|max:255|unique:products,sku_code," . $this->product->id : "required|string|max:255|unique:products,sku_code";
+        $thumbnail = $this->method() === "PUT" ? "nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:2048" : "required|image|mimes:jpeg,png,jpg,gif,webp,svg|max:2048";
 
         return [
             /* =========================
@@ -34,7 +36,11 @@ class ProductRequest extends FormRequest
             'sub_category' => "required|exists:sub_categories,id",
             'buying_price' => "nullable|numeric|min:0",
             'selling_price' => "required|numeric|min:0",
-            'thumbnail' => "required|image|mimes:jpeg,png,jpg,gif,webp,svg|max:2048",
+            'brand' => 'nullable|exists:brands,id',
+            'thumbnail' =>  $thumbnail,
+            'gallery_images.*' => 'nullable|image|max:2048',
+            'deleted_gallery_ids' => 'nullable|string',
+            'tags' => 'nullable|array',
         ];
     }
 

@@ -67,8 +67,14 @@ class ProductController extends Controller
         return view('admin.product.edit', compact('product', 'categories', 'subCategories', 'brands', 'tags', 'productTags'));
     }
 
-    public function update(Request $request)
+    public function update(ProductRequest $request, Product $product)
     {
-        dd($request->all());
+        $product = ProductRepository::updateByRequest($request, $product);
+
+        if ($product) {
+            return to_route("product.index")->withSuccess("Product updated successfully");
+        } else {
+            return to_route("product.index")->withError("Product not updated");
+        }
     }
 }

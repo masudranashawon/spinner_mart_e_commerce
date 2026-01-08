@@ -198,7 +198,7 @@
               <!-- Visible dummy input for clicking -->
               <input type="file" id="dummyGalleryInput" multiple accept="image/*" hidden>
               <!-- deleted existing images -->
-              <input type="hidden" name="deleted_galleries" id="deletedGalleries">
+              <input type="hidden" name="deleted_gallery_ids" id="deleted_gallery_ids">
 
               <div id="galleryPreview" class="d-flex mt-lg-4 flex-wrap gap-2">
                 @foreach ($product->galleries as $gallery)
@@ -218,7 +218,7 @@
         </fieldset>
 
         <div class="d-flex justify-content-end my-4">
-          <a href="{{ route('product.create') }}" class="btn btn-secondary d-flex align-items-center px-2">
+          <a href="{{ route('product.edit', $product->id) }}" class="btn btn-secondary d-flex align-items-center px-2">
             <i class="link-icon mr-2" data-feather="rotate-cw"></i>Reset</a>
 
           <button type="submit" class="btn btn-primary ml-2">Submit</button>
@@ -276,16 +276,14 @@
       })
 
       //Select2 for tags
-      $(function() {
-        'use strict'
-        if ($(".tags-select-multiple").length) {
-          $(".tags-select-multiple").select2();
-        }
-      });
+      'use strict'
+      if ($(".tags-select-multiple").length) {
+        $(".tags-select-multiple").select2();
+      }
     });
   </script>
 
-  <script>
+  {{-- <script>
     $(function() {
 
       const MAX_FILES = 5;
@@ -294,15 +292,30 @@
       const $preview = $('#galleryPreview');
       const $realInput = $('#galleryInput');
       const $dummyInput = $('#dummyGalleryInput');
-      const $deletedInput = $('#deletedGalleries');
+      const $dropArea = $('#galleryDropArea');
+      const $deletedInput = $('#deleted_gallery_ids');
 
       let newFiles = [];
       let deletedExistingIds = [];
 
-      /* ----------------------------
-        DROP / CLICK (new images)
-      -----------------------------*/
-      $('#galleryDropArea').on('click', () => $dummyInput.click());
+      // Click → dummy input open
+      $dropArea.on('click', () => $dummyInput.click());
+
+      // Drag effects
+      $dropArea.on('dragover', e => {
+        e.preventDefault();
+        $dropArea.addClass('border-primary');
+      });
+
+      $dropArea.on('dragleave', () => $dropArea.removeClass('border-primary'));
+
+      $dropArea.on('drop', e => {
+        e.preventDefault();
+        $dropArea.removeClass('border-primary');
+        handleNewFiles(e.originalEvent.dataTransfer.files);
+      });
+
+
 
       $dummyInput.on('change', function() {
         addNewFiles(this.files);
@@ -344,27 +357,36 @@
         reader.readAsDataURL(file);
       }
 
-      /* ----------------------------
-        DELETE (event delegation)
-      -----------------------------*/
+      // DELETE (event delegation) with confirmation
       $preview.on('click', '.remove-gallery', function() {
         const $item = $(this).closest('.gallery-item');
 
-        // Existing image
-        if ($item.data('existing')) {
-          const id = $item.data('id');
-          deletedExistingIds.push(id);
-          $deletedInput.val(deletedExistingIds.join(','));
-          $item.remove();
-          return;
-        }
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "This image will be marked for deletion.",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, remove it!',
+          cancelButtonText: 'Cancel'
+        }).then((result) => {
+          if (!result.isConfirmed) return;
 
-        // New image
-        if ($item.data('new')) {
-          const index = $item.data('index');
-          newFiles.splice(index, 1);
-          refreshNewImages();
-        }
+          // Existing image
+          if ($item.data('existing')) {
+            const id = $item.data('id');
+            deletedExistingIds.push(id);
+            $deletedInput.val(deletedExistingIds.join(','));
+            $item.remove();
+            return;
+          }
+
+          // New image
+          if ($item.data('new')) {
+            const index = $item.data('index');
+            newFiles.splice(index, 1);
+            refreshNewImages();
+          }
+        });
       });
 
       function refreshNewImages() {
@@ -372,15 +394,129 @@
         newFiles.forEach((file, i) => renderNewImage(file, i));
       }
 
-      /* ----------------------------
-        FORM SUBMIT
-      -----------------------------*/
+      // FORM SUBMIT
       $('form').on('submit', function() {
         const dt = new DataTransfer();
         newFiles.forEach(f => dt.items.add(f));
         $realInput[0].files = dt.files;
       });
 
+    });
+  </script> --}}
+
+  <script>
+    $(function() {
+      const MAX_FILES = 5;
+      const MAX_FILE_SIZE = 2 * 1024 * 1024;
+
+      const $dropArea = $('#galleryDropArea');
+      const $realInput = $('#galleryInput');
+      const $dummyInput = $('#dummyGalleryInput');
+      const $preview = $('#galleryPreview');
+      const $deletedInput = $('#deleted_gallery_ids');
+
+      let newFiles = [];
+      let deletedExistingIds = [];
+
+      // Click → dummy input
+      $dropArea.on('click', () => $dummyInput.click());
+
+      // Drag effects
+      $dropArea.on('dragover', e => {
+        e.preventDefault();
+        $dropArea.addClass('border-primary');
+      });
+      $dropArea.on('dragleave', () => $dropArea.removeClass('border-primary'));
+      $dropArea.on('drop', e => {
+        e.preventDefault();
+        $dropArea.removeClass('border-primary');
+        handleNewFiles(e.originalEvent.dataTransfer.files);
+      });
+
+      // Dummy input
+      $dummyInput.on('change', function() {
+        handleNewFiles(this.files);
+        this.value = '';
+      });
+
+      function handleNewFiles(files) {
+        for (let file of files) {
+          if (!file.type.startsWith('image/')) continue;
+          if (file.size > MAX_FILE_SIZE) continue;
+          if (newFiles.length + $preview.find('[data-existing]').length >= MAX_FILES) continue;
+
+          // duplicate check
+          const isDuplicate = newFiles.some(f => f.name === file.name && f.size === file.size && f.lastModified ===
+            file.lastModified);
+          if (isDuplicate) continue;
+
+          newFiles.push(file);
+          renderNewImage(file, newFiles.length - 1);
+        }
+      }
+
+      function renderNewImage(file, index) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const html = $(`
+        <div class="gallery-item position-relative" data-new="1" data-index="${index}">
+          <img src="${e.target.result}" class="w-100 h-100 rounded border" style="object-fit: cover;" alt="Gallery Image">
+          <div class="overlay d-flex justify-content-end align-items-start">
+            <button type="button" class="btn btn-sm btn-danger rounded-circle p-1 remove-gallery">
+              <i data-feather="trash-2"></i>
+            </button>
+          </div>
+        </div>
+      `);
+          $preview.append(html);
+          feather.replace();
+        };
+        reader.readAsDataURL(file);
+      }
+
+      // DELETE with Swal confirmation
+      $preview.on('click', '.remove-gallery', function() {
+        const $item = $(this).closest('.gallery-item');
+
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "This image will be removed.",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, remove it!',
+          cancelButtonText: 'Cancel'
+        }).then(result => {
+          if (!result.isConfirmed) return;
+
+          // Existing image
+          if ($item.data('existing')) {
+            const id = $item.data('id');
+            deletedExistingIds.push(id);
+            $deletedInput.val(deletedExistingIds.join(','));
+            $item.remove();
+            return;
+          }
+
+          // New image
+          if ($item.data('new')) {
+            const index = $item.data('index');
+            newFiles.splice(index, 1);
+            refreshNewImages();
+          }
+        });
+      });
+
+      function refreshNewImages() {
+        $preview.find('[data-new]').remove();
+        newFiles.forEach((file, i) => renderNewImage(file, i));
+      }
+
+      // Form submit
+      $('form').on('submit', function() {
+        const dt = new DataTransfer();
+        newFiles.forEach(f => dt.items.add(f));
+        $realInput[0].files = dt.files;
+      });
     });
   </script>
 @endpush
