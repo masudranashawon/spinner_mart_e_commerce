@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\TagController;
@@ -67,5 +68,10 @@ Route::prefix("admin")->group(function () {
     Route::get("/product/{product}/show", "show")->name("product.show");
     Route::get("/product/{product}/edit", "edit")->name("product.edit");
     Route::put("/product/{product}/update", "update")->name("product.update");
+  });
+
+  // product variant routes
+  Route::controller(ProductVariantController::class)->group(function () {
+    Route::post("/product/{product}/variants/bulk", "bulkStore")->name("products.variants.bulkStore");
   });
 });

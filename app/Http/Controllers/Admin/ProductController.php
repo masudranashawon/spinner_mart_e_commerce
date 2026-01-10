@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
+use App\Models\ProductVariant;
+use App\Models\Size;
 use App\Models\SubCategory;
 use App\Models\Tag;
 use App\Repositories\ProductRepository;
@@ -44,6 +47,10 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
+        $colors = Color::latest()->get();
+        $sizes = Size::latest()->get();
+        $productVariants = ProductVariant::where('product_id', $product->id)->get(); // Fetch variants
+
         $productGalleries =  $product->galleries->map(function ($media) {
             return [
                 "media_id" => $media->id,
@@ -51,7 +58,7 @@ class ProductController extends Controller
             ];
         });
 
-        return view('admin.product.show', compact("product", "productGalleries"));
+        return view('admin.product.show', compact("product", "productGalleries", "colors", "sizes", "productVariants"));
     }
 
     public function edit(Product $product)
