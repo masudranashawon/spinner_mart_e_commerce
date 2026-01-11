@@ -17,4 +17,14 @@ class ProductVariant extends Model
     {
         return $this->hasMany(InventoryStock::class);
     }
+
+    public function color()
+    {
+        return $this->belongsTo(Color::class);
+    }
+
+    public function size()
+    {
+        return $this->belongsTo(Size::class);
+    }
 }
