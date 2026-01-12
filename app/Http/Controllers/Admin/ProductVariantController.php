@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductVariantRequest;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Repositories\ProductVariantRepository;
 
 
@@ -18,6 +19,21 @@ class ProductVariantController extends Controller
             return to_route("product.show", $product->id)->withSuccess("Variants saved successfully");
         } else {
             return to_route("product.show", $product->id)->withError("Variants saved failed");
+        }
+    }
+
+    public function destroy(Product $product, ProductVariant $variant)
+    {
+        if ($variant->product_id !== $product->id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $deleted = $variant->delete();
+
+        if ($deleted) {
+            return to_route("product.show", $product->id)->withSuccess("Variant deleted successfully");
+        } else {
+            return to_route("product.show", $product->id)->withError("Variant deletion failed");
         }
     }
 }

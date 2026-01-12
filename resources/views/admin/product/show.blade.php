@@ -39,7 +39,8 @@
             </div>
 
             {{-- Product Gallery --}}
-            <div class="col-lg-6">
+            <div class="col-lg-6 d-flex flex-column align-items-center" style="min-height: 250px;">
+
               <h5 class="font-weight-bold mb-2">Product Gallery</h5>
 
               @if ($productGalleries->count())
@@ -52,7 +53,9 @@
                   @endforeach
                 </div>
               @else
-                <p class="text-muted">No gallery images found.</p>
+                <div class="d-flex flex-grow-1 align-items-center">
+                  <p class="text-muted mb-0">No gallery images added yet.</p>
+                </div>
               @endif
             </div>
           </div>
@@ -115,54 +118,59 @@
     {{-- Variants --}}
     <div class="card mt-4">
       <div class="card-header d-flex justify-content-between align-items-center">
-        <h5>{{ count($productVariants) }} Variants</h5>
+        <h5>{{ count($productVariants) > 0 ? count($productVariants) . ' Variants' : 'Variants' }}</h5>
 
         <button type="button" class="btn btn-primary px-2 py-1" data-toggle="modal" data-target="#variantModal">
           Add Variants <i class="link-icon" data-feather="plus-circle"></i>
         </button>
       </div>
       <div class="card-footer table-responsive">
-        <table class="table-hover table">
-          <thead>
-            <tr>
-              <th>Product SKU</th>
-              <th>Options</th>
-              <th>Buying Price</th>
-              <th>Selling Price</th>
-              <th>Discount</th>
-              <th>Stock</th>
-              <th class="text-center">Action</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            @forelse($productVariants ?? [] as $key => $variant)
+        @if (count($productVariants) > 0)
+          <table class="table-hover table">
+            <thead>
               <tr>
-                <td>{{ $variant?->sku_code }}</td>
-                <td>
-                  <strong class="fw-bold bg-light">
-                    {{ $variant?->size ? 'Size: ' . $variant?->size?->name : '' }}
-                    {{ $variant?->size && $variant?->color ? ',' : '' }}
-                    {{ $variant?->color ? 'Colour: ' . $variant?->color?->name : '' }}
-                  </strong>
-                </td>
-                <td>৳ {{ $variant?->buying_price }}</td>
-                <td>৳ {{ $variant?->selling_price }}</td>
-                <td>{{ $variant->discount ? $variant->discount . '%' : '-' }}</td>
-                <td>{{ $variant?->current_stock }}</td>
-                <td class="text-center">
-                  <a href="{{ route('product.edit', $product?->id) }}"><button class="btn btn-primary btn-icon btn-md"><i
-                        data-feather="edit"></i></button></a>
-                  <button class="btn btn-danger btn-icon btn-md"><i data-feather="trash-2"></i></button>
-                </td>
+                <th>Product SKU</th>
+                <th>Options</th>
+                <th>Buying Price</th>
+                <th>Selling Price</th>
+                <th>Discount</th>
+                <th>Stock</th>
+                <th class="text-center">Action</th>
               </tr>
-            @empty
-              <tr class="text-center">
-                <td colspan="8">No Product Found</td>
-              </tr>
-            @endforelse
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              @foreach ($productVariants ?? [] as $key => $variant)
+                <tr>
+                  <td>{{ $variant?->sku_code }}</td>
+                  <td>
+                    <strong class="fw-bold bg-light">
+                      {{ $variant?->size ? 'Size: ' . $variant?->size?->name : '' }}
+                      {{ $variant?->size && $variant?->color ? ',' : '' }}
+                      {{ $variant?->color ? 'Colour: ' . $variant?->color?->name : '' }}
+                    </strong>
+                  </td>
+                  <td>৳ {{ $variant?->buying_price }}</td>
+                  <td>৳ {{ $variant?->selling_price }}</td>
+                  <td>{{ $variant->discount ? $variant->discount . '%' : '-' }}</td>
+                  <td>{{ $variant?->current_stock }}</td>
+                  <td class="text-center">
+                    <a href="{{ route('product.edit', $product?->id) }}"><button
+                        class="btn btn-primary btn-icon btn-md"><i data-feather="edit"></i></button></a>
+
+                    <a href="{{ route('product.variants.destroy', [$product?->id, $variant?->id]) }}"
+                      class="delete-confirm btn btn-danger btn-icon btn-md">
+                      <i data-feather="trash-2"></i>
+                    </a>
+                  </td>
+                </tr>
+              @endforeach
+
+            </tbody>
+          </table>
+        @else
+          <p class="text-secondary text-center">No variants found for this product.</p>
+        @endif
       </div>
     </div>
 
@@ -236,8 +244,8 @@
               </tbody>
             </table>
 
-            <button type="button" class="btn btn-secondary mt-3 px-2 py-1" id="addVariantRow"><i class="link-icon"
-                data-feather="plus-circle"></i> Add Variant Row</button>
+            <button type="button" class="btn btn-secondary mt-3 px-2 py-1" id="addVariantRow">
+              <i class="link-icon" data-feather="plus-circle"></i> Add Variant Row</button>
             @if ($errors->any())
               <div class="alert text-danger">
                 <ul class="mb-0 p-0">
@@ -263,31 +271,31 @@
       <tbody id="variantRowTemplate">
         <tr data-index="__INDEX__">
           <td>
-            <input type="text" name="variants[__INDEX__][sku]" class="form-control skuInput">
+            <x-input name="variants[__INDEX__][sku]" placeholder="Write SKU" class="skuInput -mb-1rem" />
           </td>
           <td>
-            <select name="variants[__INDEX__][color_id]" class="form-control colorSelect">
+            <x-select name="variants[__INDEX__][color_id]" class="colorSelect -mb-1rem">
               <option value="">Select Color</option>
               @foreach ($colors as $color)
                 <option value="{{ $color->id }}">{{ $color->name }}</option>
               @endforeach
-            </select>
+            </x-select>
           </td>
           <td>
-            <select name="variants[__INDEX__][size_id]" class="form-control sizeSelect">
+            <x-select name="variants[__INDEX__][size_id]" class="sizeSelect -mb-1rem">
               <option value="">Select Size</option>
               @foreach ($sizes as $size)
                 <option value="{{ $size->id }}">{{ $size->name }}</option>
               @endforeach
-            </select>
+            </x-select>
           </td>
           <td>
-            <input type="number" name="variants[__INDEX__][buying_price]" class="form-control"
-              value="{{ $product->buying_price }}">
+            <x-input type="number" name="variants[__INDEX__][buying_price]" value="{{ $product->buying_price }}"
+              class="-mb-1rem" />
           </td>
           <td>
-            <input type="number" name="variants[__INDEX__][selling_price]" class="form-control"
-              value="{{ $product->selling_price }}">
+            <x-input type="number" name="variants[__INDEX__][selling_price]" value="{{ $product->selling_price }}"
+              class="-mb-1rem" />
           </td>
           <td>
             <button type="button" class="btn btn-danger btn-sm removeRow">Remove</button>
@@ -298,15 +306,25 @@
   </div>
 @endsection
 
+@push('style')
+  <style>
+    .-mb-1rem {
+      margin-bottom: -1rem;
+    }
+  </style>
+@endpush
+
 @push('script')
   <script>
     $(function() {
       // Function to generate SKU
       function generateSKU(row) {
-        let productId = {{ $product->id }};
-        let colorId = row.find('.colorSelect').val() || 0;
-        let sizeId = row.find('.sizeSelect').val() || 0;
-        row.find('.skuInput').val('P' + productId + '-C' + colorId + '-S' + sizeId);
+        let prefix = 'SF';
+        let random = Math.random().toString(36).substring(2, 6).toUpperCase();
+        let time = Date.now().toString().slice(-4);
+        let sku = prefix + random + time;
+
+        row.find('.skuInput').val(sku);
       }
 
       // Add initial row
@@ -318,10 +336,6 @@
         $('#variantTable tbody').append(row);
         generateSKU(row);
         variantIndex++;
-      });
-
-      $('#variantTable').on('change', '.colorSelect, .sizeSelect', function() {
-        generateSKU($(this).closest('tr'));
       });
 
       $('#variantTable').on('click', '.removeRow', function() {
