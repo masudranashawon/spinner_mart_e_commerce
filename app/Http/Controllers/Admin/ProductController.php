@@ -49,7 +49,9 @@ class ProductController extends Controller
     {
         $colors = Color::latest()->get();
         $sizes = Size::latest()->get();
-        $productVariants = ProductVariant::where('product_id', $product->id)->latest()->get(); // Fetch variants
+        $productVariants = ProductVariant::where('product_id', $product->id)->where(function ($q) {
+            $q->whereNotNull('size_id')->orWhereNotNull('color_id');
+        })->latest()->get(); // Fetch variants
 
         $productGalleries =  $product->galleries->map(function ($media) {
             return [

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Product;
 use App\Models\ProductDetails;
+use App\Models\ProductVariant;
 use Arafat\LaravelRepository\Repository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -66,6 +67,15 @@ class ProductRepository extends Repository
         if ($mediaIds > 0) {
             $product->galleries()->sync($mediaIds);
         }
+
+        ProductVariant::create([
+            'product_id'    => $product->id,
+            'size_id'       => null,
+            'color_id'      => null,
+            'sku_code'      => $product->sku_code,
+            'buying_price'  => $product->buying_price,
+            'selling_price' => $product->selling_price,
+        ]);
 
         return $product;
     }

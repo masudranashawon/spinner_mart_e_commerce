@@ -36,4 +36,18 @@ class ProductVariantController extends Controller
             return to_route("product.show", $product->id)->withError("Variant deletion failed");
         }
     }
+
+    public function update(
+        ProductVariantRequest $request,
+        Product $product,
+        ProductVariant $variant
+    ) {
+        $productVariant = ProductVariantRepository::updateByRequest($request, $product, $variant);
+
+        if ($productVariant) {
+            return to_route("product.show", $product->id)->withSuccess("Variants updated successfully");
+        } else {
+            return to_route("product.show", $product->id)->withError("Variants update failed");
+        }
+    }
 }

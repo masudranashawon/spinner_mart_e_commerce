@@ -21,9 +21,21 @@ class ProductVariantRequest extends FormRequest
      */
     public function rules(): array
     {
+
+        if ($this->method() === 'PUT') {
+            // Update: single variant
+            return [
+                'edit_size' => 'nullable|exists:sizes,id',
+                'edit_color' => 'nullable|exists:colors,id',
+                'edit_buying_price' => 'required|numeric|min:0',
+                'edit_selling_price' => 'required|numeric|min:0',
+            ];
+        }
+
+        // Bulk create: multiple variants
         return [
             'variants' => 'required|array|min:1',
-            'variants.*.sku' => 'required|string',
+            'variants.*.sku' => 'required|string|max:255|unique:product_variants,sku_code',
             'variants.*.color_id' => 'nullable|exists:colors,id',
             'variants.*.size_id' => 'nullable|exists:sizes,id',
             'variants.*.buying_price' => 'required|numeric|min:0',

@@ -155,8 +155,10 @@
                   <td>{{ $variant->discount ? $variant->discount . '%' : '-' }}</td>
                   <td>{{ $variant?->current_stock }}</td>
                   <td class="text-center">
-                    <a href="{{ route('product.edit', $product?->id) }}"><button
-                        class="btn btn-primary btn-icon btn-md"><i data-feather="edit"></i></button></a>
+                    <button class="btn btn-primary btn-icon edit-variant-btn" data-toggle="modal"
+                      data-target="#variantEditModal" data-variant='@json($variant)'>
+                      <i data-feather="edit"></i>
+                    </button>
 
                     <a href="{{ route('product.variants.destroy', [$product?->id, $variant?->id]) }}"
                       class="delete-confirm btn btn-danger btn-icon btn-md">
@@ -165,7 +167,6 @@
                   </td>
                 </tr>
               @endforeach
-
             </tbody>
           </table>
         @else
@@ -218,6 +219,9 @@
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" role="document">
       <form action="{{ route('products.variants.bulkStore', $product->id) }}" method="POST" class="w-100">
         @csrf
+
+        <input type="hidden" name="_form" value="variant_create">
+
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="variantModalLabel">Add Variants</h5>
@@ -246,6 +250,8 @@
 
             <button type="button" class="btn btn-secondary mt-3 px-2 py-1" id="addVariantRow">
               <i class="link-icon" data-feather="plus-circle"></i> Add Variant Row</button>
+
+            {{-- Validation Errors --}}
             @if ($errors->any())
               <div class="alert text-danger">
                 <ul class="mb-0 p-0">
@@ -304,6 +310,58 @@
       </tbody>
     </table>
   </div>
+
+  {{-- Edit Variant Modal --}}
+  <div class="modal fade" id="variantEditModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <form id="editVariantForm" method="POST" action="">
+        @csrf
+        @method('PUT')
+
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5>Edit Variant</h5>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <div class="modal-body">
+            <input type="hidden" name="_form" value="variant_edit">
+
+            <x-input type="hidden" id="variant_id" name="variant_id" />
+
+            <x-select label="Size" name="edit_size" id="edit_size">
+
+              @foreach ($sizes as $size)
+                <option value="{{ $size->id }}">{{ $size->name }}</option>
+              @endforeach
+
+            </x-select>
+
+            <x-select label="Color" name="edit_color" id="edit_color">
+
+              @foreach ($colors as $color)
+                <option value="{{ $color->id }}">{{ $color->name }}</option>
+              @endforeach
+
+            </x-select>
+
+            <x-input label="Buying Price" type="number" name="edit_buying_price" id="edit_buying_price" />
+
+            <x-input label="Selling Price" type="number" name="edit_selling_price" id="edit_selling_price" />
+            @error('variant')
+              <p class="text-danger fw-bold mt-2">{{ $message }}</p>
+            @enderror
+          </div>
+
+
+          <div class="modal-footer">
+            <button class="btn btn-primary" type="submit">Update Variant</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 @endsection
 
 @push('style')
@@ -316,25 +374,22 @@
 
 @push('script')
   <script>
-    $(function() {
-      // Function to generate SKU
-      function generateSKU(row) {
-        let prefix = 'SF';
-        let random = Math.random().toString(36).substring(2, 6).toUpperCase();
-        let time = Date.now().toString().slice(-4);
-        let sku = prefix + random + time;
-
-        row.find('.skuInput').val(sku);
-      }
-
-      // Add initial row
+    $(document).ready(function() {
+      // Add Variant Row
       let variantIndex = 0;
 
       $('#addVariantRow').on('click', function() {
-        let html = $('#variantRowTemplate').html().replace(/__INDEX__/g, variantIndex);
+        let template = $('#variantRowTemplate').html();
+        let html = template.replace(/__INDEX__/g, variantIndex);
         let row = $(html);
         $('#variantTable tbody').append(row);
-        generateSKU(row);
+
+        // Generate SKU
+        let prefix = 'SF';
+        let random = Math.random().toString(36).substring(2, 6).toUpperCase();
+        let time = Date.now().toString().slice(-4);
+        row.find('.skuInput').val(prefix + random + time);
+
         variantIndex++;
       });
 
@@ -342,11 +397,54 @@
         $(this).closest('tr').remove();
       });
 
-      // Show modal if there are validation errors
+      // Edit Variant Modal
+      $('#variantEditModal').on('show.bs.modal', function(event) {
+        let button = $(event.relatedTarget);
+        if (!button.length) return;
+
+        let variant = button.data('variant');
+        let productId = {{ $product->id }};
+
+        // Set form action dynamically
+        let url = "{{ route('product.variants.update', ['product' => ':product', 'variant' => ':variant']) }}"
+          .replace(':product', productId)
+          .replace(':variant', variant.id);
+
+        $('#editVariantForm').attr('action', url);
+
+        // Populate fields
+        $('#variant_id').val(variant.id);
+        $('#edit_size').val(variant.size_id);
+        $('#edit_color').val(variant.color_id);
+        $('#edit_buying_price').val(variant.buying_price);
+        $('#edit_selling_price').val(variant.selling_price);
+      });
+
+      // Show modals on validation errors
       @if ($errors->any())
-        $(document).ready(function() {
+        let formType = @json(old('_form'));
+
+        if (formType === 'variant_create') {
           $('#variantModal').modal('show');
-        });
+        }
+
+        if (formType === 'variant_edit') {
+          let oldData = @json(old());
+          let productId = {{ $product->id }};
+          let url = "{{ route('product.variants.update', ['product' => ':product', 'variant' => ':variant']) }}"
+            .replace(':product', productId)
+            .replace(':variant', oldData.variant_id);
+
+          $('#editVariantForm').attr('action', url);
+
+          $('#variant_id').val(oldData.variant_id);
+          $('#edit_size').val(oldData.edit_size);
+          $('#edit_color').val(oldData.edit_color);
+          $('#edit_buying_price').val(oldData.edit_buying_price);
+          $('#edit_selling_price').val(oldData.edit_selling_price);
+
+          $('#variantEditModal').modal('show');
+        }
       @endif
     });
   </script>

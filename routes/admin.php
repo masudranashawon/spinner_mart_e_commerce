@@ -74,5 +74,6 @@ Route::prefix("admin")->group(function () {
   Route::controller(ProductVariantController::class)->group(function () {
     Route::post("/product/{product}/variants/bulk", "bulkStore")->name("products.variants.bulkStore");
     Route::delete("/product/{product}/variants/{variant}/destroy", "destroy")->name("product.variants.destroy");
+    Route::put("/product/{product}/variants/{variant}/update", "update")->name("product.variants.update");
   });
 });
