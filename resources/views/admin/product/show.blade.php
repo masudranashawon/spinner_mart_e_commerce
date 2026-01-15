@@ -63,7 +63,7 @@
       </div>
 
       {{-- Product Info  --}}
-      <div class="col-md-7">
+      <div class="col-md-3">
         <div class="card">
           <div class="card-body">
 
@@ -110,6 +110,46 @@
               </tr>
             </table>
 
+          </div>
+        </div>
+      </div>
+
+      {{-- Stock Info  --}}
+      <div class="col-md-4">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#stockModal">
+          Update Stock
+        </button>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="font-weight-bold mb-3">Stock Information</h5>
+            <table class="table-bordered table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Variant</th>
+                  <th>Quantity</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @forelse ($stockHistory as $stock)
+                  <tr>
+                    <td>{{ $stock->created_at->format('d/m/y h:i A') }}</td>
+                    <td>
+                      {{ $stock->variant->variant_text ?? 'N/A' }}
+                    </td>
+                    <td>
+                      {{ $stock->type === 'stock_out' ? '-' : '+' }}{{ $stock->quantity }}
+                    </td>
+                    <td>{{ ucfirst(str_replace('_', ' ', $stock->type)) }}</td>
+                  </tr>
+                @empty
+                  <tr>
+                    <td colspan="4" class="text-center">No stock history found</td>
+                  </tr>
+                @endforelse
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -213,7 +253,7 @@
     </a>
   </div>
 
-  <!-- Modal -->
+  <!-- Add Variant Modal -->
   <div class="modal fade" id="variantModal" tabindex="-1" role="dialog" aria-labelledby="variantModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" role="document">
@@ -358,6 +398,76 @@
             <button class="btn btn-primary" type="submit">Update Variant</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {{-- Stock Update Modal --}}
+  <div class="modal fade" id="stockModal">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <form method="POST" action="{{ route('products.stock.bulkUpdate', $product->id) }}">
+        @csrf
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title">Update Stock</h5>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <div class="modal-body">
+            @if ($errors->any())
+              <div class="alert alert-danger">
+                <ul class="mb-0">
+                  @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                  @endforeach
+                </ul>
+              </div>
+            @endif
+
+            <table class="table-bordered table">
+              <thead>
+                <tr>
+                  <th>Variant</th>
+                  <th>Type</th>
+                  <th>Qty</th>
+                  <th>Note</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($stockHistory as $index => $variant)
+                  <tr>
+                    <td>
+                      {{ $variant->variant_text }}
+                      <input type="hidden" name="stocks[{{ $index }}][variant_id]"
+                        value="{{ $variant->id }}">
+                    </td>
+                    <td>
+                      <select name="stocks[{{ $index }}][type]" class="form-control">
+                        <option value="stock_in">Add Stock</option>
+                        <option value="stock_out">Remove Stock</option>
+                        <option value="return">Return</option>
+                        <option value="adjustment">Adjustment</option>
+                      </select>
+                    </td>
+                    <td>
+                      <input type="number" name="stocks[{{ $index }}][quantity]" class="form-control"
+                        min="1">
+                    </td>
+                    <td>
+                      <input type="text" name="stocks[{{ $index }}][note]" class="form-control">
+                    </td>
+                  </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Update Stock</button>
+          </div>
+
         </div>
       </form>
     </div>

@@ -7,6 +7,7 @@ use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\InventoryStock;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Size;
@@ -49,10 +50,13 @@ class ProductController extends Controller
     {
         $colors = Color::latest()->get();
         $sizes = Size::latest()->get();
+
+        // product variants
         $productVariants = ProductVariant::where('product_id', $product->id)->where(function ($q) {
             $q->whereNotNull('size_id')->orWhereNotNull('color_id');
         })->latest()->get(); // Fetch variants
 
+        // product galleries
         $productGalleries =  $product->galleries->map(function ($media) {
             return [
                 "media_id" => $media->id,
@@ -60,7 +64,15 @@ class ProductController extends Controller
             ];
         });
 
-        return view('admin.product.show', compact("product", "productGalleries", "colors", "sizes", "productVariants"));
+        // stock history
+        $stockHistory = InventoryStock::whereIn(
+            'product_variant_id',
+            $productVariants->pluck('id')
+        )
+            ->latest()
+            ->get();
+
+        return view('admin.product.show', compact("product", "productGalleries", "colors", "sizes", "productVariants", "stockHistory"));
     }
 
     public function edit(Product $product)

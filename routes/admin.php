@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\InventoryStockController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\SizeController;
@@ -75,5 +76,10 @@ Route::prefix("admin")->group(function () {
     Route::post("/product/{product}/variants/bulk", "bulkStore")->name("products.variants.bulkStore");
     Route::delete("/product/{product}/variants/{variant}/destroy", "destroy")->name("product.variants.destroy");
     Route::put("/product/{product}/variants/{variant}/update", "update")->name("product.variants.update");
+  });
+
+  // inventory stock routes
+  Route::controller(InventoryStockController::class)->group(function () {
+    Route::post("/products/{product}/stock", "bulkUpdate")->name("products.stock.bulkUpdate");
   });
 });
