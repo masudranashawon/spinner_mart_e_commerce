@@ -116,12 +116,15 @@
 
       {{-- Stock Info  --}}
       <div class="col-md-4">
-        <button class="btn btn-primary" data-toggle="modal" data-target="#stockModal">
-          Update Stock
-        </button>
         <div class="card">
-          <div class="card-body">
-            <h5 class="font-weight-bold mb-3">Stock Information</h5>
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="font-weight-bold">Stock Information</h5>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#stockUpdateModal">
+              Update Stock
+            </button>
+          </div>
+
+          <div class="card-footer table-responsive">
             <table class="table-bordered table">
               <thead>
                 <tr>
@@ -136,12 +139,21 @@
                   <tr>
                     <td>{{ $stock->created_at->format('d/m/y h:i A') }}</td>
                     <td>
-                      {{ $stock->variant->variant_text ?? 'N/A' }}
+                      @if ($stock->variant->size || $stock->variant->color)
+                        {{ $stock->variant->size ? 'Size: ' . $stock->variant->size->name : '' }}
+                        {{ $stock->variant->size && $stock->variant->color ? ',' : '' }}
+                        {{ $stock->variant->color ? 'Color: ' . $stock->variant->color->name : '' }}
+                      @else
+                        Default Variant
+                      @endif
                     </td>
+                    <td>{{ $stock->quantity }}</td>
                     <td>
-                      {{ $stock->type === 'stock_out' ? '-' : '+' }}{{ $stock->quantity }}
+                      <span
+                        class="{{ $stock->type == 'stock_in' ? 'badge badge-success' : ($stock->type == 'stock_out' ? 'badge badge-danger' : ($stock->type == 'return' ? 'badge badge-info' : 'badge badge-warning')) }}">
+                        {{ ucfirst(str_replace('_', ' ', $stock->type)) }}
+                      </span>
                     </td>
-                    <td>{{ ucfirst(str_replace('_', ' ', $stock->type)) }}</td>
                   </tr>
                 @empty
                   <tr>
@@ -217,8 +229,10 @@
 
     {{-- Short Description --}}
     <div class="card mt-4">
-      <div class="card-body">
-        <h5 class="font-weight-bold mb-3">Short Description</h5>
+      <div class="card-header">
+        <h5 class="font-weight-bold">Short Description</h5>
+      </div>
+      <div class="card-footer">
         <div class="text-muted">
           {!! $product->details->short_description ?? '<p>No Short description available.</p>' !!}
         </div>
@@ -227,8 +241,10 @@
 
     {{-- Description --}}
     <div class="card mt-4">
-      <div class="card-body">
-        <h5 class="font-weight-bold mb-3">Description</h5>
+      <div class="card-header">
+        <h5 class="font-weight-bold">Description</h5>
+      </div>
+      <div class="card-footer">
         <div class="text-muted">
           {!! $product->details->description ?? '<p>No description available.</p>' !!}
         </div>
@@ -237,8 +253,10 @@
 
     {{-- Additional Information --}}
     <div class="card mt-3">
-      <div class="card-body">
-        <h5 class="font-weight-bold mb-3">Additional Information</h5>
+      <div class="card-header">
+        <h5 class="font-weight-bold">Additional Information</h5>
+      </div>
+      <div class="card-footer">
         <div class="text-muted">
           {!! $product->details->additional_info ?? '<p>No additional information.</p>' !!}
         </div>
@@ -404,11 +422,13 @@
   </div>
 
   {{-- Stock Update Modal --}}
-  <div class="modal fade" id="stockModal">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-      <form method="POST" action="{{ route('products.stock.bulkUpdate', $product->id) }}">
+  <div class="modal fade" id="stockUpdateModal">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <form method="POST" action="{{ route('products.stock.bulkUpdate', $product->id) }}" class="w-100">
         @csrf
+
         <div class="modal-content">
+          <input type="hidden" name="_form" value="stock_update">
 
           <div class="modal-header">
             <h5 class="modal-title">Update Stock</h5>
@@ -426,48 +446,57 @@
               </div>
             @endif
 
-            <table class="table-bordered table">
-              <thead>
-                <tr>
-                  <th>Variant</th>
-                  <th>Type</th>
-                  <th>Qty</th>
-                  <th>Note</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach ($stockHistory as $index => $variant)
-                  <tr>
-                    <td>
-                      {{ $variant->variant_text }}
+            <div class="table-responsive">
+              <table class="table">
+                <tbody>
+                  @foreach ($stockVariants as $index => $variant)
+                    @if ($variant->size || $variant->color)
+                      <tr>
+                        <td class="border-top-0 font-weight-bold pb-0 pt-2">
+                          {{ $variant->size ? 'Size: ' . $variant->size->name : '' }}
+                          {{ $variant->size && $variant->color ? ',' : '' }}
+                          {{ $variant->color ? 'Color: ' . $variant->color->name : '' }}
+                        </td>
+                      </tr>
+                    @endif
+                    <tr class="border-bottom p-2">
                       <input type="hidden" name="stocks[{{ $index }}][variant_id]"
                         value="{{ $variant->id }}">
-                    </td>
-                    <td>
-                      <select name="stocks[{{ $index }}][type]" class="form-control">
-                        <option value="stock_in">Add Stock</option>
-                        <option value="stock_out">Remove Stock</option>
-                        <option value="return">Return</option>
-                        <option value="adjustment">Adjustment</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input type="number" name="stocks[{{ $index }}][quantity]" class="form-control"
-                        min="1">
-                    </td>
-                    <td>
-                      <input type="text" name="stocks[{{ $index }}][note]" class="form-control">
-                    </td>
-                  </tr>
-                @endforeach
-              </tbody>
-            </table>
+                      <td class="border-top-0">
+                        <select name="stocks[{{ $index }}][type]" class="form-control">
+                          <option value="stock_in">Add Stock</option>
+                          <option value="stock_out">Remove Stock</option>
+                          <option value="return">Return</option>
+                          <option value="adjustment">Adjustment</option>
+                        </select>
+                      </td>
+
+                      <td class="border-top-0">
+                        <div class="input-group input-group-sm py-0">
+                          <span class="input-group-text py-0">Qty
+                            ({{ $variant->current_stock }})
+                          </span>
+                          <input type="number" name="stocks[{{ $index }}][quantity]" class="form-control"
+                            min="1">
+                        </div>
+                      </td>
+
+                      <td class="border-top-0">
+                        <div class="input-group input-group-sm py-0">
+                          <span class="input-group-text py-0">Notes</span>
+                          <input type="text" name="stocks[{{ $index }}][note]" class="form-control">
+                        </div>
+                      </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div class="modal-footer">
-            <button type="submit" class="btn btn-success">Update Stock</button>
+            <button type="submit" class="btn btn-primary">Update Stock</button>
           </div>
-
         </div>
       </form>
     </div>
@@ -536,6 +565,10 @@
 
         if (formType === 'variant_create') {
           $('#variantModal').modal('show');
+        }
+
+        if (formType === 'stock_update') {
+          $('#stockUpdateModal').modal('show');
         }
 
         if (formType === 'variant_edit') {

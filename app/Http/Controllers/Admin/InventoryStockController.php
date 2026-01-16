@@ -15,16 +15,31 @@ class InventoryStockController extends Controller
         $request->validate([
             'stocks' => 'required|array|min:1',
             'stocks.*.variant_id' => 'required|exists:product_variants,id',
-            'stocks.*.quantity'   => 'required|integer|min:1',
+            'stocks.*.quantity'   => 'nullable|integer|min:1',
             'stocks.*.type'       => 'required|in:stock_in,stock_out,return,adjustment',
             'stocks.*.note'       => 'nullable|string',
         ]);
 
         foreach ($request->stocks as $row) {
-            $variant = ProductVariant::find($row['variant_id']);
+
+            // Skip if quantity is not provided
+            if (!isset($row['quantity']) || $row['quantity'] === '' || $row['quantity'] === null) {
+                continue;
+            }
 
             // Stock calculation
-            $qty = $row['quantity'];
+            $qty = (int) $row['quantity'];
+
+            if ($qty <= 0) {
+                continue;
+            }
+
+            $variant = ProductVariant::find($row['variant_id']);
+
+            if (!$variant) {
+                continue;
+            }
+
             if ($row['type'] === 'stock_out') {
                 if ($variant->current_stock < $qty) {
                     throw ValidationException::withMessages([

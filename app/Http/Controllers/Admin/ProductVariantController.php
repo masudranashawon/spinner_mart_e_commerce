@@ -30,6 +30,17 @@ class ProductVariantController extends Controller
 
         $deleted = $variant->delete();
 
+        if ($product->variants()->count() == 0) {
+            ProductVariant::create([
+                'product_id' => $product->id,
+                'size_id'    => null,
+                'color_id'   => null,
+                'sku_code'   => $product->sku_code,
+                'buying_price' => $product->buying_price,
+                'selling_price' => $product->selling_price,
+            ]);
+        }
+
         if ($deleted) {
             return to_route("product.show", $product->id)->withSuccess("Variant deleted successfully");
         } else {

@@ -56,6 +56,9 @@ class ProductController extends Controller
             $q->whereNotNull('size_id')->orWhereNotNull('color_id');
         })->latest()->get(); // Fetch variants
 
+        //stock variants
+        $stockVariants = ProductVariant::where('product_id', $product->id)->latest()->get();
+
         // product galleries
         $productGalleries =  $product->galleries->map(function ($media) {
             return [
@@ -67,12 +70,10 @@ class ProductController extends Controller
         // stock history
         $stockHistory = InventoryStock::whereIn(
             'product_variant_id',
-            $productVariants->pluck('id')
-        )
-            ->latest()
-            ->get();
+            $stockVariants->pluck('id')
+        )->latest()->get();
 
-        return view('admin.product.show', compact("product", "productGalleries", "colors", "sizes", "productVariants", "stockHistory"));
+        return view('admin.product.show', compact("product", "productGalleries", "colors", "sizes", "productVariants", "stockVariants", "stockHistory"));
     }
 
     public function edit(Product $product)
