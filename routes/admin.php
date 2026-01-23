@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InventoryStockController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
@@ -12,7 +13,12 @@ use App\Http\Controllers\Admin\TagController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix("admin")->group(function () {
-  // category routes
+  // dashboard routes
+  Route::controller(DashboardController::class)->group(function () {
+    Route::get("/dashboard", "index")->name("admin.root");
+  });
+
+  //category routes
   Route::controller(CategoryController::class)->group(function () {
     Route::get("/categories", "index")->name("category.index");
     Route::post("/category/store", "store")->name("category.store");
