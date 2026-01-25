@@ -1,3 +1,5 @@
+<?php $categories = App\Models\Category::with('subCategories')->latest('id')->get(); ?>
+
 <!-- start header -->
 <header id="header">
     <div class="topbar">
