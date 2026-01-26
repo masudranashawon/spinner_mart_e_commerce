@@ -709,7 +709,7 @@
                             </div>
                         </div>
                         <div class="content">
-                            <h3><a href="product.html">{{$product?->name}}</a></h3>
+                            <h3><a href="product.html" class="text-truncate"  style="max-width:180px" >{{$product?->name}}</a></h3>
                             <div class="rating-product">
                                 <i class="fi flaticon-star"></i>
                                 <i class="fi flaticon-star"></i>
@@ -719,8 +719,8 @@
                                 <span>120</span>
                             </div>
                             <div class="price">
-                                <span class="present-price">{{$product?->selling_price}}</span>
-                                <del class="old-price">120</del>
+                                <span class="present-price">{{$product?->discount_price}} </span>
+                                <del class="old-price">{{$product?->selling_price}}</del>
                             </div>
                         </div>
                     </div>

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->float('selling_price');
             $table->float('buying_price')->default(0);
             $table->float('discount')->default(0);
+            $table->float('discount_price')->default(0);
             $table->integer('reviews')->default(0);
             $table->integer('rating')->default(0);
             $table->foreignIdFor(Media::class)->nullable()->constrained()->cascadeOnDelete();

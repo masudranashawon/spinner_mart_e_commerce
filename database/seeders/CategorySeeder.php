@@ -34,30 +34,10 @@ class CategorySeeder extends Seeder
                 "slug" => "footwear",
             ],
             [
-                "name" => "Bags & Backpacks",
-                "slug" => "bags-backpacks",
-            ],
-            [
-                "name" => "Watches",
-                "slug" => "watches",
-            ],
-            [
                 "name" => "Accessories",
                 "slug" => "accessories",
             ],
-            [
-                "name" => "Winter Collection",
-                "slug" => "winter-collection",
-            ],
-            [
 
-                "name" => "New Arrivals",
-                "slug" => "new-arrivals",
-            ],
-            [
-                "name" => "Best Selling",
-                "slug" => "best-selling",
-            ],
         ];
 
         foreach ($data as $category) {

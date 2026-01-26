@@ -31,12 +31,21 @@ class ProductRepository extends Repository
             $thumbnail = MediaRepository::storeByRequest($request->file("thumbnail"), "product", "image");
         }
 
+        $discountPercent = 0;
+
+        if ($request->discount_price) {
+            $discountPercent = round(
+                (($request->selling_price - $request->discount_price) / $request->selling_price) * 100
+            );
+        }
+
         $product = self::create([
             "name" => $request->name,
             "sku_code" => $request->product_sku,
             "buying_price" => $request->buying_price,
             "selling_price" => $request->selling_price,
-            "discount" => 0,
+            "discount_price" => $request->discount_price,
+            "discount" => $discountPercent,
             "media_id" =>   $thumbnail->id ?? null,
         ]);
 
@@ -75,6 +84,8 @@ class ProductRepository extends Repository
             'sku_code'      => $product->sku_code,
             'buying_price'  => $product->buying_price,
             'selling_price' => $product->selling_price,
+            "discount_price" => $request->discount_price,
+            "discount" => $discountPercent,
         ]);
 
         return $product;
@@ -95,11 +106,21 @@ class ProductRepository extends Repository
                 $product->save();
             }
 
+            $discountPercent = 0;
+
+            if ($request->discount_price) {
+                $discountPercent = round(
+                    (($request->selling_price - $request->discount_price) / $request->selling_price) * 100
+                );
+            }
+
             // Product main table
             $product->update([
                 'name' => $request->name,
                 'buying_price' => $request->buying_price,
                 'selling_price' => $request->selling_price,
+                "discount_price" => $request->discount_price,
+                "discount" =>  $discountPercent,
             ]);
 
             // Product details table

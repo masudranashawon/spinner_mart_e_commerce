@@ -56,6 +56,14 @@ class ProductVariantRepository extends Repository
                 ]);
             }
 
+            $discountPercent = 0;
+
+            if ($variant['discount_price']) {
+                $discountPercent = round(
+                    (($variant['selling_price'] - $variant['discount_price']) / $variant['selling_price']) * 100
+                );
+            }
+
             // Create the new ProductVariant
             $productVariant = self::create([
                 'product_id'    => $product->id,
@@ -64,6 +72,8 @@ class ProductVariantRepository extends Repository
                 'sku_code'      => $variant['sku'],
                 'buying_price'  => $variant['buying_price'],
                 'selling_price' => $variant['selling_price'],
+                'discount_price' => $variant['discount_price'],
+                'discount' =>  $discountPercent,
             ]);
         }
 
@@ -99,12 +109,22 @@ class ProductVariantRepository extends Repository
             ]);
         }
 
+        $discountPercent = 0;
+
+        if ($request->discount_price) {
+            $discountPercent = round(
+                (($request->selling_price - $request->discount_price) / $request->selling_price) * 100
+            );
+        }
+
         // Update only editable fields
         $variant->update([
             'size_id'       => $request->edit_size,
             'color_id'      => $request->edit_color,
             'buying_price'  => $request->edit_buying_price,
             'selling_price' => $request->edit_selling_price,
+            "discount_price" => $request->edit_discount_price,
+            "discount" => $discountPercent,
         ]);
 
         return $variant;

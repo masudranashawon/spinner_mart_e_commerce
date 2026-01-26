@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreignIdFor(Size::class)->nullable()->constrained()->nullOnDelete();
             $table->float('selling_price')->nullable();
             $table->float('buying_price')->nullable();
-            $table->float('discount')->nullable();
+            $table->float('discount_price')->nullable();
             $table->integer('current_stock')->default(0);
             $table->timestamps();
         });

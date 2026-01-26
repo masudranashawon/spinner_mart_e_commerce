@@ -83,6 +83,10 @@
                 <td class="font-weight-bold">৳ {{ $product->selling_price }}</td>
               </tr>
               <tr>
+                <td class="text-muted">Discounted Price</td>
+                <td class="font-weight-bold">৳ {{ $product->discount_price }}</td>
+              </tr>
+              <tr>
                 <td class="text-muted">Sold Count</td>
                 <td> {{ $product->sold_count ?? '0.00' }}</td>
               </tr>
@@ -185,7 +189,7 @@
                 <th>Options</th>
                 <th>Buying Price</th>
                 <th>Selling Price</th>
-                <th>Discount</th>
+                <th>Discount Price</th>
                 <th>Stock</th>
                 <th class="text-center">Action</th>
               </tr>
@@ -204,7 +208,7 @@
                   </td>
                   <td>৳ {{ $variant?->buying_price }}</td>
                   <td>৳ {{ $variant?->selling_price }}</td>
-                  <td>{{ $variant->discount ? $variant->discount . '%' : '-' }}</td>
+                  <td>{{ $variant?->discount_price ? $variant?->discount_price : '-' }}</td>
                   <td>{{ $variant?->current_stock }}</td>
                   <td class="text-center">
                     <button class="btn btn-primary btn-icon edit-variant-btn" data-toggle="modal"
@@ -297,6 +301,7 @@
                   <th>Size</th>
                   <th>Buying Price</th>
                   <th>Selling Price</th>
+                  <th>Discount Price</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -362,6 +367,10 @@
               class="-mb-1rem" />
           </td>
           <td>
+            <x-input type="number" name="variants[__INDEX__][discount_price]" value="{{ $product->discount_price }}"
+              class="-mb-1rem" />
+          </td>
+          <td>
             <button type="button" class="btn btn-danger btn-sm removeRow">Remove</button>
           </td>
         </tr>
@@ -406,6 +415,9 @@
             <x-input label="Buying Price" type="number" name="edit_buying_price" id="edit_buying_price" />
 
             <x-input label="Selling Price" type="number" name="edit_selling_price" id="edit_selling_price" />
+
+            <x-input label="Discount Price Price" type="number" name="edit_discount_price" id="edit_discount_price" />
+
             @error('variant')
               <p class="text-danger fw-bold mt-2">{{ $message }}</p>
             @enderror
@@ -557,6 +569,7 @@
         $('#edit_color').val(variant.color_id);
         $('#edit_buying_price').val(variant.buying_price);
         $('#edit_selling_price').val(variant.selling_price);
+        $('#edit_discount_price').val(variant.discount_price);
       });
 
       // Show modals on validation errors
@@ -585,6 +598,7 @@
           $('#edit_color').val(oldData.edit_color);
           $('#edit_buying_price').val(oldData.edit_buying_price);
           $('#edit_selling_price').val(oldData.edit_selling_price);
+          $('#edit_discount_price').val(oldData.edit_discount_price);
 
           $('#variantEditModal').modal('show');
         }
