@@ -55,11 +55,11 @@
                             <div class="shopWidgetWraper">
                                 <div class="priceFilterSlider">
                                     <form action="#" method="get" class="clearfix">
-                                        <!-- <div id="sliderRange"></div>
+                                        {{-- <div id="sliderRange"></div>
                                                 <div class="pfsWrap">
                                                     <label>Price:</label>
                                                     <span id="amount"></span>
-                                                </div> -->
+                                                </div> --}}
                                         <div class="d-flex">
                                             <div class="col-lg-6 pe-2">
                                                 <label for="" class="form-label">Min</label>
@@ -119,7 +119,7 @@
                                     <div class="product-card">
                                         <div class="card-image">
                                             <div class="image">
-                                                <img src="{{ $product?->thumbnail }}" alt="{{$product?->name}}" class="w-100 h-100" style="object-fit: cover;">
+                                                <img src="{{ $product?->thumbnail }}" alt="{{$product?->name}}">
                                             </div>
                                         </div>
                                         <div class="content">
@@ -158,8 +158,9 @@
             <div class="col-lg-8">
                 <div class="shop-section-top-inner">
                     <div class="shoping-product">
-                        <p>We found <span>10 items</span> for you!</p>
+                        <p>We found <span>{{$products->total()}} items</span> for you! </p>
                     </div>
+
                     <div class="short-by">
                         <ul>
                             <li>
@@ -176,15 +177,20 @@
                     </div>
                 </div>
                 <div class="product-wrap">
-                    <div class="row align-items-center">
+                    <div class="row align-items-start">
+                        @forelse($products ?? [] as $product)
                         <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
                             <div class="product-item">
                                 <div class="image">
-                                    <img src="assets/images/interest-product/1.png" alt="">
+                                    <img src="{{$product->thumbnail}}" alt="{{$product->name}}">
+                                    @if($loop->even)
+                                    <div class="tag sale">Sale</div>
+                                    @else
                                     <div class="tag new">New</div>
+                                    @endif
                                 </div>
-                                <div class="text">
-                                    <h2><a href="product-single.html">Wireless Headphones</a></h2>
+                                <div class="text p-3 p-lg-4">
+                                    <h2><a href="product-single.html" class="text-truncate w-100">{{$product->name}}</a></h2>
                                     <div class="rating-product">
                                         <i class="fi flaticon-star"></i>
                                         <i class="fi flaticon-star"></i>
@@ -194,380 +200,21 @@
                                         <span>130</span>
                                     </div>
                                     <div class="price">
-                                        <span class="present-price">$120.00</span>
-                                        <del class="old-price">$200.00</del>
+                                        <span class="present-price">{{$product->discount_price}}</span>
+                                        <del class="old-price">{{$product->selling_price}}</del>
                                     </div>
-                                    <div class="shop-btn">
-                                        <a class="theme-btn-s2" href="product.html">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="product-item">
-                                <div class="image">
-                                    <img src="assets/images/interest-product/2.png" alt="">
-                                    <div class="tag sale">Sale</div>
-                                </div>
-                                <div class="text">
-                                    <h2><a href="product-single.html">Blue Bag with Lock</a></h2>
-                                    <div class="rating-product">
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <span>120</span>
-                                    </div>
-                                    <div class="price">
-                                        <span class="present-price">$160.00</span>
-                                        <del class="old-price">$190.00</del>
-                                    </div>
-                                    <div class="shop-btn">
-                                        <a class="theme-btn-s2" href="product.html">Shop Now</a>
+                                    <div class="shop-btn p-0">
+                                        <a class="theme-btn-s2 px-2 py-2 w-100" href="product.html">Shop Now</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="product-item">
-                                <div class="image">
-                                    <img src="assets/images/interest-product/3.png" alt="">
-                                    <div class="tag new">New</div>
-                                </div>
-                                <div class="text">
-                                    <h2><a href="product-single.html">Stylish Pink Top</a></h2>
-                                    <div class="rating-product">
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <span>150</span>
-                                    </div>
-                                    <div class="price">
-                                        <span class="present-price">$150.00</span>
-                                        <del class="old-price">$200.00</del>
-                                    </div>
-                                    <div class="shop-btn">
-                                        <a class="theme-btn-s2" href="product.html">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="product-item">
-                                <div class="image">
-                                    <img src="assets/images/interest-product/4.png" alt="">
-                                    <div class="tag sale">Sale</div>
-                                </div>
-                                <div class="text">
-                                    <h2><a href="product-single.html">Brown Com Boots</a></h2>
-                                    <div class="rating-product">
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <span>120</span>
-                                    </div>
-                                    <div class="price">
-                                        <span class="present-price">$120.00</span>
-                                        <del class="old-price">$150.00</del>
-                                    </div>
-                                    <div class="shop-btn">
-                                        <a class="theme-btn-s2" href="product.html">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="product-item">
-                                <div class="image">
-                                    <img src="assets/images/interest-product/5.png" alt="">
-                                    <div class="tag new">New</div>
-                                </div>
-                                <div class="text">
-                                    <h2><a href="product-single.html">Winter Sweter</a></h2>
-                                    <div class="rating-product">
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <span>160</span>
-                                    </div>
-                                    <div class="price">
-                                        <span class="present-price">$110.00</span>
-                                        <del class="old-price">$130.00</del>
-                                    </div>
-                                    <div class="shop-btn">
-                                        <a class="theme-btn-s2" href="product.html">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="product-item">
-                                <div class="image">
-                                    <img src="assets/images/interest-product/6.png" alt="">
-                                    <div class="tag sale">Sale</div>
-                                </div>
-                                <div class="text">
-                                    <h2><a href="product-single.html">Blue Kids Shoes</a></h2>
-                                    <div class="rating-product">
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <span>130</span>
-                                    </div>
-                                    <div class="price">
-                                        <span class="present-price">$180.00</span>
-                                        <del class="old-price">$200.00</del>
-                                    </div>
-                                    <div class="shop-btn">
-                                        <a class="theme-btn-s2" href="product.html">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="product-item">
-                                <div class="image">
-                                    <img src="assets/images/interest-product/7.png" alt="">
-                                    <div class="tag new">New</div>
-                                </div>
-                                <div class="text">
-                                    <h2><a href="product-single.html">Stylish Bag</a></h2>
-                                    <div class="rating-product">
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <span>120</span>
-                                    </div>
-                                    <div class="price">
-                                        <span class="present-price">$170.00</span>
-                                        <del class="old-price">$200.00</del>
-                                    </div>
-                                    <div class="shop-btn">
-                                        <a class="theme-btn-s2" href="product.html">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="product-item">
-                                <div class="image">
-                                    <img src="assets/images/interest-product/8.png" alt="">
-                                    <div class="tag sale">Sale</div>
-                                </div>
-                                <div class="text">
-                                    <h2><a href="product-single.html">Finger Rings</a></h2>
-                                    <div class="rating-product">
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <span>120</span>
-                                    </div>
-                                    <div class="price">
-                                        <span class="present-price">$100.00</span>
-                                        <del class="old-price">$130.00</del>
-                                    </div>
-                                    <div class="shop-btn">
-                                        <a class="theme-btn-s2" href="product.html">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="product-item">
-                                <div class="image">
-                                    <img src="assets/images/trending-product/1.png" alt="">
-                                    <div class="tag new">New</div>
-                                </div>
-                                <div class="text">
-                                    <h2><a href="product-single.html">Pink Baby Shoes</a></h2>
-                                    <div class="rating-product">
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <span>130</span>
-                                    </div>
-                                    <div class="price">
-                                        <span class="present-price">$120.00</span>
-                                        <del class="old-price">$200.00</del>
-                                    </div>
-                                    <div class="shop-btn">
-                                        <a class="theme-btn-s2" href="product.html">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="product-item">
-                                <div class="image">
-                                    <img src="assets/images/interest-product/1.png" alt="">
-                                    <div class="tag new">New</div>
-                                </div>
-                                <div class="text">
-                                    <h2><a href="product-single.html">Wireless Headphones</a></h2>
-                                    <div class="rating-product">
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <span>130</span>
-                                    </div>
-                                    <div class="price">
-                                        <span class="present-price">$120.00</span>
-                                        <del class="old-price">$200.00</del>
-                                    </div>
-                                    <div class="shop-btn">
-                                        <a class="theme-btn-s2" href="product.html">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="product-item">
-                                <div class="image">
-                                    <img src="assets/images/interest-product/2.png" alt="">
-                                    <div class="tag sale">Sale</div>
-                                </div>
-                                <div class="text">
-                                    <h2><a href="product-single.html">Blue Bag with Lock</a></h2>
-                                    <div class="rating-product">
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <span>120</span>
-                                    </div>
-                                    <div class="price">
-                                        <span class="present-price">$160.00</span>
-                                        <del class="old-price">$190.00</del>
-                                    </div>
-                                    <div class="shop-btn">
-                                        <a class="theme-btn-s2" href="product.html">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="product-item">
-                                <div class="image">
-                                    <img src="assets/images/interest-product/3.png" alt="">
-                                    <div class="tag new">New</div>
-                                </div>
-                                <div class="text">
-                                    <h2><a href="product-single.html">Stylish Pink Top</a></h2>
-                                    <div class="rating-product">
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <span>150</span>
-                                    </div>
-                                    <div class="price">
-                                        <span class="present-price">$150.00</span>
-                                        <del class="old-price">$200.00</del>
-                                    </div>
-                                    <div class="shop-btn">
-                                        <a class="theme-btn-s2" href="product.html">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="product-item">
-                                <div class="image">
-                                    <img src="assets/images/interest-product/4.png" alt="">
-                                    <div class="tag sale">Sale</div>
-                                </div>
-                                <div class="text">
-                                    <h2><a href="product-single.html">Brown Com Boots</a></h2>
-                                    <div class="rating-product">
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <span>120</span>
-                                    </div>
-                                    <div class="price">
-                                        <span class="present-price">$120.00</span>
-                                        <del class="old-price">$150.00</del>
-                                    </div>
-                                    <div class="shop-btn">
-                                        <a class="theme-btn-s2" href="product.html">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="product-item">
-                                <div class="image">
-                                    <img src="assets/images/interest-product/5.png" alt="">
-                                    <div class="tag new">New</div>
-                                </div>
-                                <div class="text">
-                                    <h2><a href="product-single.html">Winter Sweter</a></h2>
-                                    <div class="rating-product">
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <span>160</span>
-                                    </div>
-                                    <div class="price">
-                                        <span class="present-price">$110.00</span>
-                                        <del class="old-price">$130.00</del>
-                                    </div>
-                                    <div class="shop-btn">
-                                        <a class="theme-btn-s2" href="product.html">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="product-item">
-                                <div class="image">
-                                    <img src="assets/images/interest-product/6.png" alt="">
-                                    <div class="tag sale">Sale</div>
-                                </div>
-                                <div class="text">
-                                    <h2><a href="product-single.html">Blue Kids Shoes</a></h2>
-                                    <div class="rating-product">
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <i class="fi flaticon-star"></i>
-                                        <span>130</span>
-                                    </div>
-                                    <div class="price">
-                                        <span class="present-price">$180.00</span>
-                                        <del class="old-price">$200.00</del>
-                                    </div>
-                                    <div class="shop-btn">
-                                        <a class="theme-btn-s2" href="product.html">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @empty
+                        <p>No product found</p>
+                        @endforelse
                     </div>
+
+                    {{ $products->links() }}
                 </div>
             </div>
         </div>
@@ -641,4 +288,18 @@
 
 </div>
 <!-- end of page-wrapper -->
+
+<style>
+    .image {
+        height: 12rem;
+        overflow: hidden;
+    }
+
+    .image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain !important;
+    }
+
+</style>
 @endsection

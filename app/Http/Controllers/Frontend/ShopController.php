@@ -16,7 +16,7 @@ class ShopController extends Controller
     {
 
         $categories = Category::latest('id')->get();
-        $products = Product::latest('id')->get();
+        $products = Product::latest()->paginate(20)->withQueryString();
         $tags = Tag::latest('id')->get();
         $sizes = Size::latest('id')->get();
         $colors = Color::latest('id')->get();
