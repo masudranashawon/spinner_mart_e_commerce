@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class ProductVariant extends Model
 {
@@ -27,4 +28,21 @@ class ProductVariant extends Model
     {
         return $this->belongsTo(Size::class);
     }
+
+        protected function currentStock(): Attribute
+        {
+            return Attribute::make(
+                get: function () {
+                    $in = $this->stocks()
+                        ->whereIn('type', ['stock_in', 'return'])
+                        ->sum('quantity');
+
+                    $out = $this->stocks()
+                        ->whereIn('type', ['stock_out', 'adjustment'])
+                        ->sum('quantity');
+
+                    return $in - $out;
+                }
+            );
+        }
 }

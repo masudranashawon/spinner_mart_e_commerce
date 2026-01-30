@@ -24,4 +24,36 @@ class ShopController extends Controller
 
         return view('frontend.shop.index', compact('categories', 'products', 'recentlyAdded', 'tags', 'sizes', 'colors'));
     }
+
+    public function show($slug)
+    {
+        $product = Product::with([
+            'variants.color',
+            'variants.size'
+        ])
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        // Default variant
+        $defaultVariant = $product->variants->first();
+
+        // ALL variants
+        $variants = $product->variants->map(function ($v) {
+            return [
+                'id'       => $v->id,
+                'color_id' => $v->color_id,
+                'size_id'  => $v->size_id,
+                'sku'      => $v->sku_code,
+                'price'    => $v->selling_price,
+                'discount' => $v->discount_price,
+                'stock'    => $v->currentStock,
+            ];
+        })->values();
+
+        return view('frontend.shop.show', compact(
+            'product',
+            'defaultVariant',
+            'variants'
+        ));
+    }
 }

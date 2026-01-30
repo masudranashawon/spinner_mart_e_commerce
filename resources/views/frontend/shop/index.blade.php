@@ -190,7 +190,7 @@
                                     @endif
                                 </div>
                                 <div class="text p-3 p-lg-4">
-                                    <h2><a href="product-single.html" class="text-truncate w-100">{{$product->name}}</a></h2>
+                                    <h2><a href="{{route('productDetails', $product->slug)}}" class="text-truncate w-100">{{$product->name}}</a></h2>
                                     <div class="rating-product">
                                         <i class="fi flaticon-star"></i>
                                         <i class="fi flaticon-star"></i>
@@ -284,8 +284,6 @@
         </div>
     </div>
     <!-- popup-quickview -->
-</div>
-
 </div>
 <!-- end of page-wrapper -->
 
