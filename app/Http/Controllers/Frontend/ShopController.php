@@ -28,32 +28,40 @@ class ShopController extends Controller
     public function show($slug)
     {
         $product = Product::with([
-            'variants.color',
-            'variants.size'
+            'variants' => function ($q) {
+                $q->where('current_stock', '>', 0)  //variants with stock
+                    ->with(['color:id,name,color_code', 'size:id,name']);
+            },
+            'galleries',
+            'details.category',
+            'tags'
         ])
             ->where('slug', $slug)
             ->firstOrFail();
 
         // Default variant
-        $defaultVariant = $product->variants->first();
+        $defaultVariant = $product->variants
+            ->where('current_stock', '>', 0)
+            ->first() ?? $product->variants->first();
 
-        // ALL variants
-        $variants = $product->variants->map(function ($v) {
+        // Frontend variants data
+        $variantsData = $product->variants->map(function ($v) {
             return [
-                'id'       => $v->id,
-                'color_id' => $v->color_id,
-                'size_id'  => $v->size_id,
-                'sku'      => $v->sku_code,
-                'price'    => $v->selling_price,
-                'discount' => $v->discount_price,
-                'stock'    => $v->currentStock,
+                'id'          => $v->id,
+                'color_id'    => $v->color_id,
+                'size_id'     => $v->size_id,
+                'sku'         => $v->sku_code,
+                'price'       => number_format($v->selling_price, 2),
+                'discount'    => $v->discount_price ? number_format($v->discount_price, 2) : null,
+                'stock'       => $v->current_stock,
+                'in_stock'    => $v->current_stock > 0,
             ];
-        })->values();
+        });
 
         return view('frontend.shop.show', compact(
             'product',
             'defaultVariant',
-            'variants'
+            'variantsData'
         ));
     }
 }

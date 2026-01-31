@@ -69,35 +69,36 @@
                         </div>
                         <p>{{$product?->details?->short_description}}</p>
 
+                        {{-- Color Selection --}}
                         @if($product->variants->whereNotNull('color_id')->count())
                         <div class="product-filter-item color">
                             <div class="color-name">
-                                <span>Color :</span>
+                                <span>Color:</span>
                                 <ul>
-                                    @foreach($product->variants->unique('color_id') as $key => $variant)
-                                    @php $out = $variant->currentStock <= 0; @endphp <li class="{{ $out ? 'opacity-50' : '' }}">
-                                        <input type="radio" name="color" value="{{ $variant->color_id }}" class="color-input" id="color{{ $key }}" {{ $out ? 'disabled' : '' }}>
-                                        <label for="color{{ $key }}" style="background-color: {{ $variant->color?->color_code }}" title="{{ $out ? 'Out of stock' : '' }}"></label>
-                                        </li>
-                                        @endforeach
+                                    @foreach($product->variants->unique('color_id')->filter(fn($v) => $v->color_id) as $variant)
+                                    <li class="{{ $variant->currentStock <= 0 ? 'out-of-stock' : '' }}">
+                                        <input type="radio" name="color" value="{{ $variant->color_id }}" class="color-input" id="color-{{ $variant->color_id }}" data-stock="{{ $variant->currentStock }}" {{ $variant->currentStock <= 0 ? 'disabled' : '' }} {{ $variant->color_id == $defaultVariant->color_id ? 'checked' : '' }}>
+                                        <label for="color-{{ $variant->color_id }}" style="background-color: {{ $variant->color?->color_code }}" title="{{ $variant->color?->name }} {{ $variant->currentStock <= 0 ? '(Out of stock)' : '' }}"></label>
+                                    </li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
                         @endif
 
+                        {{-- Size Selection --}}
                         @if($product->variants->whereNotNull('size_id')->count())
                         <div class="product-filter-item color filter-size">
                             <div class="color-name">
-                                <span>Sizes :</span>
-
+                                <span>Sizes:</span>
                                 <ul>
-                                    @foreach($product->variants->unique('size_id') as $key => $variant)
-                                    @if($variant?->size)
-                                    <li class="color">
-                                        <input type="radio" name="size" value="{{ $variant?->size->id }}" id="{{ $variant?->size?->name.$key }}" class="size size-input">
-                                        <label for="{{ $variant?->size?->name.$key }}">{{ $variant?->size?->name }}</label>
+                                    @foreach($product->variants->unique('size_id')->filter(fn($v) => $v->size_id) as $variant)
+                                    <li>
+                                        <input type="radio" name="size" value="{{ $variant->size_id }}" id="size-{{ $variant->size_id }}" class="size-input" data-stock="{{ $variant->currentStock }}" {{ $variant->size_id == $defaultVariant->size_id ? 'checked' : '' }}>
+                                        <label for="size-{{ $variant->size_id }}">
+                                            {{ $variant->size?->name }}
+                                        </label>
                                     </li>
-                                    @endif
                                     @endforeach
                                 </ul>
                             </div>
@@ -111,19 +112,25 @@
                             <a href="#" class="theme-btn-s2">Add to cart</a>
                             <a href="#" class="wl-btn"><i class="fi flaticon-heart"></i></a>
                         </div>
-                        
+
+                        {{-- Stock Info --}}
                         <ul class="important-text">
                             <li>SKU: <span id="sku">{{ $defaultVariant->sku_code }}</span></li>
                             <li>
                                 Stock:
-                                <span id="stock">
-                                    {{ $defaultVariant->currentStock > 0 ? $defaultVariant->currentStock.' available' : 'Out of stock' }}
+                                <span id="stock" class="{{ $defaultVariant->currentStock > 0 ? 'in-stock' : 'out-of-stock' }}">
+                                    {{ $defaultVariant->currentStock > 0 
+                ? $defaultVariant->currentStock . ' available' 
+                : 'Out of stock' }}
                                 </span>
                             </li>
-                            <li><span>Categories:</span> {{$product->details->category->name}}</li>
-                            <li><span>Tags:</span> @foreach($product->tags as $tag)
-                                <span class="badge bg-secondary px-2 py-0 small text-light fw-normal mb-2 mb-md-0">{{$tag->name}}</span>
-                                @endforeach </li>
+                            <li><span>Category:</span> {{ $product->details->category->name }}</li>
+                            <li>
+                                <span>Tags:</span>
+                                @foreach($product->tags as $tag)
+                                <span class="badge bg-secondary px-2 py-0 small text-light fw-normal mb-2 mb-md-0">{{ $tag->name }}</span>
+                                @endforeach
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -339,98 +346,138 @@
 
 @push('script')
 <script>
-    const variants = @json($variants);
+    // Variants data from server
+    const variantsData = @json($variantsData);
 
-    let selectedColor = null;
-    let selectedSize  = null;
+    // State management
+    let state = {
+        selectedColor: {{$defaultVariant-> color_id ?? 'null'}}, 
+        selectedSize: {{$defaultVariant-> size_id ?? 'null'}}, 
+        currentVariant: null
+    };
 
-    // ===============================
-    // Initial default variant
-    // ===============================
-    @if($defaultVariant)
-        selectedColor = {{ $defaultVariant->color_id ?? 'null' }};
-        selectedSize  = {{ $defaultVariant->size_id ?? 'null' }};
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeVariants();
 
-        if (selectedColor) {
-            document.querySelector(`.color-input[value="{{ $defaultVariant->color_id }}"]`)?.setAttribute('checked', true);
-        }
-
-        if (selectedSize) {
-            document.querySelector(`.size-input[value="{{ $defaultVariant->size_id }}"]`)?.setAttribute('checked', true);
-        }
-    @endif
-
-    // ===============================
-    // Color change
-    // ===============================
-    document.querySelectorAll('.color-input').forEach(el => {
-        el.addEventListener('change', e => {
-            selectedColor = e.target.value;
-            updateSizeAvailability();
-            updateVariant();
+        // Event listeners
+        document.querySelectorAll('.color-input').forEach(el => {
+            el.addEventListener('change', handleColorChange);
         });
-    });
 
-    // ===============================
-    // Size change
-    // ===============================
-    document.querySelectorAll('.size-input').forEach(el => {
-        el.addEventListener('change', e => {
-            selectedSize = e.target.value;
-            updateVariant();
-        });
-    });
-
-    // ===============================
-    // Disable size if variant doesn't exist
-    // ===============================
-    function updateSizeAvailability() {
         document.querySelectorAll('.size-input').forEach(el => {
-            const exists = variants.some(v =>
-                v.color_id == selectedColor && v.size_id == el.value
+            el.addEventListener('change', handleSizeChange);
+        });
+    });
+
+    function initializeVariants() {
+        updateSizeAvailability();
+        updateCurrentVariant();
+    }
+
+    function handleColorChange(e) {
+        state.selectedColor = parseInt(e.target.value);
+        updateSizeAvailability();
+        updateCurrentVariant();
+    }
+
+    function handleSizeChange(e) {
+        state.selectedSize = parseInt(e.target.value);
+        updateCurrentVariant();
+    }
+
+    function updateSizeAvailability() {
+        if (!state.selectedColor) return;
+
+        document.querySelectorAll('.size-input').forEach(el => {
+            const sizeId = parseInt(el.value);
+
+            // Check if variant exists with this color+size combination
+            const variantExists = variantsData.some(v =>
+                v.color_id == state.selectedColor &&
+                v.size_id == sizeId &&
+                v.in_stock
             );
 
-            el.disabled = !exists;
-            el.closest('li').style.opacity = exists ? 1 : 0.4;
+            const listItem = el.closest('li');
 
-            if (!exists) el.checked = false;
+            if (variantExists) {
+                el.disabled = false;
+                listItem.classList.remove('disabled');
+                listItem.style.opacity = '1';
+            } else {
+                el.disabled = true;
+                el.checked = false;
+                listItem.classList.add('disabled');
+                listItem.style.opacity = '0.4';
+            }
         });
     }
 
-    // ===============================
-    // Update variant
-    // ===============================
-    function updateVariant() {
-        const variant = variants.find(v =>
-            (selectedColor ? v.color_id == selectedColor : true) &&
-            (selectedSize  ? v.size_id  == selectedSize  : true)
-        );
+    function updateCurrentVariant() {
+        // Find matching variant
+        const variant = variantsData.find(v => {
+            const colorMatch = !state.selectedColor || v.color_id == state.selectedColor;
+            const sizeMatch = !state.selectedSize || v.size_id == state.selectedSize;
+            return colorMatch && sizeMatch;
+        });
 
-        // If variant doesn't exist
-        if (!variant) return;
+        if (!variant) {
+            console.warn('No variant found for selection');
+            return;
+        }
 
-        // Variant Exist → price/sku always show
-        document.getElementById('price').innerText =
-            variant.discount > 0 ? variant.discount : variant.price;
-
-        document.getElementById('oldPrice').innerText =
-            variant.discount > 0 ? variant.price : '';
-
-        document.getElementById('sku').innerText = variant.sku;
-
-        document.getElementById('stock').innerText =
-            variant.stock > 0
-                ? variant.stock + ' available'
-                : 'Out of stock';
+        state.currentVariant = variant;
+        updateUI(variant);
     }
 
-    // ===============================
-    // Initial size filtering
-    // ===============================
-    if (selectedColor) {
-        updateSizeAvailability();
-        updateVariant();
+    function updateUI(variant) {
+        // Update price
+        const priceEl = document.getElementById('price');
+        const oldPriceEl = document.getElementById('oldPrice');
+
+        if (variant.discount) {
+            priceEl.textContent = '৳' + variant.discount;
+            oldPriceEl.textContent = '৳' + variant.price;
+            oldPriceEl.style.display = 'inline';
+        } else {
+            priceEl.textContent = '৳' + variant.price;
+            oldPriceEl.style.display = 'none';
+        }
+
+        // Update SKU
+        document.getElementById('sku').textContent = variant.sku;
+
+        // Update stock
+        const stockEl = document.getElementById('stock');
+        if (variant.in_stock) {
+            stockEl.textContent = variant.stock + ' available';
+            stockEl.className = 'in-stock';
+        } else {
+            stockEl.textContent = 'Out of stock';
+            stockEl.className = 'out-of-stock';
+        }
+
+        // Update add to cart button
+        updateAddToCartButton(variant);
     }
+
+    function updateAddToCartButton(variant) {
+        const addToCartBtn = document.querySelector('.theme-btn-s2');
+
+        if (variant.in_stock) {
+            addToCartBtn.classList.remove('disabled');
+            addToCartBtn.textContent = 'Add to cart';
+        } else {
+            addToCartBtn.classList.add('disabled');
+            addToCartBtn.textContent = 'Out of stock';
+        }
+    }
+
+    // Export current variant for cart functionality
+    window.getCurrentVariant = function() {
+        return state.currentVariant;
+    };
+
 </script>
 @endpush
-
