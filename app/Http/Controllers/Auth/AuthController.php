@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\AuthRequest;
 
 class AuthController extends Controller
 {
@@ -17,7 +17,7 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function registerStore(Request $request)
+    public function registerStore(AuthRequest $request)
     {
         dd($request->all());
         // Handle register logic here
