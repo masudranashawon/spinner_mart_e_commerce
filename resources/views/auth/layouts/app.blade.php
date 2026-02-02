@@ -17,18 +17,7 @@
     </title>
 
     <link href="{{ asset('frontend/assets/css/themify-icons.css') }}" rel="stylesheet">
-    <link href="{{ asset('frontend/assets/css/font-awesome.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('frontend/assets/css/flaticon_ecommerce.css') }}" rel="stylesheet">
     <link href="{{ asset('frontend/assets/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('frontend/assets/css/animate.css') }}" rel="stylesheet">
-    <link href="{{ asset('frontend/assets/css/owl.carousel.css') }}" rel="stylesheet">
-    <link href="{{ asset('frontend/assets/css/owl.theme.css') }}" rel="stylesheet">
-    <link href="{{ asset('frontend/assets/css/slick.css') }}" rel="stylesheet">
-    <link href="{{ asset('frontend/assets/css/slick-theme.css') }}" rel="stylesheet">
-    <link href="{{ asset('frontend/assets/css/swiper.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('frontend/assets/css/owl.transitions.css') }}" rel="stylesheet">
-    <link href="{{ asset('frontend/assets/css/jquery.fancybox.css') }}" rel="stylesheet">
-    <link href="{{ asset('frontend/assets/css/odometer-theme-default.css') }}" rel="stylesheet">
     <link href="{{ asset('frontend/assets/sass/style.css') }}" rel="stylesheet">
 
     @stack('style')
@@ -46,7 +35,7 @@
                     <div class="loader-line-mask">
                         <div class="loader-line"></div>
                     </div>
-                    <img src="assets/images/preloader.png" alt="Loading...">
+                    <img src="{{ asset('frontend/assets/images/preloader.png') }}" alt="Loading...">
                 </div>
             </div>
         </div>
@@ -59,12 +48,7 @@
     <!-- All JavaScript files
     ================================================== -->
     <script src="{{ asset('frontend/assets/js/jquery.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/bootstrap.bundle.min.js') }}"></script>
-    <!-- Plugins for this template -->
-    <script src="{{ asset('frontend/assets/js/modernizr.custom.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/jquery.dlmenu.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/jquery-plugin-collection.js') }}"></script>
-    <!-- Custom script for this template -->
     <script src="{{ asset('frontend/assets/js/script.js') }}"></script>
 
     @stack('script')

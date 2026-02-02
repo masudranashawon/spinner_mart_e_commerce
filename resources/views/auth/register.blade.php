@@ -10,16 +10,16 @@
                 <form class="wpo-accountWrapper" action="#">
                     <div class="wpo-accountInfo">
                         <div class="wpo-accountInfoHeader">
-                            <a href="index.html"><img src="assets/images/logo-2.svg" alt=""></a>
-                            <a class="wpo-accountBtn" href="login.html">
+                            <a href="{{ route('home') }}"><img src="{{ asset('frontend/assets/images/logo-2.svg') }}" alt=""></a>
+                            <a class="wpo-accountBtn" href="{{ route('login') }}">
                                 <span class="">Log in</span>
                             </a>
                         </div>
                         <div class="image">
-                            <img src="assets/images/login.svg" alt="">
+                            <img src="{{ asset('frontend/assets/images/login.svg') }}" alt="">
                         </div>
                         <div class="back-home">
-                            <a class="wpo-accountBtn" href="index.html">
+                            <a class="wpo-accountBtn" href="{{ route('home') }}">
                                 <span class="">Back To Home</span>
                             </a>
                         </div>
@@ -41,7 +41,7 @@
                             <div class="col-lg-12 col-md-12 col-12">
                                 <div class="form-group">
                                     <label>Password</label>
-                                    <input class="pwd2" type="password" placeholder="Your password here.." value="sfsg" name="pass">
+                                    <input class="pwd2" type="password" placeholder="Your password here.." name="password">
                                     <span class="input-group-btn">
                                         <button class="btn btn-default reveal3" type="button"><i class="ti-eye"></i></button>
                                     </span>
@@ -50,7 +50,7 @@
                             <div class="col-lg-12 col-md-12 col-12">
                                 <div class="form-group">
                                     <label>Confirm Password</label>
-                                    <input class="pwd3" type="password" placeholder="Your password here.." value="ssres" name="pass">
+                                    <input class="pwd3" type="password" placeholder="Your password here.." name="password_confirmation">
                                     <span class="input-group-btn">
                                         <button class="btn btn-default reveal2" type="button"><i class="ti-eye"></i></button>
                                     </span>
@@ -61,7 +61,7 @@
                             </div>
                         </div>
 
-                        <p class="subText">Sign into your pages account <a href="login.html">Login</a></p>
+                        <p class="subText">Sign into your pages account <a href="{{ route('login') }}">Login</a></p>
                     </div>
                 </form>
             </div>
