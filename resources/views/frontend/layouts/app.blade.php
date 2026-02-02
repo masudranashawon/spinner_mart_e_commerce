@@ -27,6 +27,7 @@
     <link href="{{ asset('frontend/assets/css/owl.transitions.css') }}" rel="stylesheet">
     <link href="{{ asset('frontend/assets/css/jquery.fancybox.css') }}" rel="stylesheet">
     <link href="{{ asset('frontend/assets/css/odometer-theme-default.css') }}" rel="stylesheet">
+    <link href="{{ asset('admin/assets/vendors/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('frontend/assets/sass/style.css') }}" rel="stylesheet">
 </head>
 
@@ -93,8 +94,44 @@
     <script src="{{ asset('frontend/assets/js/modernizr.custom.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/jquery.dlmenu.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/jquery-plugin-collection.js') }}"></script>
+    <script src="{{ asset('admin/assets/vendors/sweetalert2/sweetalert2.min.js') }}"></script>
     <!-- Custom script for this template -->
     <script src="{{ asset('frontend/assets/js/script.js') }}"></script>
+
+    <script>
+        const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+        }
+        });
+
+        @if (session('success'))
+        Toast.fire({
+        icon: "success",
+        title: "{{ session('success') }}"
+        });
+        @endif
+
+        @if (session('error'))
+        Toast.fire({
+        icon: "error",
+        title: "{{ session('error') }}"
+        });
+        @endif
+
+        @if (session('warning'))
+        Toast.fire({
+        icon: "warning",
+        title: "{{ session('warning') }}"
+        });
+        @endif
+    </script>
 
     @stack('script')
 </body>
