@@ -7,7 +7,8 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <form class="wpo-accountWrapper" action="#">
+                <form class="wpo-accountWrapper" action="{{ route('login.post') }}" method="POST">
+                    @csrf
                     <div class="wpo-accountInfo">
                         <div class="wpo-accountInfoHeader">
                             <a href="{{ route('home') }}"><img src="{{ asset('frontend/assets/images/logo-2.svg') }}" alt=""></a>
@@ -31,20 +32,26 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-12">
-                                <label>Email</label>
-                                <input type="text" id="email" name="email" placeholder="demo@gmail.com">
+                                <label for="email">Email</label>
+                                <input type="text" id="email" name="email" placeholder="demo@gmail.com" value="{{ old('email') }}">
+                                @error('email') <small class="text-danger mb-md-3 mb-2 d-block">{{ $message }}</small> @enderror
                             </div>
                             <div class="col-lg-12 col-md-12 col-12">
                                 <div class="form-group">
-                                    <label>Password</label>
-                                    <input class="pwd6" type="password" placeholder="" value="123456" name="pass">
+                                    <label for="password">Password</label>
+                                    <input class="pwd6" id="password" type="password" placeholder="Enter Your Password" value="{{ old('password') }}" name="password">
                                     <span class="input-group-btn">
                                         <button class="btn btn-default reveal6" type="button"><i class="ti-eye"></i></button>
                                     </span>
                                 </div>
+                                @error('password') <small class="text-danger mb-md-3 mb-2 d-block">{{ $message }}</small> @enderror
                             </div>
                             <div class="col-lg-12 col-md-12 col-12">
-                                <div class="check-box-wrap">
+                                <div class="check-box-wrap position-relative d-flex justify-content-between align-items-center flex-wrap">
+                                    <div class="form-check">
+                                        <input id="remember" class="form-check-input" type="checkbox" name="remember">
+                                        <label class="form-check-label" for="remember">Remember me</label>
+                                    </div>
 
                                     <div class="forget-btn">
                                         <a href="forgot.html">Forgot Password?</a>

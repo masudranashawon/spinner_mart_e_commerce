@@ -13,7 +13,7 @@ Route::controller(AuthController::class)->group(function () {
   Route::get('register', 'register')->name('register');
   Route::post('register', 'registerStore')->name('register.store');
   Route::get('login', 'login')->name('login');
-  Route::post('login', 'loginStore')->name('login.store');
+  Route::post('login', 'loginPost')->name('login.post');
   Route::post('logout', 'logout')->name('logout');
 });
 

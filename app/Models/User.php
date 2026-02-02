@@ -8,6 +8,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @method bool hasRole($roles, string $guard = null)
+ * @method bool hasAnyRole($roles, string $guard = null)
+ * @method $this assignRole(...$roles)
+ * @method $this removeRole($role)
+ */
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
