@@ -11,6 +11,7 @@ Route::get('/products/{slug}', [ShopController::class, 'show'])->name('productDe
 
 Route::controller(AuthController::class)->group(function () {
   Route::get('login', 'login')->name('login');
+  Route::get('register', 'register')->name('register');
 });
 
 @include("admin.php");
