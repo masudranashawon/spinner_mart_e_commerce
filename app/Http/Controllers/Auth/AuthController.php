@@ -16,4 +16,10 @@ class AuthController extends Controller
     {
         return view('auth.register');
     }
+
+    public function registerStore(Request $request)
+    {
+        dd($request->all());
+        // Handle register logic here
+    }
 }

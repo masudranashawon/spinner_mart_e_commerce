@@ -10,8 +10,11 @@ Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/products/{slug}', [ShopController::class, 'show'])->name('productDetails');
 
 Route::controller(AuthController::class)->group(function () {
-  Route::get('login', 'login')->name('login');
   Route::get('register', 'register')->name('register');
+  Route::post('register', 'registerStore')->name('register.store');
+  Route::get('login', 'login')->name('login');
+  Route::post('login', 'loginStore')->name('login.store');
+  Route::post('logout', 'logout')->name('logout');
 });
 
 @include("admin.php");

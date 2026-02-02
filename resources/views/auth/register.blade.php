@@ -7,7 +7,8 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <form class="wpo-accountWrapper" action="#">
+                <form class="wpo-accountWrapper" action="{{ route('register.store') }}" method="POST">
+                    @csrf
                     <div class="wpo-accountInfo">
                         <div class="wpo-accountInfoHeader">
                             <a href="{{ route('home') }}"><img src="{{ asset('frontend/assets/images/logo-2.svg') }}" alt=""></a>
