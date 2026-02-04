@@ -9,8 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
- * @method bool hasRole($roles, string $guard = null)
- * @method bool hasAnyRole($roles, string $guard = null)
+ * @method bool hasRole($roles, string|null $guard = null)
+ * @method bool hasAnyRole($roles, string|null $guard = null)
  * @method $this assignRole(...$roles)
  * @method $this removeRole($role)
  */

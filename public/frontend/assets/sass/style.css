@@ -2394,7 +2394,7 @@ img {
   text-align: right;
 }
 
-.header-middle .middle-right ul {
+.header-middle .middle-right > ul {
   list-style: none;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -2408,7 +2408,7 @@ img {
 }
 
 @media (max-width: 991px) {
-  .header-middle .middle-right ul {
+  .header-middle .middle-right > ul {
     -webkit-box-pack: center;
         -ms-flex-pack: center;
             justify-content: center;
@@ -2416,11 +2416,11 @@ img {
   }
 }
 
-.header-middle .middle-right ul li {
+.header-middle .middle-right > ul > li {
   position: relative;
 }
 
-.header-middle .middle-right ul li a {
+.header-middle .middle-right > ul > li > a {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -2435,24 +2435,24 @@ img {
 }
 
 @media (max-width: 1199px) {
-  .header-middle .middle-right ul li a {
+  .header-middle .middle-right > ul > li a {
     padding-left: 5px;
   }
 }
 
-.header-middle .middle-right ul li a .fi {
+.header-middle .middle-right > ul > li a .fi {
   font-size: 30px;
   line-height: 30px;
 }
 
 @media (max-width: 575px) {
-  .header-middle .middle-right ul li a .fi {
+  .header-middle .middle-right > ul > li a .fi {
     font-size: 25px;
     line-height: 21px;
   }
 }
 
-.header-middle .middle-right ul li a span {
+.header-middle .middle-right > ul > li > a > span {
   font-family: "Jost", sans-serif;
   font-weight: 400;
   font-size: 18px;
@@ -2460,31 +2460,31 @@ img {
 }
 
 @media (max-width: 575px) {
-  .header-middle .middle-right ul li a span {
+  .header-middle .middle-right > ul > li > a > span {
     font-size: 16px;
     line-height: 21px;
   }
 }
 
-.header-middle .middle-right ul li:nth-child(1) {
+.header-middle .middle-right > ul > li:nth-child(1) {
   padding-left: 0;
 }
 
-.header-middle .middle-right ul li:nth-child(1) .fi {
+.header-middle .middle-right > ul > li:nth-child(1) .fi {
   padding-right: 10px;
 }
 
-.header-middle .middle-right ul li:nth-child(2) .fi {
+.header-middle .middle-right > ul > li:nth-child(2) .fi {
   padding-right: 10px;
 }
 
-.header-middle .middle-right ul li:nth-child(3) {
+.header-middle .middle-right > ul > li:nth-child(3) {
   padding-right: 15px;
   padding-left: 15px;
 }
 
 @media (max-width: 575px) {
-  .header-middle .middle-right ul li:nth-child(3) {
+  .header-middle .middle-right > ul > li:nth-child(3) {
     padding-right: 5px;
   }
 }

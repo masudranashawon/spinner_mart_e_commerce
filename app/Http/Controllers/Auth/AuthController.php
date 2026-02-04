@@ -5,11 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Enums\AuthEnums;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
-use App\Models\User;
 use App\Repositories\AuthRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -25,26 +23,25 @@ class AuthController extends Controller
             'password' => 'required|string|min:6',
         ]);
 
+        $credentials = $request->only('email', 'password');
+        $remember = $request->filled('remember');
 
-        if (Auth::guard('web')->check()) {
-            Auth::guard('web')->logout();
-        }
+        // Attempt login
+        if (Auth::attempt($credentials, $remember)) {
+            $request->session()->regenerate();
 
-        $user = User::where('email', $request->email)->where('password', Hash::make($request->password))->first();
-
-        if (!$user && Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
+            /** @var \App\Models\User $user */
             $user = Auth::user();
+
+            if (!$user->hasRole(AuthEnums::USER->value)) {
+                Auth::logout();
+                return back()->withErrors('Unauthorized access');
+            }
+
+            return redirect()->route('home')->withSuccess('Login successfully');
         }
 
-        if (!$user->hasRole(AuthEnums::USER->value)) {
-            Auth::logout();
-            return back()->withError('Unauthorized access');
-        }
-
-        if ($user && $user->hasRole(AuthEnums::USER->value)) {
-            Auth::login($user);
-            return to_route('home')->withSuccess('Login successfully');
-        }
+        return back()->withErrors('Invalid credentials');
     }
 
     public function register()
@@ -63,5 +60,15 @@ class AuthController extends Controller
         } else {
             return to_route("register")->withError("Register Failed");
         }
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return to_route('home')->withSuccess('Logout successfully');
     }
 }

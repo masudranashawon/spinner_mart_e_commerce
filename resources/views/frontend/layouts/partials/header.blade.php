@@ -1,7 +1,11 @@
-<?php $categories = App\Models\Category::with('subCategories')->latest('id')->get(); ?>
+<?php 
+    $categories = App\Models\Category::with('subCategories')->latest('id')->get();
+    $user = auth('web')?->user();
+ ?>
 
 <!-- start header -->
 <header id="header">
+    <!-- start topbar -->
     <div class="topbar">
         <div class="container">
             <div class="row">
@@ -75,7 +79,34 @@
                     <div class="middle-right">
                         <ul>
                             <li><a href="compare.html"><i class="fi flaticon-right-and-left"></i><span>Compare</span></a></li>
+
+                            @if($user)
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fi flaticon-user-profile"></i><span>{{ $user->name }}</span>
+                                </a>
+
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li>
+                                        <form action="{{ route('logout') }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="fa fa-sign-out text-danger"></i> Logout
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                            @endif
+
+                            @guest
                             <li><a href="{{ route('login') }}"><i class="fi flaticon-user-profile"></i><span>Login</span></a></li>
+                            @endguest
+
                             <li>
                                 <div class="header-wishlist-form-wrapper">
                                     <button class="wishlist-toggle-btn"> <i class="fi flaticon-heart"></i>
@@ -243,3 +274,10 @@
     </div>
 </header>
 <!-- end of header -->
+
+<style>
+    .header-middle {
+        overflow: inherit;
+    }
+
+</style>
