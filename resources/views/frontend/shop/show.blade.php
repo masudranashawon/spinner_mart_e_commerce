@@ -53,7 +53,10 @@
                     </div>
                 </div>
                 <div class="col-lg-7">
-                    <div class="product-single-content">
+                    <form action="{{ route('cart.store') }}" method="POST" class="product-single-content">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        
                         <h3 class="text-start">{{$product->name}}</h3>
                         <div class="price">
                             <span id="price" class="present-price">{{$defaultVariant->discount_price > 0 ? $defaultVariant->discount_price : $defaultVariant->selling_price}}</span>
@@ -82,6 +85,9 @@
                                     </li>
                                     @endforeach
                                 </ul>
+                                @error('color')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         @endif
@@ -101,17 +107,24 @@
                                     </li>
                                     @endforeach
                                 </ul>
+                                @error('size')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         @endif
 
                         <div class="pro-single-btn">
                             <div class="quantity cart-plus-minus">
-                                <input class="text-value" type="text" value="1">
+                                <input name="quantity" class="text-value" value="1" min="1">
                             </div>
-                            <a href="#" class="theme-btn-s2">Add to cart</a>
+                            <button class="btn theme-btn-s2">Add to cart</button>
                             <a href="#" class="wl-btn"><i class="fi flaticon-heart"></i></a>
                         </div>
+                        
+                         @error('quantity')
+                            <span class="text-danger">{{ $message }}</span>
+                         @enderror
 
                         {{-- Stock Info --}}
                         <ul class="important-text">
@@ -119,9 +132,7 @@
                             <li>
                                 Stock:
                                 <span id="stock" class="{{ $defaultVariant->currentStock > 0 ? 'in-stock' : 'out-of-stock' }}">
-                                    {{ $defaultVariant->currentStock > 0 
-                ? $defaultVariant->currentStock . ' available' 
-                : 'Out of stock' }}
+                                    {{ $defaultVariant->currentStock > 0 ? $defaultVariant->currentStock . ' available' : 'Out of stock' }}
                                 </span>
                             </li>
                             <li><span>Category:</span> {{ $product->details->category->name }}</li>
@@ -132,7 +143,7 @@
                                 @endforeach
                             </li>
                         </ul>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -351,8 +362,8 @@
 
     // State management
     let state = {
-        selectedColor: {{$defaultVariant-> color_id ?? 'null'}}, 
-        selectedSize: {{$defaultVariant-> size_id ?? 'null'}}, 
+        selectedColor: {{$defaultVariant-> color_id ?? 'null'}},
+        selectedSize: {{$defaultVariant-> size_id ?? 'null'}},
         currentVariant: null
     };
 

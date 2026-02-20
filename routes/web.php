@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ShopController;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,12 @@ Route::controller(AuthController::class)->group(function () {
   Route::get('login', 'login')->name('login');
   Route::post('login', 'loginPost')->name('login.post');
   Route::post('logout', 'logout')->name('logout');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::controller(CartController::class)->group(function () {
+        Route::post('/cart/store', 'store')->name('cart.store');
+    });
 });
 
 @include("admin.php");
