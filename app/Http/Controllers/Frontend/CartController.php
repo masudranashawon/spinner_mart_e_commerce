@@ -43,12 +43,12 @@ class CartController extends Controller
             ->first();
 
         if (!$variant) {
-            return back()->withErrors('Product variant not found.');
+            return back()->with('error', 'Selected product option is unavailable.');
         }
 
         // Stock check
         if ($variant->current_stock < $request->quantity) {
-            return back()->withErrors('Not enough stock available.');
+            return back()->with('error', 'Not enough stock available!');
         }
 
         // Set price
@@ -65,6 +65,8 @@ class CartController extends Controller
         if ($cart) {
             $cart->quantity += $request->quantity;
             $cart->save();
+
+            return back()->withSuccess('Cart updated successfully!');
         } else {
             Cart::create([
                 'user_id' => auth('web')->user()->id,
@@ -75,6 +77,18 @@ class CartController extends Controller
             ]);
         }
 
-        return back()->withSSuccess('Product added to cart successfully!');
+        return back()->withSuccess('Product added to cart successfully!');
+    }
+
+
+    public function destroy(Cart $cart)
+    {
+        if ($cart->user_id != auth('web')->user()->id) {
+            return back()->with('error', 'Unauthorized action.');
+        }
+
+        $cart->delete();
+
+        return back()->withSuccess('Cart item removed successfully!');
     }
 }

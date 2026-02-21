@@ -21,6 +21,8 @@ Route::controller(AuthController::class)->group(function () {
 Route::middleware('auth')->group(function () {
     Route::controller(CartController::class)->group(function () {
         Route::post('/cart/store', 'store')->name('cart.store');
+        Route::post('/cart/update', 'update')->name('cart.update');
+        Route::delete('/cart/{cart}/destroy', 'destroy')->name('cart.destroy');
     });
 });
 

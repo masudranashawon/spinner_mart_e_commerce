@@ -22,4 +22,9 @@ class Cart extends Model
     {
         return $this->belongsTo(ProductVariant::class, 'product_variant_id');
     }
+
+    public function getTotalAttribute()
+    {
+        return ($this?->variant?->discount_price ?? $this?->variant?->selling_price) * $this?->quantity;
+    }
 }
