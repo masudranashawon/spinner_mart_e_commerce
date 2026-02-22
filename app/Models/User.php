@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Cart;
 
 /**
  * @method bool hasRole($roles, string|null $guard = null)
@@ -14,6 +16,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method $this assignRole(...$roles)
  * @method $this removeRole($role)
  */
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */

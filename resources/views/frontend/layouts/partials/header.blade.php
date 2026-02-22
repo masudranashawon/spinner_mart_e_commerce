@@ -207,7 +207,7 @@
                                             <span class="mini-checkout-price">Subtotal:
                                                 <span>৳{{ number_format($cartItems->sum('total'), 2) }}</span></span>
                                             <div class="mini-btn">
-                                                <a href="cart.html" class="view-cart-btn">View Cart</a>
+                                                <a href="{{ route('cart.index') }}" class="view-cart-btn">View Cart</a>
                                             </div>
                                         </div>
                                     </div>

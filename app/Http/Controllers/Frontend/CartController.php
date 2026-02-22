@@ -7,9 +7,18 @@ use App\Models\Cart;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
+    public function index()
+    {
+        $user = auth('web')->user();
+        $cartItems = $user->cartItems()->latest()->get();
+
+        return  view('frontend.cart.index', compact('cartItems'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -79,7 +88,6 @@ class CartController extends Controller
 
         return back()->withSuccess('Product added to cart successfully!');
     }
-
 
     public function destroy(Cart $cart)
     {
