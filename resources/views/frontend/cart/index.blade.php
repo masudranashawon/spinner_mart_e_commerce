@@ -32,10 +32,12 @@
             <div class="col-12">
                 <div class="single-page-title">
                     <h2>Your Cart</h2>
-                    <p>There are {{count($cartItems)?? "No"}} products in this list</p>
+                    <p>There are {{count($cartItems) > 0 ? count($cartItems) : "No"}} products in this list</p>
                 </div>
             </div>
         </div>
+
+        @if(count($cartItems) > 0)
         <div class="cart-wrapper">
             <div class="row">
                 <div class="col-lg-8 col-12">
@@ -52,7 +54,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($cartItems as $cart)
+                                    @foreach($cartItems as $cart)
                                     <tr class="wishlist-item">
                                         <td class="product-item-wish">
                                             <div class="check-box"><input type="checkbox" class="myproject-checkbox">
@@ -102,7 +104,6 @@
                                             @endif
                                         </td>
 
-
                                         <td class="td-quantity">
                                             <div class="quantity cart-plus-minus">
                                                 <input class="text-value" type="text" value="{{$cart->quantity}}">
@@ -110,6 +111,7 @@
                                                 <div class="inc qtybutton">+</div>
                                             </div>
                                         </td>
+
                                         <td class="ptice">
                                             @php
                                             $total = $cart->quantity * ($cart->variant->discount_price ?? $cart->variant->selling_price);
@@ -118,21 +120,16 @@
                                         </td>
                                         <td class="action">
                                             <ul>
-                                                <li class="w-btn"><a data-bs-toggle="tooltip" data-bs-html="true" title="" href="#" data-bs-original-title="Remove from Cart" aria-label="Remove from Cart"><i class="fi ti-trash"></i></a></li>
+                                                <li class="w-btn">
+                                                    <button class="btn delete-cart" type="button" data-bs-toggle="tooltip" data-bs-html="true" title="" data-bs-original-title="Remove from Cart" aria-label="Remove from Cart" data-id="{{ $cart->id }}">
+                                                        <i class="fi ti-trash fs-3"></i>
+                                                    </button>
+                                                </li>
                                             </ul>
                                         </td>
                                     </tr>
-                                    @empty
-                                    <tr class="wishlist-item">
-                                        <td class="product-item-wish" colspan="5">
-                                            <div class="text-center">
-                                                <h4>No Product in Cart</h4>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endforelse
+                                    @endforeach
                                 </tbody>
-
                             </table>
                         </div>
                         <div class="cart-action">
@@ -164,6 +161,15 @@
                 </div>
             </div>
         </div>
+        @else
+        <div class="text-center mt-5">
+            <h2>No Product in the Cart</h2>
+            <div class="shop-btn d-flex justify-content-center mt-3">
+                <a class="theme-btn-s2" href="{{route('shop')}}">Shop Now</a>
+            </div>
+        </div>
+        @endif
+
         <div class="cart-prodact">
             <h2>You May be Interested in…</h2>
             <div class="row">
@@ -280,3 +286,49 @@
 
 </style>
 @endsection
+
+@push('script')
+<script>
+    $(document).ready(function() {
+        $('.delete-cart').click(function() {
+            let id = $(this).data('id');
+            let url = "{{ route('cart.destroy', ':id') }}".replace(':id', id);
+
+            $.ajax({
+                url: url
+                , type: 'POST'
+                , data: {
+                    _method: 'DELETE'
+                    , _token: '{{ csrf_token() }}'
+                }
+                , success: function() {
+                    Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Cart item removed successfully!',
+                    showConfirmButton: false,
+                    timer: 1800,
+                    timerProgressBar: true
+                });
+
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+                }
+                , error: function(xhr) {
+                   Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Failed to remove item!',
+                    showConfirmButton: false,
+                    timer: 2200
+                });
+                }
+            });
+        });
+    });
+
+</script>
+@endpush
