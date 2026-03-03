@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ShopController;
+use App\Http\Controllers\Frontend\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -23,6 +24,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/carts', 'index')->name('cart.index');
         Route::post('/cart/store', 'store')->name('cart.store');
         Route::delete('/cart/{cart}/destroy', 'destroy')->name('cart.destroy');
+    });
+
+    Route::controller(WishlistController::class)->group(function () {
+        Route::get('/wishlists', 'index')->name('wishlist.index');
+        Route::post('/wishlist/store', 'store')->name('wishlist.store');
+        Route::delete('/wishlist/{wishlist}/destroy', 'destroy')->name('wishlist.destroy');
     });
 });
 

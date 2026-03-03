@@ -1,0 +1,251 @@
+@extends('frontend.layouts.app')
+
+@section('title', 'Shop')
+
+@section('content')
+
+<!-- start wpo-page-title -->
+<section class="wpo-page-title">
+    <h2 class="d-none">Hide</h2>
+    <div class="container">
+        <div class="row">
+            <div class="col col-xs-12">
+                <div class="wpo-breadcumb-wrap">
+                    <ol class="wpo-breadcumb-wrap">
+                        <li><a href="{{ route('home') }}">Home</a></li>
+                        <li><a href="{{ route('shop') }}">Product Page</a></li>
+                        <li>Wishlist</li>
+                    </ol>
+                </div>
+            </div>
+        </div> <!-- end row -->
+    </div> <!-- end container -->
+</section>
+<!-- end page-title -->
+
+<!-- cart-area start -->
+<div class="cart-area section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="single-page-title">
+                    <h2>Your Wishlist</h2>
+                    <p>There are {{count($wishlists) > 0 ? count($wishlists) : "No"}} products in this list</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form">
+            <div class="cart-wrapper">
+                <div class="row">
+                    @if(count($wishlists) > 0)
+                    <div class="col-12">
+                        <form action="https://wpocean.com/html/tf/themart/cart">
+                            <table class="table-responsive cart-wrap">
+                                <thead>
+                                    <tr>
+                                        <th class="images images-b">Product</th>
+                                        <th class="ptice">Price</th>
+                                        <th class="stock">Stock Status</th>
+                                        <th class="remove remove-b">Action</th>
+                                        <th class="remove remove-b">Remove</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    @foreach($wishlists as $wishlist)
+                                    <tr class="wishlist-item">
+                                        <td class="product-item-wish">
+                                            <div class="check-box"><input type="checkbox" class="myproject-checkbox">
+                                            </div>
+                                            <div class="images">
+                                                <span>
+                                                    <img src="{{$wishlist->product->thumbnail}}" alt="{{$wishlist->product->name}}">
+                                                </span>
+                                            </div>
+                                            <div class="product">
+                                                <ul>
+                                                    <li class="first-cart">{{$wishlist->product->name}}</li>
+                                                    <li>
+                                                        <div class="rating-product">
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <span>{{$wishlist->product->rating}}</span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td class="ptice">
+                                            @if($wishlist?->product?->discount_price)
+                                            <del class="me-1">৳{{ number_format($wishlist?->product?->selling_price,2) }}</del>
+                                            ৳{{ number_format($wishlist?->product?->discount_price,2) }}
+                                            @else
+                                            ৳{{ number_format($wishlist?->product?->selling_price,2) }}
+                                            @endif
+                                        </td>
+
+                                        @if($wishlist->stock > 0)
+                                        <td class="stock"><span class="in-stock">In Stock </span></td>
+                                        @else
+                                        <td class="stock"><span class="in-stock out-stock">Out Stock</span></td>
+                                        @endif
+
+                                        <td class="add-wish">
+                                            <a class="theme-btn-s2" href="{{ route('cart.index') }}">Shop Now</a>
+                                        </td>
+                                        <td class="action">
+                                            <ul>
+                                                <li class="w-btn"><a data-bs-toggle="tooltip" data-bs-html="true" title="" href="#" data-bs-original-title="Remove" aria-label="Remove"><i class="fi flaticon-remove"></i></a></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+
+
+                                    <tr class="wishlist-item">
+                                        <td class="product-item-wish">
+                                            <div class="check-box"><input type="checkbox" class="myproject-checkbox">
+                                            </div>
+                                            <div class="images">
+                                                <span>
+                                                    <img src="assets/images/cart/img-2.jpg" alt="">
+                                                </span>
+                                            </div>
+                                            <div class="product">
+                                                <ul>
+                                                    <li class="first-cart">Blue Bag</li>
+                                                    <li>
+                                                        <div class="rating-product">
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <span>30</span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td class="ptice">$200</td>
+                                        <td class="stock"><span class="in-stock">In Stock</span></td>
+                                        <td class="add-wish">
+                                            <a class="theme-btn-s2" href="cart.html">Shop Now</a>
+                                        </td>
+                                        <td class="action">
+                                            <ul>
+                                                <li class="w-btn"><a data-bs-toggle="tooltip" data-bs-html="true" title="" href="#" data-bs-original-title="Remove" aria-label="Remove"><i class="fi flaticon-remove"></i></a></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr class="wishlist-item">
+                                        <td class="product-item-wish">
+                                            <div class="check-box"><input type="checkbox" class="myproject-checkbox">
+                                            </div>
+                                            <div class="images">
+                                                <span>
+                                                    <img src="assets/images/cart/img-3.jpg" alt="">
+                                                </span>
+                                            </div>
+                                            <div class="product">
+                                                <ul>
+                                                    <li class="first-cart">Kids Blue Shoes</li>
+                                                    <li>
+                                                        <div class="rating-product">
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <span>50</span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td class="ptice">$270</td>
+                                        <td class="stock"><span class="in-stock out-stock">Out Stock</span></td>
+                                        <td class="add-wish">
+                                            <a class="theme-btn-s2" href="cart.html">Shop Now</a>
+                                        </td>
+                                        <td class="action">
+                                            <ul>
+                                                <li class="w-btn"><a data-bs-toggle="tooltip" data-bs-html="true" title="" href="#" data-bs-original-title="Remove" aria-label="Remove"><i class="fi flaticon-remove"></i></a></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr class="wishlist-item">
+                                        <td class="product-item-wish">
+                                            <div class="check-box"><input type="checkbox" class="myproject-checkbox">
+                                            </div>
+                                            <div class="images">
+                                                <span>
+                                                    <img src="assets/images/cart/img-4.jpg" alt="">
+                                                </span>
+                                            </div>
+                                            <div class="product">
+                                                <ul>
+                                                    <li class="first-cart">Hand Made Hat</li>
+                                                    <li>
+                                                        <div class="rating-product">
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <span>15</span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td class="ptice">$ 100</td>
+                                        <td class="stock"><span class="in-stock">In Stock</span></td>
+                                        <td class="add-wish">
+                                            <a class="theme-btn-s2" href="cart.html">Shop Now</a>
+                                        </td>
+                                        <td class="action">
+                                            <ul>
+                                                <li class="w-btn"><a data-bs-toggle="tooltip" data-bs-html="true" title="" href="#" data-bs-original-title="Remove" aria-label="Remove"><i class="fi flaticon-remove"></i></a></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                    @else
+                    <div class="text-center mt-5">
+                        <h2>No Product in the Wishlist</h2>
+                        <div class="shop-btn d-flex justify-content-center mt-3">
+                            <a class="theme-btn-s2" href="{{route('shop')}}">Shop Now</a>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- cart-area end -->
+
+<style>
+    .image {
+        height: 12rem;
+        overflow: hidden;
+    }
+
+    .image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain !important;
+    }
+
+</style>
+@endsection

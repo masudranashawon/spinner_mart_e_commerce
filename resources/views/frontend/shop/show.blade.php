@@ -119,7 +119,7 @@
                                 <input name="quantity" class="text-value" value="1" min="1">
                             </div>
                             <button class="btn theme-btn-s2">Add to cart</button>
-                            <a href="#" class="wl-btn"><i class="fi flaticon-heart"></i></a>
+                            <button class="add-wishlist btn wl-btn" data-product="{{ $product->id }}" type="button"><i class="fi flaticon-heart"></i></button>
                         </div>
                         
                          @error('quantity')
@@ -490,5 +490,45 @@
         return state.currentVariant;
     };
 
+</script>
+
+<script>
+$(document).on('click', '.add-wishlist', function() {
+
+    let productId = $(this).data('product');
+
+    $.ajax({
+        url: "{{ route('wishlist.store') }}",
+        type: "POST",
+        data: {
+            _token: "{{ csrf_token() }}",
+            product_id: productId,
+        },
+
+        success: function(response) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: response.status === 'success' ? 'success' : 'info',
+                title: response.message,
+                showConfirmButton: false,
+                timer: 1800
+            });
+
+        },
+
+        error: function(xhr) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: 'Failed to add wishlist!',
+                showConfirmButton: false,
+                timer: 2200
+            });
+        }
+    });
+
+});
 </script>
 @endpush
