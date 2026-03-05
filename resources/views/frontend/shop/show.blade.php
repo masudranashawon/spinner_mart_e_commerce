@@ -56,7 +56,7 @@
                     <form action="{{ route('cart.store') }}" method="POST" class="product-single-content">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        
+
                         <h3 class="text-start">{{$product->name}}</h3>
                         <div class="price">
                             <span id="price" class="present-price">{{$defaultVariant->discount_price > 0 ? $defaultVariant->discount_price : $defaultVariant->selling_price}}</span>
@@ -86,7 +86,7 @@
                                     @endforeach
                                 </ul>
                                 @error('color')
-                                    <span class="text-danger">{{ $message }}</span>
+                                <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
@@ -108,7 +108,7 @@
                                     @endforeach
                                 </ul>
                                 @error('size')
-                                    <span class="text-danger">{{ $message }}</span>
+                                <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
@@ -119,12 +119,17 @@
                                 <input name="quantity" class="text-value" value="1" min="1">
                             </div>
                             <button class="btn theme-btn-s2">Add to cart</button>
+
+                            @if(auth()->check() && auth()->user()?->wishlist?->where('product_id', $product->id)->count())
+                            <button class="btn remove-wishlist theme-btn-s2 px-3 ms-2" data-product="{{ $product->id }}" type="button"><i class="fi flaticon-heart"></i></button>
+                            @else
                             <button class="add-wishlist btn wl-btn" data-product="{{ $product->id }}" type="button"><i class="fi flaticon-heart"></i></button>
+                            @endif
                         </div>
-                        
-                         @error('quantity')
-                            <span class="text-danger">{{ $message }}</span>
-                         @enderror
+
+                        @error('quantity')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
 
                         {{-- Stock Info --}}
                         <ul class="important-text">
@@ -362,8 +367,8 @@
 
     // State management
     let state = {
-        selectedColor: {{$defaultVariant-> color_id ?? 'null'}},
-        selectedSize: {{$defaultVariant-> size_id ?? 'null'}},
+        selectedColor: {{$defaultVariant-> color_id ?? 'null'}}, 
+        selectedSize: {{$defaultVariant-> size_id ?? 'null'}}, 
         currentVariant: null
     };
 
@@ -493,28 +498,73 @@
 </script>
 
 <script>
-$(document).on('click', '.add-wishlist', function() {
+    $(document).on('click', '.add-wishlist', function() {
+
+        let productId = $(this).data('product');
+
+        $.ajax({
+            url: "{{ route('wishlist.store') }}", 
+            type: "POST",
+            data: {
+                _token: "{{ csrf_token() }}", 
+                product_id: productId,
+                },
+
+            success: function(response) {
+                Swal.fire({
+                    toast: true, 
+                    position: 'top-end',
+                    icon: response.status === 'success' ? 'success' : 'info',
+                    title: response.message,
+                    showConfirmButton: false,
+                    timer: 1800,
+                });
+
+                setTimeout(function(){
+                    location.reload();
+                }, 1200);
+            },
+
+            error: function(xhr) {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Failed to add wishlist!',
+                    showConfirmButton: false,
+                    timer: 2200,
+                });
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).on('click', '.remove-wishlist', function () {
 
     let productId = $(this).data('product');
 
     $.ajax({
-        url: "{{ route('wishlist.store') }}",
-        type: "POST",
+        url: "{{ route('wishlist.destroy') }}",
+        type: "DELETE",
         data: {
             _token: "{{ csrf_token() }}",
-            product_id: productId,
+            product_id: productId
         },
-
-        success: function(response) {
+        
+        success: function (response) {
             Swal.fire({
-                toast: true,
+                toast: true, 
                 position: 'top-end',
                 icon: response.status === 'success' ? 'success' : 'info',
                 title: response.message,
                 showConfirmButton: false,
-                timer: 1800
+                timer: 1800,
             });
 
+            setTimeout(function(){
+                location.reload();
+            }, 1200);
         },
 
         error: function(xhr) {
@@ -522,13 +572,12 @@ $(document).on('click', '.add-wishlist', function() {
                 toast: true,
                 position: 'top-end',
                 icon: 'error',
-                title: 'Failed to add wishlist!',
+                title: 'Failed to remove wishlist!',
                 showConfirmButton: false,
-                timer: 2200
+                timer: 2200,
             });
         }
     });
-
 });
 </script>
 @endpush

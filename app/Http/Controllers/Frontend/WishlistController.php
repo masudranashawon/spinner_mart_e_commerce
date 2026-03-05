@@ -20,7 +20,7 @@ class WishlistController extends Controller
 
             // attach stock
             $item->stock = $totalStock;
-            
+
             return $item;
         });
 
@@ -33,18 +33,7 @@ class WishlistController extends Controller
             'product_id' => 'required|exists:products,id',
         ]);
 
-        $userId = auth('web')->user()->id;
-
-        $exists = Wishlist::where('user_id', $userId)
-            ->where('product_id', $request->product_id)
-            ->exists();
-
-        if ($exists) {
-            return response()->json([
-                'status' => 'exists',
-                'message' => 'Product already in wishlist!'
-            ]);
-        }
+        $userId = auth('web')->user()?->id;
 
         Wishlist::create([
             'user_id' =>  $userId,
@@ -54,6 +43,24 @@ class WishlistController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Product added to wishlist!'
+        ]);
+    }
+
+    public function destroy(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+        ]);
+
+        $userId = auth('web')->id();
+
+        Wishlist::where('user_id', $userId)
+            ->where('product_id', $request->product_id)
+            ->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Product removed from wishlist!'
         ]);
     }
 }

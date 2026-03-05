@@ -12,11 +12,11 @@ Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/products/{slug}', [ShopController::class, 'show'])->name('productDetails');
 
 Route::controller(AuthController::class)->group(function () {
-  Route::get('register', 'register')->name('register');
-  Route::post('register', 'registerStore')->name('register.store');
-  Route::get('login', 'login')->name('login');
-  Route::post('login', 'loginPost')->name('login.post');
-  Route::post('logout', 'logout')->name('logout');
+    Route::get('register', 'register')->name('register');
+    Route::post('register', 'registerStore')->name('register.store');
+    Route::get('login', 'login')->name('login');
+    Route::post('login', 'loginPost')->name('login.post');
+    Route::post('logout', 'logout')->name('logout');
 });
 
 Route::middleware('auth')->group(function () {
@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(WishlistController::class)->group(function () {
         Route::get('/wishlists', 'index')->name('wishlist.index');
         Route::post('/wishlist/store', 'store')->name('wishlist.store');
-        Route::delete('/wishlist/{wishlist}/destroy', 'destroy')->name('wishlist.destroy');
+        Route::delete('/wishlist/destroy', 'destroy')->name('wishlist.destroy');
     });
 });
 
