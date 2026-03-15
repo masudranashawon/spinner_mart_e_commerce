@@ -29,20 +29,10 @@ class ProductVariant extends Model
         return $this->belongsTo(Size::class);
     }
 
-        protected function currentStock(): Attribute
-        {
-            return Attribute::make(
-                get: function () {
-                    $in = $this->stocks()
-                        ->whereIn('type', ['stock_in', 'return'])
-                        ->sum('quantity');
-
-                    $out = $this->stocks()
-                        ->whereIn('type', ['stock_out', 'adjustment'])
-                        ->sum('quantity');
-
-                    return $in - $out;
-                }
-            );
-        }
+    protected function currentStock(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->stocks()->sum('quantity')
+        );
+    }
 }

@@ -28,21 +28,19 @@ class ShopController extends Controller
     public function show($slug)
     {
         $product = Product::with([
-            'variants' => function ($q) {
-                $q->where('current_stock', '>', 0)  //variants with stock
-                    ->with(['color:id,name,color_code', 'size:id,name']);
-            },
+            'variants.color:id,name,color_code',
+            'variants.size:id,name',
             'galleries',
             'details.category',
             'tags'
-        ])
-            ->where('slug', $slug)
+        ])->where('slug', $slug)
             ->firstOrFail();
+
 
         // Default variant
         $defaultVariant = $product->variants
-            ->where('current_stock', '>', 0)
-            ->first() ?? $product->variants->first();
+            ->firstWhere(fn($v) => is_null($v->color_id) && is_null($v->size_id))
+            ?? $product->variants->first();
 
         // Frontend variants data
         $variantsData = $product->variants->map(function ($v) {

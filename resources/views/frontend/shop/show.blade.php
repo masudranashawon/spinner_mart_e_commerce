@@ -59,8 +59,17 @@
 
                         <h3 class="text-start">{{$product->name}}</h3>
                         <div class="price">
-                            <span id="price" class="present-price">{{$defaultVariant->discount_price > 0 ? $defaultVariant->discount_price : $defaultVariant->selling_price}}</span>
-                            <del id="oldPrice" class="old-price">{{ $defaultVariant->discount_price ? $defaultVariant->selling_price : '' }}</del>
+                            <span id="price" class="present-price">
+                                {{ $defaultVariant?->discount_price > 0 ? $defaultVariant->discount_price : $defaultVariant?->selling_price }}
+                            </span>
+
+                            <del id="oldPrice" class="old-price">
+                                {{ $defaultVariant?->discount_price ? $defaultVariant->selling_price : '' }}
+                            </del>
+                        </div>
+
+                        <div class="price">
+
                         </div>
                         <div class="rating-product">
                             <i class="fi flaticon-star"></i>
@@ -133,11 +142,11 @@
 
                         {{-- Stock Info --}}
                         <ul class="important-text">
-                            <li>SKU: <span id="sku">{{ $defaultVariant->sku_code }}</span></li>
+                            <li>SKU: <span id="sku">{{ $defaultVariant?->sku_code }}</span></li>
                             <li>
                                 Stock:
-                                <span id="stock" class="{{ $defaultVariant->currentStock > 0 ? 'in-stock' : 'out-of-stock' }}">
-                                    {{ $defaultVariant->currentStock > 0 ? $defaultVariant->currentStock . ' available' : 'Out of stock' }}
+                                <span id="stock" class="{{ $defaultVariant?->currentStock > 0 ? 'in-stock' : 'out-of-stock' }}">
+                                    {{ $defaultVariant?->currentStock > 0 ? $defaultVariant?->currentStock . ' available' : 'Out of stock' }}
                                 </span>
                             </li>
                             <li><span>Category:</span> {{ $product->details->category->name }}</li>

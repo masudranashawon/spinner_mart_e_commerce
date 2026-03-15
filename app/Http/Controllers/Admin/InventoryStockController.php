@@ -20,40 +20,96 @@ class InventoryStockController extends Controller
             'stocks.*.note'       => 'nullable|string',
         ]);
 
+        // foreach ($request->stocks as $row) {
+
+        //     // Skip if quantity is not provided
+        //     if (!isset($row['quantity']) || $row['quantity'] === '' || $row['quantity'] === null) {
+        //         continue;
+        //     }
+
+        //     // Stock calculation
+        //     $qty = (int) $row['quantity'];
+
+        //     if ($qty <= 0) {
+        //         continue;
+        //     }
+
+        //     $variant = ProductVariant::find($row['variant_id']);
+
+        //     if (!$variant) {
+        //         continue;
+        //     }
+
+        //     if ($row['type'] === 'stock_out' || $row['type'] === 'return') {
+        //         $variant->decrement('current_stock', $qty);
+        //         $qty = -$qty; // ledger entry
+        //     } elseif ($row['type'] === 'stock_in') {
+        //         $variant->increment('current_stock', $qty);
+        //     } elseif ($row['type'] === 'adjustment') {
+        //         $oldStock = $variant->current_stock;
+        //         $difference = $qty - $oldStock;
+        //         $variant->update(['current_stock' => $qty]);
+        //         $qty = $difference; // ledger
+        //     }
+
+        //     InventoryStock::create([
+        //         'product_variant_id' => $variant->id,
+        //         'quantity'           => $qty,
+        //         'type'               => $row['type'],
+        //         'note'               => $row['note'] ?? null,
+        //     ]);
+        // }
+
+
         foreach ($request->stocks as $row) {
 
-            // Skip if quantity is not provided
             if (!isset($row['quantity']) || $row['quantity'] === '' || $row['quantity'] === null) {
                 continue;
             }
 
-            // Stock calculation
             $qty = (int) $row['quantity'];
+            if ($qty <= 0) continue;
 
-            if ($qty <= 0) {
-                continue;
-            }
+            // Lock row to avoid concurrent updates
+            $variant = ProductVariant::lockForUpdate()->findOrFail($row['variant_id']);
 
-            $variant = ProductVariant::find($row['variant_id']);
+            // Initialize ledger quantity
+            $ledgerQty = $qty;
 
-            if (!$variant) {
-                continue;
-            }
-
-            if ($row['type'] === 'stock_out') {
+            if ($row['type'] === 'stock_out' || $row['type'] === 'return') {
+                // Stock must be sufficient
                 if ($variant->current_stock < $qty) {
                     throw ValidationException::withMessages([
                         'stocks' => "Insufficient stock for SKU {$variant->sku_code}"
                     ]);
                 }
+
+                // decrement current stock
                 $variant->decrement('current_stock', $qty);
-            } else {
+
+                // ledger negative
+                $ledgerQty = -$qty;
+            } elseif ($row['type'] === 'stock_in') {
                 $variant->increment('current_stock', $qty);
+                $ledgerQty = $qty;
+            } elseif ($row['type'] === 'adjustment') {
+                $oldStock = $variant->current_stock;
+
+                // new stock = $qty (admin input)
+                $difference = $qty - $oldStock;
+
+                $variant->update([
+                    'current_stock' => $qty
+                ]);
+
+                // ledger quantity = difference (can be + or -)
+                $ledgerQty = $difference;
             }
 
+            // create ledger entry
             InventoryStock::create([
                 'product_variant_id' => $variant->id,
-                'quantity'           => $qty,
+                'quantity'           => $ledgerQty,
                 'type'               => $row['type'],
                 'note'               => $row['note'] ?? null,
             ]);
