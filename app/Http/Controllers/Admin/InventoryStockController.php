@@ -20,47 +20,6 @@ class InventoryStockController extends Controller
             'stocks.*.note'       => 'nullable|string',
         ]);
 
-        // foreach ($request->stocks as $row) {
-
-        //     // Skip if quantity is not provided
-        //     if (!isset($row['quantity']) || $row['quantity'] === '' || $row['quantity'] === null) {
-        //         continue;
-        //     }
-
-        //     // Stock calculation
-        //     $qty = (int) $row['quantity'];
-
-        //     if ($qty <= 0) {
-        //         continue;
-        //     }
-
-        //     $variant = ProductVariant::find($row['variant_id']);
-
-        //     if (!$variant) {
-        //         continue;
-        //     }
-
-        //     if ($row['type'] === 'stock_out' || $row['type'] === 'return') {
-        //         $variant->decrement('current_stock', $qty);
-        //         $qty = -$qty; // ledger entry
-        //     } elseif ($row['type'] === 'stock_in') {
-        //         $variant->increment('current_stock', $qty);
-        //     } elseif ($row['type'] === 'adjustment') {
-        //         $oldStock = $variant->current_stock;
-        //         $difference = $qty - $oldStock;
-        //         $variant->update(['current_stock' => $qty]);
-        //         $qty = $difference; // ledger
-        //     }
-
-        //     InventoryStock::create([
-        //         'product_variant_id' => $variant->id,
-        //         'quantity'           => $qty,
-        //         'type'               => $row['type'],
-        //         'note'               => $row['note'] ?? null,
-        //     ]);
-        // }
-
-
         foreach ($request->stocks as $row) {
 
             if (!isset($row['quantity']) || $row['quantity'] === '' || $row['quantity'] === null) {
