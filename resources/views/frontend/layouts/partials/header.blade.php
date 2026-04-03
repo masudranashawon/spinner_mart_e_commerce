@@ -2,6 +2,7 @@
     $categories = App\Models\Category::with('subCategories')->latest('id')->get();
     $user = auth('web')?->user();
     $cartItems = $user?->cartItems()?->latest()->get();
+    $wishlist = $user?->wishlist()?->latest()->get();
  ?>
 
 <!-- start header -->
@@ -111,40 +112,42 @@
                             <li>
                                 <div class="header-wishlist-form-wrapper">
                                     <button class="wishlist-toggle-btn"> <i class="fi flaticon-heart"></i>
-                                        <span class="cart-count">3</span></button>
+                                        <span class="cart-count">{{ $wishlist?->count() ?? 0 }}</span></button>
                                     <div class="mini-wislist-content">
                                         <button class="mini-cart-close"><i class="ti-close"></i></button>
                                         <div class="mini-cart-items">
                                             <div class="mini-cart-item clearfix">
-                                                <div class="mini-cart-item-image">
-                                                    <a href="product.html"><img src="{{ asset('frontend/assets/images/cart/img-1.jpg') }}" alt></a>
-                                                </div>
-                                                <div class="mini-cart-item-des">
-                                                    <a href="product.html">Stylish Pink Coat</a>
-                                                    <span class="mini-cart-item-price">$150</span>
-                                                    <span class="mini-cart-item-quantity"><a href="#"><i class="ti-close"></i></a></span>
-                                                </div>
-                                            </div>
+                                            @foreach($wishlist ?? [] as $item)
                                             <div class="mini-cart-item clearfix">
                                                 <div class="mini-cart-item-image">
-                                                    <a href="product.html"><img src="{{ asset('frontend/assets/images/cart/img-2.jpg') }}" alt></a>
+                                                    <a href="{{ route('productDetails', $item->product->slug) }}"><img src="{{ $item->product->thumbnail }}" alt="{{ $item->product->name }}"></a>
                                                 </div>
                                                 <div class="mini-cart-item-des">
-                                                    <a href="product.html">Blue Bag</a>
-                                                    <span class="mini-cart-item-price">$120</span>
-                                                    <span class="mini-cart-item-quantity"><a href="#"><i class="ti-close"></i></a></span>
+                                                    <a href="{{ route('productDetails', $item->product->slug) }}" style="width: 90%;" class="text-truncate">{{ $item->product->name }}</a>
+
+                                                    <span class="mini-cart-item-price">
+                                                        @if($item->product->discount_price)
+                                                        <del class="me-1">৳{{ number_format($item->product->selling_price,2) }}</del>
+                                                        ৳{{ number_format($item->product->discount_price,2) }}
+                                                        @else
+                                                        ৳{{ number_format($item->product->selling_price,2) }}
+                                                        @endif
+                                                    </span>
+
+                                                    <form action="{{ route('wishlist.destroy') }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <input type="hidden" name="product_id" value="{{ $item->product_id }}">
+
+                                                        <button type="submit" class="mini-cart-item-quantity btn btn-link p-0 border-0 shadow-none">
+                                                            <span class="mini-cart-item-quantity">
+                                                                <i class="ti-close"></i>
+                                                            </span>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </div>
-                                            <div class="mini-cart-item clearfix">
-                                                <div class="mini-cart-item-image">
-                                                    <a href="product.html"><img src="{{ asset('frontend/assets/images/cart/img-3.jpg') }}" alt></a>
-                                                </div>
-                                                <div class="mini-cart-item-des">
-                                                    <a href="product.html">Kids Blue Shoes</a>
-                                                    <span class="mini-cart-item-price">$120</span>
-                                                    <span class="mini-cart-item-quantity"><a href="#"><i class="ti-close"></i></a></span>
-                                                </div>
-                                            </div>
+                                            @endforeach
                                         </div>
                                         <div class="mini-cart-action clearfix">
                                             <div class="mini-btn">
@@ -161,7 +164,7 @@
                                     <div class="mini-cart-content">
                                         <button class="mini-cart-close"><i class="ti-close"></i></button>
                                         <div class="mini-cart-items">
-                                            @foreach($cartItems as $item)
+                                            @foreach($cartItems ?? [] as $item)
                                             <div class="mini-cart-item clearfix">
                                                 <div class="mini-cart-item-image">
                                                     <a href="{{ route('productDetails', $item->product->slug) }}"><img src="{{ $item->product->thumbnail }}" alt="{{ $item->product->name }}"></a>

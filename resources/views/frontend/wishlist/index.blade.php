@@ -40,185 +40,76 @@
                 <div class="row">
                     @if(count($wishlists) > 0)
                     <div class="col-12">
-                        <form action="https://wpocean.com/html/tf/themart/cart">
-                            <table class="table-responsive cart-wrap">
-                                <thead>
-                                    <tr>
-                                        <th class="images images-b">Product</th>
-                                        <th class="ptice">Price</th>
-                                        <th class="stock">Stock Status</th>
-                                        <th class="remove remove-b">Action</th>
-                                        <th class="remove remove-b">Remove</th>
-                                    </tr>
-                                </thead>
+                        <table class="table-responsive cart-wrap">
+                            <thead>
+                                <tr>
+                                    <th class="images images-b">Product</th>
+                                    <th class="ptice">Price</th>
+                                    <th class="stock">Stock Status</th>
+                                    <th class="remove remove-b">Action</th>
+                                    <th class="remove remove-b">Remove</th>
+                                </tr>
+                            </thead>
 
-                                <tbody>
-
-                                    @foreach($wishlists as $wishlist)
-                                    <tr class="wishlist-item">
-                                        <td class="product-item-wish">
-                                            <div class="check-box"><input type="checkbox" class="myproject-checkbox">
-                                            </div>
-                                            <div class="images">
-                                                <span>
-                                                    <img src="{{$wishlist->product->thumbnail}}" alt="{{$wishlist->product->name}}">
-                                                </span>
-                                            </div>
-                                            <div class="product">
-                                                <ul>
-                                                    <li class="first-cart">{{$wishlist->product->name}}</li>
-                                                    <li>
-                                                        <div class="rating-product">
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <span>{{$wishlist->product->rating}}</span>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                        <td class="ptice">
-                                            @if($wishlist?->product?->discount_price)
-                                            <del class="me-1">৳{{ number_format($wishlist?->product?->selling_price,2) }}</del>
-                                            ৳{{ number_format($wishlist?->product?->discount_price,2) }}
-                                            @else
-                                            ৳{{ number_format($wishlist?->product?->selling_price,2) }}
-                                            @endif
-                                        </td>
-
-                                        @if($wishlist->stock > 0)
-                                        <td class="stock"><span class="in-stock">In Stock </span></td>
+                            <tbody>
+                                @foreach($wishlists as $wishlist)
+                                <tr class="wishlist-item">
+                                    <td class="product-item-wish">
+                                        <div class="check-box"><input type="checkbox" class="myproject-checkbox">
+                                        </div>
+                                        <div class="images">
+                                            <a style="width: 6rem; height: 6rem;" class="image d-block overflow-hidden" href="{{ route('productDetails', $wishlist->product->slug) }}">
+                                                <img src="{{$wishlist->product->thumbnail}}" alt="{{ $wishlist->product->name }}" class="img-fluid w-100 h-100 object-fit-contain">
+                                            </a>
+                                        </div>
+                                        <div class="product">
+                                            <ul>
+                                                <li class="first-cart"><a href="{{ route('productDetails', $wishlist->product->slug) }}"style="color:#233D50;">{{$wishlist->product->name}}</a></li>
+                                                <li>
+                                                    <div class="rating-product">
+                                                        <i class="fi flaticon-star"></i>
+                                                        <i class="fi flaticon-star"></i>
+                                                        <i class="fi flaticon-star"></i>
+                                                        <i class="fi flaticon-star"></i>
+                                                        <i class="fi flaticon-star"></i>
+                                                        <span>{{$wishlist->product->rating}}</span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td class="ptice">
+                                        @if($wishlist?->product?->discount_price)
+                                        <del class="me-1">৳{{ number_format($wishlist?->product?->selling_price,2) }}</del>
+                                        ৳{{ number_format($wishlist?->product?->discount_price,2) }}
                                         @else
-                                        <td class="stock"><span class="in-stock out-stock">Out Stock</span></td>
+                                        ৳{{ number_format($wishlist?->product?->selling_price,2) }}
                                         @endif
+                                    </td>
 
-                                        <td class="add-wish">
-                                            <a class="theme-btn-s2" href="{{ route('cart.index') }}">Shop Now</a>
-                                        </td>
-                                        <td class="action">
-                                            <ul>
-                                                <li class="w-btn"><a data-bs-toggle="tooltip" data-bs-html="true" title="" href="#" data-bs-original-title="Remove" aria-label="Remove"><i class="fi flaticon-remove"></i></a></li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                    @endforeach
+                                    @if($wishlist->stock > 0)
+                                    <td class="stock"><span class="in-stock">In Stock </span></td>
+                                    @else
+                                    <td class="stock"><span class="in-stock out-stock">Out Stock</span></td>
+                                    @endif
 
-
-                                    <tr class="wishlist-item">
-                                        <td class="product-item-wish">
-                                            <div class="check-box"><input type="checkbox" class="myproject-checkbox">
-                                            </div>
-                                            <div class="images">
-                                                <span>
-                                                    <img src="assets/images/cart/img-2.jpg" alt="">
-                                                </span>
-                                            </div>
-                                            <div class="product">
-                                                <ul>
-                                                    <li class="first-cart">Blue Bag</li>
-                                                    <li>
-                                                        <div class="rating-product">
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <span>30</span>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                        <td class="ptice">$200</td>
-                                        <td class="stock"><span class="in-stock">In Stock</span></td>
-                                        <td class="add-wish">
-                                            <a class="theme-btn-s2" href="cart.html">Shop Now</a>
-                                        </td>
-                                        <td class="action">
-                                            <ul>
-                                                <li class="w-btn"><a data-bs-toggle="tooltip" data-bs-html="true" title="" href="#" data-bs-original-title="Remove" aria-label="Remove"><i class="fi flaticon-remove"></i></a></li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                    <tr class="wishlist-item">
-                                        <td class="product-item-wish">
-                                            <div class="check-box"><input type="checkbox" class="myproject-checkbox">
-                                            </div>
-                                            <div class="images">
-                                                <span>
-                                                    <img src="assets/images/cart/img-3.jpg" alt="">
-                                                </span>
-                                            </div>
-                                            <div class="product">
-                                                <ul>
-                                                    <li class="first-cart">Kids Blue Shoes</li>
-                                                    <li>
-                                                        <div class="rating-product">
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <span>50</span>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                        <td class="ptice">$270</td>
-                                        <td class="stock"><span class="in-stock out-stock">Out Stock</span></td>
-                                        <td class="add-wish">
-                                            <a class="theme-btn-s2" href="cart.html">Shop Now</a>
-                                        </td>
-                                        <td class="action">
-                                            <ul>
-                                                <li class="w-btn"><a data-bs-toggle="tooltip" data-bs-html="true" title="" href="#" data-bs-original-title="Remove" aria-label="Remove"><i class="fi flaticon-remove"></i></a></li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                    <tr class="wishlist-item">
-                                        <td class="product-item-wish">
-                                            <div class="check-box"><input type="checkbox" class="myproject-checkbox">
-                                            </div>
-                                            <div class="images">
-                                                <span>
-                                                    <img src="assets/images/cart/img-4.jpg" alt="">
-                                                </span>
-                                            </div>
-                                            <div class="product">
-                                                <ul>
-                                                    <li class="first-cart">Hand Made Hat</li>
-                                                    <li>
-                                                        <div class="rating-product">
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <span>15</span>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                        <td class="ptice">$ 100</td>
-                                        <td class="stock"><span class="in-stock">In Stock</span></td>
-                                        <td class="add-wish">
-                                            <a class="theme-btn-s2" href="cart.html">Shop Now</a>
-                                        </td>
-                                        <td class="action">
-                                            <ul>
-                                                <li class="w-btn"><a data-bs-toggle="tooltip" data-bs-html="true" title="" href="#" data-bs-original-title="Remove" aria-label="Remove"><i class="fi flaticon-remove"></i></a></li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
-                        </form>
+                                    <td class="add-wish">
+                                        <a class="theme-btn-s2" href="{{ route('productDetails', $wishlist->product->slug) }}">Shop Now</a>
+                                    </td>
+                                    <td class="action">
+                                    <form action="{{route('wishlist.destroy')}}" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="hidden" name="product_id" value="{{$wishlist->product_id}}">
+                                        <button type="submit" class="btn btn-lg w-btn fs-2" data-bs-toggle="tooltip" data-bs-html="true" title="" data-bs-original-title="Remove" aria-label="Remove">
+                                            <i class="fi flaticon-remove"></i>
+                                        </button>
+                                    </form>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                     @else
                     <div class="text-center mt-5">
