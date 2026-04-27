@@ -58,6 +58,13 @@ class WishlistController extends Controller
             ->where('product_id', $request->product_id)
             ->delete();
 
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Product removed from wishlist!'
+            ]);
+        }
+
         return back()->withSuccess('Product removed from wishlist!');
     }
 }
