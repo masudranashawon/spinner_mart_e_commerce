@@ -55,6 +55,13 @@
                                 </thead>
                                 <tbody>
                                     @foreach($cartItems as $cart)
+                                        @php
+                                            $price =
+                                                $cart->variant->discount_price > 0
+                                                    ? $cart->variant->discount_price
+                                                    : $cart->variant->selling_price;
+                                            $subTotal = $price * $cart->quantity;
+                                        @endphp
                                     <tr class="wishlist-item">
                                         <td class="product-item-wish">
                                             <div class="check-box"><input type="checkbox" class="myproject-checkbox">
@@ -105,19 +112,21 @@
                                         </td>
 
                                         <td class="td-quantity">
-                                            <div class="quantity cart-plus-minus">
-                                                <input class="text-value" type="text" value="{{$cart->quantity}}">
+                                            <div class="quantity cart-plus-minus" data-cart-id="{{$cart->id}}" data-product-id="{{ $cart->product_id }}" data-variant-id="{{$cart->product_variant_id}}"
+                                                        data-product-price="{{ $cart->variant?->discount_price > 0 ? $cart->variant?->discount_price : $cart->variant?->selling_price }}">
+                                                <input name="quantity" class="text-value" type="text" readonly value="{{ old('quantity', $cart->quantity) }}">
                                                 <div class="dec qtybutton">-</div>
                                                 <div class="inc qtybutton">+</div>
                                             </div>
                                         </td>
 
-                                        <td class="ptice">
+                                        {{-- <td class="ptice">
                                             @php
                                             $total = $cart->quantity * ($cart->variant->discount_price ?? $cart->variant->selling_price);
                                             @endphp
                                             ৳{{ number_format($total,2) }}
-                                        </td>
+                                        </td> --}}
+                                        <td class="ptice subtotal{{$cart->id}}">৳ {{number_format($subTotal,2)}}</td>
                                         <td class="action">
                                             <ul>
                                                 <li class="w-btn">
@@ -288,6 +297,63 @@
 @endsection
 
 @push('script')
+<script>
+    $(document).ready(function() {
+        $(".qtybutton").on("click", function() {
+            const $button = $(this);
+            const productId = $button.closest('[data-product-id]').data('product-id');
+            const productPrice = $button.closest('[data-product-price]').data('product-price');
+            const variantId = $button.closest('[data-variant-id]').data('variant-id');
+            const cartId = $button.closest('[data-cart-id]').data('cart-id');
+            const csrfToken = $('meta[name="csrf-token"]').attr('content');
+            let quantity = $button.parent().find("input").val();
+
+            if (quantity < 1) {
+                quantity = 1;
+                $button.parent().find("input").val(1);
+                const subtotal = quantity * productPrice;
+                $('.subtotal' + cartId).html('৳ ' + subtotal.toFixed(2));
+                return;
+            }
+            
+            const subtotal = quantity * productPrice;
+            $('.subtotal' + cartId).html('৳ ' + subtotal.toFixed(2));
+
+            $.ajax({
+                url: "{{ route('cart.update') }}",
+                method: "POST",
+                data: {
+                    _token: csrfToken,
+                    product_id: productId,
+                    product_variant_id: variantId,
+                    quantity: quantity
+                },
+
+                success: function(response) {
+                    if (response.status) { 
+                        Toast.fire({
+                        icon: "success",
+                        title: response.message
+                        });
+                    } else {
+                        Toast.fire({
+                            icon: "error",
+                            title: response.message
+                        });
+                    }
+                },
+
+                 error: function() {
+                    Toast.fire({
+                        icon: "error",
+                        title: "Something went wrong!"
+                    });
+                }
+            });
+        });
+    });
+</script>
+
 <script>
     $(document).ready(function() {
         $('.delete-cart').click(function() {

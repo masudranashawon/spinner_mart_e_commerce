@@ -89,6 +89,28 @@ class CartController extends Controller
         return back()->withSuccess('Product added to cart successfully!');
     }
 
+     public function update(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'product_variant_id' => 'required|exists:product_variants,id',
+            'quantity' => 'required|numeric|min:1',
+        ]);
+
+        $user = auth('web')->user();
+
+        $cartItem = Cart::where('user_id', $user->id)->where('product_id', $request->product_id)->where('product_variant_id', $request->product_variant_id)->first();
+
+        $cartItem->update([
+            'quantity' => $request->quantity
+        ]);
+
+         return response()->json([
+            'status' => true,
+            'message' => 'Cart updated successfully'
+        ]);
+    }
+
     public function destroy(Cart $cart)
     {
         if ($cart->user_id != auth('web')->user()->id) {

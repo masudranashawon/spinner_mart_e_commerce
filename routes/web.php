@@ -23,6 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(CartController::class)->group(function () {
         Route::get('/carts', 'index')->name('cart.index');
         Route::post('/cart/store', 'store')->name('cart.store');
+        Route::post('/cart/update', 'update')->name('cart.update');
         Route::delete('/cart/{cart}/destroy', 'destroy')->name('cart.destroy');
     });
 
