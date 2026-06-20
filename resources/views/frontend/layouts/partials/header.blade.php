@@ -208,7 +208,7 @@
                                         </div>
                                         <div class="mini-cart-action clearfix">
                                             <span class="mini-checkout-price">Subtotal:
-                                                <span>৳{{ number_format($cartItems->sum('total'), 2) }}</span></span>
+                                                <span>৳{{ number_format($cartItems?->sum('total'), 2) }}</span></span>
                                             <div class="mini-btn">
                                                 <a href="{{ route('cart.index') }}" class="view-cart-btn">View Cart</a>
                                             </div>

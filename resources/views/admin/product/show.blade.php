@@ -53,7 +53,7 @@
                   @endforeach
                 </div>
               @else
-                <div class="d-flex flex-grow-1 align-items-center">
+                <div class="d-flex grow align-items-center">
                   <p class="text-muted mb-0">No gallery images added yet.</p>
                 </div>
               @endif

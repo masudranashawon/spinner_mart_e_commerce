@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InventoryStockController;
 use App\Http\Controllers\Admin\ProductController;
@@ -87,5 +88,13 @@ Route::prefix("admin")->group(function () {
   // inventory stock routes
   Route::controller(InventoryStockController::class)->group(function () {
     Route::post("/products/{product}/stock", "bulkUpdate")->name("products.stock.bulkUpdate");
+  });
+
+  // coupon routes
+  Route::controller(CouponController::class)->group(function () {
+    Route::get("/coupons", "index")->name("coupon.index");
+    Route::post("/coupon/store", "store")->name("coupon.store");
+    Route::put("/coupon/{coupon}/update", "update")->name("coupon.update");
+    Route::delete("/coupon/{coupon}/destroy", "destroy")->name("coupon.destroy");
   });
 });

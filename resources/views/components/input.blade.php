@@ -1,21 +1,17 @@
 <div class="form-group">
-  @if ($label)
+    @if ($label)
     <label for="{{ $name }}" class="form-label">
-      {{ $label }}
+        {{ $label }}
 
-      @if ($required)
+        @if ($required)
         <span class="text-danger">*</span>
-      @endif
+        @endif
     </label>
-  @endif
+    @endif
 
-  <input type="{{ $type }}" name="{{ $name }}" id="{{ $id ?? $name }}"
-    class="form-control {{ $class }}" placeholder="{{ $placeholder }}"
-    @if (!empty($value)) value="{{ old($name, $value) }}" @endif
-    @if (!empty($required)) required @endif @if (!empty($disabled)) disabled @endif
-    @if (!empty($readonly)) readonly @endif>
+    <input type="{{ $type }}" name="{{ $name }}" id="{{ $id ?? $name }}" class="form-control {{ $class }}" placeholder="{{ $placeholder }}" value="{{ old($name, $value ?? '') }}" @if (!empty($required)) required @endif @if (!empty($disabled)) disabled @endif @if (!empty($readonly)) readonly @endif>
 
-  @error($name)
+    @error($name)
     <span class="text-danger">{{ $message }}</span>
-  @enderror
+    @enderror
 </div>
