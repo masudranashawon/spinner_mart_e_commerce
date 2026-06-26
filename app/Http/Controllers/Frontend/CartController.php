@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
+use App\Models\Coupon;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -89,7 +91,7 @@ class CartController extends Controller
         return back()->withSuccess('Product added to cart successfully!');
     }
 
-     public function update(Request $request)
+    public function update(Request $request)
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
@@ -105,10 +107,67 @@ class CartController extends Controller
             'quantity' => $request->quantity
         ]);
 
-         return response()->json([
+        return response()->json([
             'status' => true,
             'message' => 'Cart updated successfully'
         ]);
+    }
+
+    public function cardCouponApply(Request $request)
+    {
+        $request->validate([
+            'coupon_code' => 'required|exists:coupons,coupon_code',
+            'sub_total' => 'required|numeric|min:0',
+        ]);
+
+        $couponCode = $request->coupon_code;
+
+        $coupon = Coupon::where('coupon_code', $couponCode)->first();
+
+
+        // Check if coupon is active
+        $start = Carbon::parse($coupon->start_date)->startOfDay();
+        $end = Carbon::parse($coupon->expiry_date)->endOfDay();
+
+        if (now()->lt($start) || now()->gt($end)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Coupon is not valid at this time.'
+            ], 400);
+        }
+
+        // Check if coupon usage limit has been reached
+        $hasReachedLimit = $coupon->total_applied >= $coupon->limit;
+        if ($hasReachedLimit) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Coupon usage limit has been reached.'
+            ], 400);
+        }
+
+        // Check if the subtotal meets the minimum amount for the coupon
+        $minAmount = $coupon->min_amount;
+        if ($minAmount > $request->sub_total) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Subtotal price does not meet the minimum amount for this coupon.'
+            ], 400);
+        }
+
+        // Calculate discount based on coupon type
+        $couponDiscount = 0;
+        if ($coupon->coupon_type == 'PERCENTAGE') {
+            $couponDiscount = ($request->sub_total * $coupon->discount) / 100;
+        } elseif ($coupon->coupon_type == 'FIXED') {
+            $couponDiscount = $coupon->discount;
+        }   
+
+        $discountPrice = $request->sub_total - $couponDiscount;
+
+        return response()->json([
+            'message' => 'Coupon applied successfully.',
+            'discount' => $discountPrice,
+        ], 200);
     }
 
     public function destroy(Cart $cart)

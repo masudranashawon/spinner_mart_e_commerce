@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/carts', 'index')->name('cart.index');
         Route::post('/cart/store', 'store')->name('cart.store');
         Route::post('/cart/update', 'update')->name('cart.update');
+        Route::post('/cart/coupon/apply', 'cardCouponApply')->name('cart.coupon.apply');
         Route::delete('/cart/{cart}/destroy', 'destroy')->name('cart.destroy');
     });
 

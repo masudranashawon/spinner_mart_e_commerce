@@ -55,13 +55,13 @@
                                 </thead>
                                 <tbody>
                                     @foreach($cartItems as $cart)
-                                        @php
-                                            $price =
-                                                $cart->variant->discount_price > 0
-                                                    ? $cart->variant->discount_price
-                                                    : $cart->variant->selling_price;
-                                            $subTotal = $price * $cart->quantity;
-                                        @endphp
+                                    @php
+                                    $price =
+                                    $cart->variant->discount_price > 0
+                                    ? $cart->variant->discount_price
+                                    : $cart->variant->selling_price;
+                                    $subTotal = $price * $cart->quantity;
+                                    @endphp
                                     <tr class="wishlist-item">
                                         <td class="product-item-wish">
                                             <div class="check-box"><input type="checkbox" class="myproject-checkbox">
@@ -112,8 +112,7 @@
                                         </td>
 
                                         <td class="td-quantity">
-                                            <div class="quantity cart-plus-minus" data-cart-id="{{$cart->id}}" data-product-id="{{ $cart->product_id }}" data-variant-id="{{$cart->product_variant_id}}"
-                                                        data-product-price="{{ $cart->variant?->discount_price > 0 ? $cart->variant?->discount_price : $cart->variant?->selling_price }}">
+                                            <div class="quantity cart-plus-minus" data-cart-id="{{$cart->id}}" data-product-id="{{ $cart->product_id }}" data-variant-id="{{$cart->product_variant_id}}" data-product-price="{{ $cart->variant?->discount_price > 0 ? $cart->variant?->discount_price : $cart->variant?->selling_price }}">
                                                 <input name="quantity" class="text-value" type="text" readonly value="{{ old('quantity', $cart->quantity) }}">
                                                 <div class="dec qtybutton">-</div>
                                                 <div class="inc qtybutton">+</div>
@@ -143,10 +142,10 @@
                         </div>
                         <div class="cart-action">
                             <div class="apply-area">
-                                <input type="text" class="form-control" placeholder="Enter your coupon">
-                                <button class="theme-btn-s2" type="submit">Apply</button>
+                                <input type="text" class="form-control" placeholder="Enter your coupon" id="couponCodeInput">
+                                <button type="button" class="theme-btn-s2" id="couponApplyBtn">Apply</button>
                             </div>
-                            <a class="theme-btn-s2" href="#"><i class="fi flaticon-refresh"></i> Update Cart</a>
+                            <a class="theme-btn-s2" href="{{route("cart.index")}}"><i class="fi flaticon-refresh"></i> Update Cart</a>
                         </div>
                     </form>
                 </div>
@@ -155,15 +154,15 @@
                         <h3>Cart Totals</h3>
                         <div class="sub-total">
                             <h4>Subtotal</h4>
-                            <span>৳{{ number_format($cartItems->sum('total'), 2) }}</span>
+                            <span>৳{{ number_format($cartItems->sum('total') ?? 0, 2) }}</span>
                         </div>
                         <div class="sub-total my-3">
                             <h4>Discount</h4>
-                            <span>00.00</span>
+                            <span id="couponDiscount">00.00</span>
                         </div>
                         <div class="total mb-3">
                             <h4>Total</h4>
-                            <span>$300.00</span>
+                            <span id="totalPrice">৳{{ number_format($cartItems->sum('total') ?? 0, 2) }}</span>
                         </div>
                         <a class="theme-btn-s2" href="checkout.html">Proceed To CheckOut</a>
                     </div>
@@ -315,43 +314,44 @@
                 $('.subtotal' + cartId).html('৳ ' + subtotal.toFixed(2));
                 return;
             }
-            
+
             const subtotal = quantity * productPrice;
             $('.subtotal' + cartId).html('৳ ' + subtotal.toFixed(2));
 
             $.ajax({
-                url: "{{ route('cart.update') }}",
-                method: "POST",
-                data: {
-                    _token: csrfToken,
-                    product_id: productId,
-                    product_variant_id: variantId,
-                    quantity: quantity
+                url: "{{ route('cart.update') }}"
+                , method: "POST"
+                , data: {
+                    _token: csrfToken
+                    , product_id: productId
+                    , product_variant_id: variantId
+                    , quantity: quantity
                 },
 
                 success: function(response) {
-                    if (response.status) { 
+                    if (response.status) {
                         Toast.fire({
-                        icon: "success",
-                        title: response.message
+                            icon: "success"
+                            , title: response.message
                         });
                     } else {
                         Toast.fire({
-                            icon: "error",
-                            title: response.message
+                            icon: "error"
+                            , title: response.message
                         });
                     }
                 },
 
-                 error: function() {
+                error: function() {
                     Toast.fire({
-                        icon: "error",
-                        title: "Something went wrong!"
+                        icon: "error"
+                        , title: "Something went wrong!"
                     });
                 }
             });
         });
     });
+
 </script>
 
 <script>
@@ -369,10 +369,62 @@
                 }
                 , success: function() {
                     Swal.fire({
+                        toast: true
+                        , position: 'top-end'
+                        , icon: 'success'
+                        , title: 'Cart item removed successfully!'
+                        , showConfirmButton: false
+                        , timer: 1800
+                        , timerProgressBar: true
+                    });
+
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                }
+                , error: function(xhr) {
+                    Swal.fire({
+                        toast: true
+                        , position: 'top-end'
+                        , icon: 'error'
+                        , title: 'Failed to remove item!'
+                        , showConfirmButton: false
+                        , timer: 2200
+                    });
+                }
+            });
+        });
+    });
+
+</script>
+
+
+<script>
+    //Coupon Code Apply
+    $("#couponApplyBtn").on("click", function(e) {
+        e.preventDefault();
+
+        let couponCode = $("#couponCodeInput").val();   
+        let subtotal = {{$cartItems->sum('total') ?? 0}}
+
+        if(couponCode == "" || couponCode == null || couponCode == undefined || couponCode.length < 5) return;
+
+        $.ajax({
+            url: '{{route("cart.coupon.apply")}}',
+            type: 'POST',
+            data: {
+                coupon_code: couponCode,
+                sub_total: subtotal,
+                _method: 'POST',
+                _token: '{{ csrf_token() }}',
+            }, 
+            success: function(response) {
+                console.log(response);
+                Swal.fire({
                     toast: true,
                     position: 'top-end',
                     icon: 'success',
-                    title: 'Cart item removed successfully!',
+                    title: 'Coupon applyed successfully!',
                     showConfirmButton: false,
                     timer: 1800,
                     timerProgressBar: true
@@ -380,21 +432,21 @@
 
                 setTimeout(() => {
                     location.reload();
-                }, 1000);
-                }
-                , error: function(xhr) {
-                   Swal.fire({
+                }, 10000);
+            }, 
+            error: function(xhr) {
+                Swal.fire({
                     toast: true,
                     position: 'top-end',
                     icon: 'error',
-                    title: 'Failed to remove item!',
+                    title: xhr.responseJSON.message,
                     showConfirmButton: false,
                     timer: 2200
                 });
-                }
-            });
+            }
         });
-    });
+ 
+    })
 
 </script>
 @endpush
