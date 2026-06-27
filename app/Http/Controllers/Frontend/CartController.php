@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Enums\Enums\CouponTypeEnums;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Coupon;
@@ -120,6 +121,8 @@ class CartController extends Controller
             'sub_total' => 'required|numeric|min:0',
         ]);
 
+
+
         $couponCode = $request->coupon_code;
 
         $coupon = Coupon::where('coupon_code', $couponCode)->first();
@@ -156,9 +159,9 @@ class CartController extends Controller
 
         // Calculate discount based on coupon type
         $couponDiscount = 0;
-        if ($coupon->coupon_type == 'PERCENTAGE') {
+        if ($coupon->coupon_type == CouponTypeEnums::PERCENTAGE->value) {
             $couponDiscount = ($request->sub_total * $coupon->discount) / 100;
-        } elseif ($coupon->coupon_type == 'FIXED') {
+        } elseif ($coupon->coupon_type == CouponTypeEnums::FIXED->value) {
             $couponDiscount = $coupon->discount;
         }   
 
@@ -167,6 +170,7 @@ class CartController extends Controller
         return response()->json([
             'message' => 'Coupon applied successfully.',
             'discount' => $discountPrice,
+            'sub_total' => $request->sub_total
         ], 200);
     }
 

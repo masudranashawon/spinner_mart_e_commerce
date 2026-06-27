@@ -154,7 +154,7 @@
                         <h3>Cart Totals</h3>
                         <div class="sub-total">
                             <h4>Subtotal</h4>
-                            <span>৳{{ number_format($cartItems->sum('total') ?? 0, 2) }}</span>
+                            <p><span>৳</span> <span id="cartSubtotalPrice">{{ number_format($cartItems->sum('total') ?? 0, 2) }}</span></p>
                         </div>
                         <div class="sub-total my-3">
                             <h4>Discount</h4>
@@ -304,6 +304,9 @@
             const productPrice = $button.closest('[data-product-price]').data('product-price');
             const variantId = $button.closest('[data-variant-id]').data('variant-id');
             const cartId = $button.closest('[data-cart-id]').data('cart-id');
+            const currentSubtotal = parseFloat($("#cartSubtotalPrice").text());
+
+            console.log(currentSubtotal);
             const csrfToken = $('meta[name="csrf-token"]').attr('content');
             let quantity = $button.parent().find("input").val();
 
@@ -315,37 +318,51 @@
                 return;
             }
 
+
+            // Update the quantity based on the button clicked
             const subtotal = quantity * productPrice;
             $('.subtotal' + cartId).html('৳ ' + subtotal.toFixed(2));
 
+
+            // Update the cart subtotal based on the button clicked
+            if ($button.hasClass("inc")) {
+                $("#cartSubtotalPrice").text((currentSubtotal + productPrice).toFixed(2));
+            }
+
+            if ($button.hasClass("dec") && quantity >= 1) {
+                $("#cartSubtotalPrice").text((currentSubtotal - productPrice).toFixed(2));
+            }
+
+
+            // Send an AJAX request to update the cart quantity in the backend
             $.ajax({
-                url: "{{ route('cart.update') }}"
-                , method: "POST"
-                , data: {
-                    _token: csrfToken
-                    , product_id: productId
-                    , product_variant_id: variantId
-                    , quantity: quantity
+                url: "{{ route('cart.update') }}",
+                method: "POST",
+                data: {
+                    _token: csrfToken,
+                    product_id: productId,
+                    product_variant_id: variantId,
+                    quantity: quantity
                 },
 
                 success: function(response) {
                     if (response.status) {
                         Toast.fire({
-                            icon: "success"
-                            , title: response.message
+                            icon: "success",
+                            title: response.message
                         });
                     } else {
                         Toast.fire({
-                            icon: "error"
-                            , title: response.message
+                            icon: "error",
+                            title: response.message
                         });
                     }
                 },
 
                 error: function() {
                     Toast.fire({
-                        icon: "error"
-                        , title: "Something went wrong!"
+                        icon: "error",
+                        title: "Something went wrong!"
                     });
                 }
             });
@@ -407,7 +424,7 @@
         let couponCode = $("#couponCodeInput").val();   
         let subtotal = {{$cartItems->sum('total') ?? 0}}
 
-        if(couponCode == "" || couponCode == null || couponCode == undefined || couponCode.length < 5) return;
+        if(couponCode == "" || couponCode == null || couponCode == undefined || couponCode.length < 2) return;
 
         $.ajax({
             url: '{{route("cart.coupon.apply")}}',
