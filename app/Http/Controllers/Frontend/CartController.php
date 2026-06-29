@@ -16,6 +16,7 @@ class CartController extends Controller
 {
     public function index()
     {
+        /** @var \App\Models\User $user */
         $user = auth('web')->user();
         $cartItems = $user->cartItems()->latest()->get();
 
@@ -117,60 +118,64 @@ class CartController extends Controller
     public function cardCouponApply(Request $request)
     {
         $request->validate([
-            'coupon_code' => 'required|exists:coupons,coupon_code',
-            'sub_total' => 'required|numeric|min:0',
+            'couponCode' => 'required|exists:coupons,coupon_code',
         ]);
 
-
-
-        $couponCode = $request->coupon_code;
-
+        $couponCode = $request->couponCode;
         $coupon = Coupon::where('coupon_code', $couponCode)->first();
 
+        // 1. Calculate actual subtotal from DB (Price * Quantity)
+        /** @var \App\Models\User $user */
+        $user = auth('web')->user();
+        $cartItems = $user->cartItems()->get();
+        
+        if ($cartItems->isEmpty()) {
+             return response()->json(['status' => false, 'message' => 'Cart is empty.'], 400);
+        }
 
-        // Check if coupon is active
+        // FIX: Properly multiply unit price by quantity for the true subtotal
+        $actualSubTotal = $cartItems->sum(function($item) {
+            return $item->price * $item->quantity;
+        });
+
+        // 2. Check Validations
         $start = Carbon::parse($coupon->start_date)->startOfDay();
         $end = Carbon::parse($coupon->expiry_date)->endOfDay();
 
         if (now()->lt($start) || now()->gt($end)) {
+            return response()->json(['status' => false, 'message' => 'Coupon is not valid at this time.'], 400);
+        }
+
+        if ($coupon->total_applied >= $coupon->limit) {
+            return response()->json(['status' => false, 'message' => 'Coupon usage limit has been reached.'], 400);
+        }
+
+        if ($coupon->min_amount > $actualSubTotal) {
             return response()->json([
-                'status' => false,
-                'message' => 'Coupon is not valid at this time.'
+                'status' => false, 
+                'message' => 'Subtotal price does not meet the minimum amount (৳' . $coupon->min_amount . ') for this coupon.'
             ], 400);
         }
 
-        // Check if coupon usage limit has been reached
-        $hasReachedLimit = $coupon->total_applied >= $coupon->limit;
-        if ($hasReachedLimit) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Coupon usage limit has been reached.'
-            ], 400);
+        // 3. Calculate initial discount to send back to UI
+        $discountAmount = 0;
+        if ($coupon->coupon_type == 'PERCENTAGE') { // Adjust this if you use an Enum here
+            $discountAmount = ($actualSubTotal * $coupon->discount) / 100;
+        } else {
+            $discountAmount = $coupon->discount;
         }
 
-        // Check if the subtotal meets the minimum amount for the coupon
-        $minAmount = $coupon->min_amount;
-        if ($minAmount > $request->sub_total) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Subtotal price does not meet the minimum amount for this coupon.'
-            ], 400);
-        }
+        $finalTotal = $actualSubTotal - $discountAmount;
 
-        // Calculate discount based on coupon type
-        $couponDiscount = 0;
-        if ($coupon->coupon_type == CouponTypeEnums::PERCENTAGE->value) {
-            $couponDiscount = ($request->sub_total * $coupon->discount) / 100;
-        } elseif ($coupon->coupon_type == CouponTypeEnums::FIXED->value) {
-            $couponDiscount = $coupon->discount;
-        }   
-
-        $discountPrice = $request->sub_total - $couponDiscount;
-
+        // Send raw config back so JS can handle real-time qty changes
         return response()->json([
             'message' => 'Coupon applied successfully.',
-            'discount' => $discountPrice,
-            'sub_total' => $request->sub_total
+            'coupon_id' => $coupon->id,
+            'coupon_type' => $coupon->coupon_type,
+            'discount_value' => $coupon->discount,
+            'min_amount' => $coupon->min_amount,
+            'calculated_discount' => round($discountAmount, 2),
+            'calculated_total' => round($finalTotal, 2)
         ], 200);
     }
 
