@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Frontend\CartController;
+use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ShopController;
 use App\Http\Controllers\Frontend\WishlistController;
@@ -32,6 +33,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/wishlists', 'index')->name('wishlist.index');
         Route::post('/wishlist/store', 'store')->name('wishlist.store');
         Route::delete('/wishlist/destroy', 'destroy')->name('wishlist.destroy');
+    });
+
+    Route::controller(CheckoutController::class)->group(function () {
+        Route::post('/checkout', 'index')->name('checkout.index');
+        Route::post('/checkout/store', 'store')->name('checkout.store');
     });
 });
 

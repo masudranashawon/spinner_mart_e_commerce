@@ -154,17 +154,23 @@
                         <h3>Cart Totals</h3>
                         <div class="sub-total">
                             <h4>Subtotal</h4>
-                            <span>$ <span id="subTotalPrice">{{ $cartItems->sum('total') ?? 0 }}</span></span>
+                            <span>৳<span id="subTotalPrice">{{ $cartItems->sum('total') ?? 0 }}</span></span>
                         </div>
                         <div class="sub-total my-3">
                             <h4>Discount</h4>
-                            <span id="couponDiscount">00.00</span>
+                            <span id="couponDiscount">৳00.00</span>
                         </div>
                         <div class="total mb-3">
                             <h4>Total</h4>
-                            <span id="totalPrice">${{ $cartItems->sum('total') ?? 0 }}</span>
+                            <span id="totalPrice">৳{{ $cartItems->sum('total') ?? 0 }}</span>
                         </div>
-                        <a class="theme-btn-s2" href="checkout.html">Proceed To CheckOut</a>
+
+                         {{-- Proceed to Checkout Form --}}
+                        <form id="checkoutForm" action="{{ route('checkout.index') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="couponId" id="couponId">
+                            <button type="button" id="proceedToCheckout" class="theme-btn-s2 btn">Proceed To CheckOut</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -332,7 +338,7 @@
             }
         }
 
-        $("#couponDiscount").text(discountAmount.toFixed(2));
+        $("#couponDiscount").text("৳" + discountAmount.toFixed(2));
 
         // Calculate Final Total
         let finalTotal = currentSubtotal - discountAmount;
@@ -425,6 +431,11 @@
 
                     // Trigger UI update
                     calculateCartTotals();
+
+                    $("#couponCodeInput").val("");
+                    $(".qtybutton").css("pointer-events", "none");
+                    $(".delete-cart").css("pointer-events", "none");
+
                 }, 
                 error: function(error) {
                     Toast.fire({
@@ -480,5 +491,16 @@
         });
     });
 
+</script>
+
+<script>
+// Proceed to Checkout
+$(document).ready(function() {
+    $('#proceedToCheckout').on('click', function(){
+        $("#couponId").val(activeCoupon ? activeCoupon.id : '');
+
+        $("#checkoutForm").submit();
+    });
+});
 </script>
 @endpush
