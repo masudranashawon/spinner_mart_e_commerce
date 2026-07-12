@@ -125,7 +125,7 @@
                                             @endphp
                                             ৳{{ number_format($total,2) }}
                                         </td> --}}
-                                        <td class="ptice subtotal{{$cart->id}}">৳ {{number_format($subTotal,2)}}</td>
+                                        <td class="ptice subtotal{{$cart->id}}">৳{{number_format($subTotal,2)}}</td>
                                         <td class="action">
                                             <ul>
                                                 <li class="w-btn">

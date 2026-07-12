@@ -10,8 +10,13 @@ class CheckoutController extends Controller
     public function index(Request $request)
 
     {
-         $couponId = $request->coupon_id;
+        $couponId = $request->coupon_id;
 
-        return view('frontend.checkout.index', compact('couponId'));
+        $user = auth('web')->user();
+
+        /** @var \App\Models\User $user */
+        $cartItems = $user?->cartItems()?->latest()?->get();
+
+        return view('frontend.checkout.index', compact('couponId', 'user', 'cartItems'));
     }
 }

@@ -124,7 +124,7 @@ class CartController extends Controller
         $couponCode = $request->couponCode;
         $coupon = Coupon::where('coupon_code', $couponCode)->first();
 
-        // 1. Calculate actual subtotal from DB (Price * Quantity)
+        // Calculate actual subtotal from DB (Price * Quantity)
         /** @var \App\Models\User $user */
         $user = auth('web')->user();
         $cartItems = $user->cartItems()->get();
@@ -133,12 +133,12 @@ class CartController extends Controller
              return response()->json(['status' => false, 'message' => 'Cart is empty.'], 400);
         }
 
-        // FIX: Properly multiply unit price by quantity for the true subtotal
+        // Properly multiply unit price by quantity for the true subtotal
         $actualSubTotal = $cartItems->sum(function($item) {
             return $item->price * $item->quantity;
         });
 
-        // 2. Check Validations
+        // Check Validations
         $start = Carbon::parse($coupon->start_date)->startOfDay();
         $end = Carbon::parse($coupon->expiry_date)->endOfDay();
 
@@ -157,9 +157,9 @@ class CartController extends Controller
             ], 400);
         }
 
-        // 3. Calculate initial discount to send back to UI
+        // Calculate initial discount to send back to UI
         $discountAmount = 0;
-        if ($coupon->coupon_type == 'PERCENTAGE') { // Adjust this if you use an Enum here
+        if ($coupon->coupon_type == CouponTypeEnums::PERCENTAGE->value) {
             $discountAmount = ($actualSubTotal * $coupon->discount) / 100;
         } else {
             $discountAmount = $coupon->discount;
