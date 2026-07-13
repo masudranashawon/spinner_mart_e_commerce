@@ -11,6 +11,7 @@ use App\Models\ProductVariant;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
@@ -128,13 +129,13 @@ class CartController extends Controller
         /** @var \App\Models\User $user */
         $user = auth('web')->user();
         $cartItems = $user->cartItems()->get();
-        
+
         if ($cartItems->isEmpty()) {
-             return response()->json(['status' => false, 'message' => 'Cart is empty.'], 400);
+            return response()->json(['status' => false, 'message' => 'Cart is empty.'], 400);
         }
 
         // Properly multiply unit price by quantity for the true subtotal
-        $actualSubTotal = $cartItems->sum(function($item) {
+        $actualSubTotal = $cartItems->sum(function ($item) {
             return $item->price * $item->quantity;
         });
 
@@ -152,7 +153,7 @@ class CartController extends Controller
 
         if ($coupon->min_amount > $actualSubTotal) {
             return response()->json([
-                'status' => false, 
+                'status' => false,
                 'message' => 'Subtotal price does not meet the minimum amount (৳' . $coupon->min_amount . ') for this coupon.'
             ], 400);
         }
@@ -166,6 +167,14 @@ class CartController extends Controller
         }
 
         $finalTotal = $actualSubTotal - $discountAmount;
+
+
+        // Coupon apply success
+        if ($coupon) {
+            session([
+                'coupon_id' => $coupon->id,
+            ]);
+        }
 
         // Send raw config back so JS can handle real-time qty changes
         return response()->json([

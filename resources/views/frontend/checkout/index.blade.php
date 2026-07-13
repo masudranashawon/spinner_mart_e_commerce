@@ -44,6 +44,15 @@
                                 <div class="coupon coupon-3">
                                     <h2>Billing Address</h2>
                                 </div>
+                                @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul class="mb-0">
+                                        @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                @endif
                                 <div class="billing-adress">
                                     <div class="contact-form form-style">
                                         <div class="row">
@@ -81,7 +90,7 @@
                                             </div>
                                             <div class="col-lg-12 col-md-12 col-12">
                                                 <div class="note-area">
-                                                    <textarea name="massage" placeholder="Additional Information">{{old('massage')}}</textarea>
+                                                    <textarea name="message" placeholder="Additional Information">{{old('message')}}</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -89,7 +98,7 @@
                                 </div>
 
                                 <div class="biling-item-3">
-                                    <input id="toggle4" type="checkbox">
+                                    <input id="toggle4" type="checkbox" name="different_shipping" value="1">
                                     <label class="fontsize" for="toggle4">Ship to a Different Address?</label>
                                     <div class="billing-adress" id="open4">
                                         <div class="contact-form form-style">
@@ -112,7 +121,7 @@
                                                     <input type="text" placeholder="City / Town*" id="City1" name="shippingCity" value="{{old('shippingCity')}}">
                                                 </div>
                                                 <div class="col-lg-6 col-md-12 col-12">
-                                                    <input type="text" placeholder="Postcode / ZIP*" id="Post1" name="shippingPost" value="{{old('shippingPost')}}">
+                                                    <input type="text" placeholder="Postcode / ZIP*" id="Post1" name="shippingPostCode" value="{{old('shippingPostCode')}}">
                                                 </div>
                                                 <div class="col-lg-6 col-md-12 col-12">
                                                     <input type="text" placeholder="Company Name*" id="Company1" name="shippingCompany" value="{{old('shippingCompany')}}">
@@ -174,11 +183,11 @@
                                     </div>
                                     <ul>
                                         <li class="free">
-                                            <input id="Free" type="radio" name="delivaryCharge" value="60" checked>
+                                            <input id="Free" type="radio" name="deliveryCharge" value="60" checked>
                                             <label for="Free">Inside City: <span>৳60.00</span></label>
                                         </li>
                                         <li class="free">
-                                            <input id="Local" type="radio" name="delivaryCharge" value="120">
+                                            <input id="Local" type="radio" name="deliveryCharge" value="120">
                                             <label for="Local">Outside City: <span>৳120.00</span></label>
                                         </li>
                                     </ul>
@@ -197,15 +206,15 @@
                                             <div class="payment-select">
                                                 <ul>
                                                     <li class="">
-                                                        <input id="remove" type="radio" name="payment" value="cod">
+                                                        <input id="remove" type="radio" name="payment_method" value="cod">
                                                         <label for="remove">Cash on Delivery</label>
                                                     </li>
                                                     <li class="">
-                                                        <input id="add" type="radio" name="payment" checked="checked" value="ssl">
+                                                        <input id="add" type="radio" name="payment_method" checked="checked" value="sslcommerz">
                                                         <label for="add">Pay With SSLCOMMERZ</label>
                                                     </li>
                                                     <li class="">
-                                                        <input id="getway" type="radio" name="payment" value="stripe">
+                                                        <input id="getway" type="radio" name="payment_method" value="stripe">
                                                         <label for="getway">Pay With STRIPE</label>
                                                     </li>
                                                 </ul>

@@ -165,12 +165,8 @@
                             <span id="totalPrice">৳{{ $cartItems->sum('total') ?? 0 }}</span>
                         </div>
 
-                         {{-- Proceed to Checkout Form --}}
-                        <form id="checkoutForm" action="{{ route('checkout.index') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="couponId" id="couponId">
-                            <button type="button" id="proceedToCheckout" class="theme-btn-s2 btn">Proceed To CheckOut</button>
-                        </form>
+                         {{-- Proceed to Checkout --}}
+                        <a href="{{ route('checkout.index') }}" class="theme-btn-s2 btn">Proceed To CheckOut</a>
                     </div>
                 </div>
             </div>
@@ -491,16 +487,5 @@
         });
     });
 
-</script>
-
-<script>
-// Proceed to Checkout
-$(document).ready(function() {
-    $('#proceedToCheckout').on('click', function(){
-        $("#couponId").val(activeCoupon ? activeCoupon.id : '');
-
-        $("#checkoutForm").submit();
-    });
-});
 </script>
 @endpush

@@ -10,7 +10,7 @@ class CheckoutController extends Controller
     public function index(Request $request)
 
     {
-        $couponId = $request->coupon_id;
+        $couponId = session('coupon_id');
 
         $user = auth('web')->user();
 

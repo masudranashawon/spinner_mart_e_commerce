@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Order;
 use Arafat\LaravelRepository\Repository;
 use Illuminate\Http\Request;
 
@@ -14,13 +15,15 @@ class OrderRepository extends Repository
      */
     public static function model()
     {
-        //return User::class;
+        return Order::class;
     }
 
-    public static function storeByRequest(Request $request)
+    public static function storeByRequest(Request $request): Order
     {
-       self::create([
+        $order =  self::create([
             //
-       ]);
+        ]);
+
+        return $order;
     }
 }

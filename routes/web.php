@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::controller(CheckoutController::class)->group(function () {
-        Route::post('/checkout', 'index')->name('checkout.index');
+        Route::get('/checkout', 'index')->name('checkout.index');
     });
 
     Route::controller(OrderController::class)->group(function () {
