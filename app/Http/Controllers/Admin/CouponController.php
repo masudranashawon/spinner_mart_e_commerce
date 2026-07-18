@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\Enums\CouponTypeEnums;
+use App\Enums\CouponTypeEnums;
 use App\Http\Controllers\Controller;
 use App\Models\Coupon;
 use App\Repositories\CouponRepository;

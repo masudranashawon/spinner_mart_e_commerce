@@ -28,11 +28,4 @@ class ProductVariant extends Model
     {
         return $this->belongsTo(Size::class);
     }
-
-    protected function currentStock(): Attribute
-    {
-        return Attribute::make(
-            get: fn() => $this->stocks()->sum('quantity')
-        );
-    }
 }

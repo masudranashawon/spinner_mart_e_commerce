@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\Enums\PaymentMethodEnums;
+use App\Enums\PaymentMethodEnums;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

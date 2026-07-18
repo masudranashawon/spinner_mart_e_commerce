@@ -8,6 +8,10 @@
 <section class="wpo-page-title">
     <h2 class="d-none">Hide</h2>
     <div class="container">
+        @php
+        $count = count($cartItems);
+        @endphp
+
         <div class="row">
             <div class="col col-xs-12">
                 <div class="wpo-breadcumb-wrap">
@@ -32,12 +36,19 @@
             <div class="col-12">
                 <div class="single-page-title">
                     <h2>Your Cart</h2>
-                    <p>There are {{count($cartItems) > 0 ? count($cartItems) : "No"}} products in this list</p>
+                    <p>
+                        @if($count > 0)
+                        There {{ $count == 1 ? 'is' : 'are' }} {{ $count }}
+                        {{ $count == 1 ? 'product' : 'products' }} in the cart.
+                        @else
+                        There is no product in the cart.
+                        @endif
+                    </p>
                 </div>
             </div>
         </div>
 
-        @if(count($cartItems) > 0)
+        @if($count > 0)
         <div class="cart-wrapper">
             <div class="row">
                 <div class="col-lg-8 col-12">

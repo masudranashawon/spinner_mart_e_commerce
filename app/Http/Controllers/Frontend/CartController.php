@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Enums\Enums\CouponTypeEnums;
+use App\Enums\CouponTypeEnums;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Coupon;

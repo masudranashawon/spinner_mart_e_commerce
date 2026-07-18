@@ -25,14 +25,27 @@
 <!-- wpo-checkout-area start-->
 <div class="wpo-checkout-area section-padding">
     <div class="container">
+        @php
+        $count = count($cartItems);
+        @endphp
+
         <div class="row">
             <div class="col-12">
                 <div class="single-page-title">
                     <h2>Your Checkout</h2>
-                    <p>There are {{$cartItems?->count() ?? 0}} products in this list</p>
+                    <p>
+                        @if($count > 0)
+                        There {{ $count == 1 ? 'is' : 'are' }} {{ $count }}
+                        {{ $count == 1 ? 'product' : 'products' }} in this list.
+                        @else
+                        There is no product for checkout.
+                        @endif
+                    </p>
                 </div>
             </div>
         </div>
+
+        @if($count > 0)
         <form action="{{route('order.store')}}" method="POST">
             @csrf
 
@@ -90,7 +103,7 @@
                                             </div>
                                             <div class="col-lg-12 col-md-12 col-12">
                                                 <div class="note-area">
-                                                    <textarea name="message" placeholder="Additional Information">{{old('message')}}</textarea>
+                                                    <textarea name="note" placeholder="Additional Information">{{old('note')}}</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -206,11 +219,11 @@
                                             <div class="payment-select">
                                                 <ul>
                                                     <li class="">
-                                                        <input id="remove" type="radio" name="payment_method" value="cod">
+                                                        <input id="remove" type="radio" name="payment_method" checked="checked" value="cod">
                                                         <label for="remove">Cash on Delivery</label>
                                                     </li>
                                                     <li class="">
-                                                        <input id="add" type="radio" name="payment_method" checked="checked" value="sslcommerz">
+                                                        <input id="add" type="radio" name="payment_method" value="sslcommerz">
                                                         <label for="add">Pay With SSLCOMMERZ</label>
                                                     </li>
                                                     <li class="">
@@ -240,6 +253,17 @@
                 </div>
             </div>
         </form>
+        @else
+        <div class="text-center mt-5">
+            <h2>Your cart is empty</h2>
+            <p class="mt-2">
+                You need to add at least one product before proceeding to checkout.
+            </p>
+            <div class="shop-btn d-flex justify-content-center mt-3">
+                <a class="theme-btn-s2" href="{{ route('shop') }}">Continue Shopping</a>
+            </div>
+        </div>
+        @endif
     </div>
 </div>
 <!-- wpo-checkout-area end-->

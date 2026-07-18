@@ -2,21 +2,12 @@
 
 namespace App\Models;
 
-use App\Enums\Enums\OrderStatusEnums;
-use App\Enums\Enums\PaymentMethodEnums;
-use App\Enums\Enums\PaymentStatusEnums;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
     protected $guarded = ['id'];
-
-    protected $casts = [
-        'payment_method' => PaymentMethodEnums::class,
-        'payment_status' => PaymentStatusEnums::class,
-        'order_status' => OrderStatusEnums::class,
-        'placed_at' => 'datetime',
-    ];
 
     public function user()
     {
@@ -37,4 +28,30 @@ class Order extends Model
     // {
     //     return $this->belongsTo(Coupon::class);
     // }
+
+    protected static function booted()
+    {
+        static::creating(function ($order) {
+
+            $yearMonth = Carbon::now()->format('ym');
+            $prefix = '#SP-' . $yearMonth . '-'; // OUTPUT: #SP-2026-
+
+            // find last order
+            $lastOrder = self::where('order_number', 'LIKE', $prefix . '%')
+                ->orderBy('id', 'desc')
+                ->first();
+
+            // get last order number
+            if ($lastOrder) {
+                $lastNumber = intval(substr($lastOrder->order_number, -4));
+                $nextNumber = $lastNumber + 1;
+            } else {
+                // if no order found, start from 1
+                $nextNumber = 1;
+            }
+
+            // set order code
+            $order->order_number = $prefix . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+        });
+    }
 }

@@ -88,9 +88,9 @@
                                 <span>Color:</span>
                                 <ul>
                                     @foreach($product->variants->unique('color_id')->filter(fn($v) => $v->color_id) as $variant)
-                                    <li class="{{ $variant->currentStock <= 0 ? 'out-of-stock' : '' }}">
-                                        <input type="radio" name="color" value="{{ $variant->color_id }}" class="color-input" id="color-{{ $variant->color_id }}" data-stock="{{ $variant->currentStock }}" {{ $variant->currentStock <= 0 ? 'disabled' : '' }} {{ $variant->color_id == $defaultVariant->color_id ? 'checked' : '' }}>
-                                        <label for="color-{{ $variant->color_id }}" style="background-color: {{ $variant->color?->color_code }}" title="{{ $variant->color?->name }} {{ $variant->currentStock <= 0 ? '(Out of stock)' : '' }}"></label>
+                                    <li class="{{ $variant->current_stock <= 0 ? 'out-of-stock' : '' }}">
+                                        <input type="radio" name="color" value="{{ $variant->color_id }}" class="color-input" id="color-{{ $variant->color_id }}" data-stock="{{ $variant->current_stock }}" {{ $variant->current_stock <= 0 ? 'disabled' : '' }} {{ $variant->color_id == $defaultVariant->color_id ? 'checked' : '' }}>
+                                        <label for="color-{{ $variant->color_id }}" style="background-color: {{ $variant->color?->color_code }}" title="{{ $variant->color?->name }} {{ $variant->current_stock <= 0 ? '(Out of stock)' : '' }}"></label>
                                     </li>
                                     @endforeach
                                 </ul>
@@ -109,7 +109,7 @@
                                 <ul>
                                     @foreach($product->variants->unique('size_id')->filter(fn($v) => $v->size_id) as $variant)
                                     <li>
-                                        <input type="radio" name="size" value="{{ $variant->size_id }}" id="size-{{ $variant->size_id }}" class="size-input" data-stock="{{ $variant->currentStock }}" {{ $variant->size_id == $defaultVariant->size_id ? 'checked' : '' }}>
+                                        <input type="radio" name="size" value="{{ $variant->size_id }}" id="size-{{ $variant->size_id }}" class="size-input" data-stock="{{ $variant->current_stock }}" {{ $variant->size_id == $defaultVariant->size_id ? 'checked' : '' }}>
                                         <label for="size-{{ $variant->size_id }}">
                                             {{ $variant->size?->name }}
                                         </label>
@@ -145,8 +145,8 @@
                             <li>SKU: <span id="sku">{{ $defaultVariant?->sku_code }}</span></li>
                             <li>
                                 Stock:
-                                <span id="stock" class="{{ $defaultVariant?->currentStock > 0 ? 'in-stock' : 'out-of-stock' }}">
-                                    {{ $defaultVariant?->currentStock > 0 ? $defaultVariant?->currentStock . ' available' : 'Out of stock' }}
+                                <span id="stock" class="{{ $defaultVariant?->current_stock > 0 ? 'in-stock' : 'out-of-stock' }}">
+                                    {{ $defaultVariant?->current_stock > 0 ? $defaultVariant?->current_stock . ' available' : 'Out of stock' }}
                                 </span>
                             </li>
                             <li><span>Category:</span> {{ $product->details->category->name }}</li>
