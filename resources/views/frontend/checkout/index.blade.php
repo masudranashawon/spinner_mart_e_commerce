@@ -1,6 +1,6 @@
 @extends('frontend.layouts.app')
 
-@section('title', 'Cart')
+@section('title', 'Checkout')
 
 @section('content')
 <!-- start wpo-page-title -->

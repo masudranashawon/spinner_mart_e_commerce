@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::controller(OrderController::class)->group(function () {
+        Route::get('/orders', 'index')->name('order.index');
         Route::post('/order/store', 'store')->name('order.store');
     });
 });

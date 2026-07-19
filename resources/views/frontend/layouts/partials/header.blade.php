@@ -90,6 +90,7 @@
 
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="#">Profile</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('order.index') }}">My Orders</a></li>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
@@ -117,45 +118,45 @@
                                         <button class="mini-cart-close"><i class="ti-close"></i></button>
                                         <div class="mini-cart-items">
                                             <div class="mini-cart-item clearfix">
-                                            @foreach($wishlist ?? [] as $item)
-                                            <div class="mini-cart-item clearfix">
-                                                <div class="mini-cart-item-image">
-                                                    <a href="{{ route('productDetails', $item->product->slug) }}"><img src="{{ $item->product->thumbnail }}" alt="{{ $item->product->name }}"></a>
+                                                @foreach($wishlist ?? [] as $item)
+                                                <div class="mini-cart-item clearfix">
+                                                    <div class="mini-cart-item-image">
+                                                        <a href="{{ route('productDetails', $item->product->slug) }}"><img src="{{ $item->product->thumbnail }}" alt="{{ $item->product->name }}"></a>
+                                                    </div>
+                                                    <div class="mini-cart-item-des">
+                                                        <a href="{{ route('productDetails', $item->product->slug) }}" style="width: 90%;" class="text-truncate">{{ $item->product->name }}</a>
+
+                                                        <span class="mini-cart-item-price">
+                                                            @if($item->product->discount_price)
+                                                            <del class="me-1">৳{{ number_format($item->product->selling_price,2) }}</del>
+                                                            ৳{{ number_format($item->product->discount_price,2) }}
+                                                            @else
+                                                            ৳{{ number_format($item->product->selling_price,2) }}
+                                                            @endif
+                                                        </span>
+
+                                                        <form action="{{ route('wishlist.destroy') }}" method="POST" class="d-inline">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <input type="hidden" name="product_id" value="{{ $item->product_id }}">
+
+                                                            <button type="submit" class="mini-cart-item-quantity btn btn-link p-0 border-0 shadow-none">
+                                                                <span class="mini-cart-item-quantity">
+                                                                    <i class="ti-close"></i>
+                                                                </span>
+                                                            </button>
+                                                        </form>
+                                                    </div>
                                                 </div>
-                                                <div class="mini-cart-item-des">
-                                                    <a href="{{ route('productDetails', $item->product->slug) }}" style="width: 90%;" class="text-truncate">{{ $item->product->name }}</a>
-
-                                                    <span class="mini-cart-item-price">
-                                                        @if($item->product->discount_price)
-                                                        <del class="me-1">৳{{ number_format($item->product->selling_price,2) }}</del>
-                                                        ৳{{ number_format($item->product->discount_price,2) }}
-                                                        @else
-                                                        ৳{{ number_format($item->product->selling_price,2) }}
-                                                        @endif
-                                                    </span>
-
-                                                    <form action="{{ route('wishlist.destroy') }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <input type="hidden" name="product_id" value="{{ $item->product_id }}">
-
-                                                        <button type="submit" class="mini-cart-item-quantity btn btn-link p-0 border-0 shadow-none">
-                                                            <span class="mini-cart-item-quantity">
-                                                                <i class="ti-close"></i>
-                                                            </span>
-                                                        </button>
-                                                    </form>
-                                                </div>
+                                                @endforeach
                                             </div>
-                                            @endforeach
-                                        </div>
-                                        <div class="mini-cart-action clearfix">
-                                            <div class="mini-btn">
-                                                <a href="{{ route('wishlist.index') }}" class="view-cart-btn">View Wishlist</a>
+                                            <div class="mini-cart-action clearfix">
+                                                <div class="mini-btn">
+                                                    <a href="{{ route('wishlist.index') }}" class="view-cart-btn">View Wishlist</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                             </li>
                             <li>
                                 <div class="mini-cart">
@@ -183,7 +184,7 @@
                                                     </small>
 
                                                     <span class="mini-cart-item-price">
-                                                        
+
                                                         @if($item->variant->discount_price)
                                                         <del class="me-1">৳{{ number_format($item->variant->selling_price,2) }}</del>
                                                         ৳{{ number_format($item->variant->discount_price,2) }}
