@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
 use App\Models\Order;
+use App\Repositories\OrderAddressRepository;
 use App\Repositories\OrderRepository;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -13,7 +15,7 @@ class OrderController extends Controller
     public function index()
     {
         $user = auth('web')->user();
-        
+
         $orders = Order::query()
             ->where('user_id', $user->id)
             ->with(['items', 'addresses'])
@@ -25,8 +27,12 @@ class OrderController extends Controller
 
     public function store(OrderRequest $request)
     {
-        $order = OrderRepository::storeByRequest($request);
 
-        return to_route('home')->with('success', 'Order has been placed successfully!');
+        DB::transaction(function () use ($request) {
+            $order = OrderRepository::storeByRequest($request);
+            $orderAddress = OrderAddressRepository::storeByRequest($request, $order);
+        });
+
+        return to_route('order.index')->with('success', 'Order has been placed successfully!');
     }
 }

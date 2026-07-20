@@ -43,39 +43,39 @@ class OrderRepository extends Repository
                 $discount = $coupon->coupon_type == CouponTypeEnums::PERCENTAGE->value
                     ? ($subTotal * $coupon->discount) / 100
                     : $coupon->discount;
-
-                $coupon->increment('total_applied');
+            } else {
+                $coupon = null; // invalid coupon
             }
         }
 
         $grandTotal = $subTotal - $discount;
 
         // Create order
-        return DB::transaction(function () use ($user, $request, $shippingCharge, $grandTotal, $coupon) {
+        $order = self::create([
+            'user_id' => $user->id,
+            'shipping_charge' => $shippingCharge,
+            'grand_total' => $grandTotal,
+            'coupon_id' => $coupon?->id ?? null,
+            'order_status' => OrderStatusEnums::PENDING->value,
+            'payment_method' => $request->payment_method,
+            'has_coupon' => $coupon?->id ? true : false,
+            'has_payment' => false,
+            'note' => $request->note,
+            'payment_status' => PaymentStatusEnums::PENDING->value,
+        ]);
 
-            $order =  self::create([
-                'user_id' => $user->id,
-                'shipping_charge' => $shippingCharge,
-                'grand_total' => $grandTotal,
-                'coupon_id' => $coupon?->id ?? null,
-                'order_status' => OrderStatusEnums::PENDING->value,
-                'payment_method' => $request->payment_method,
-                'has_coupon' => $coupon?->id ? true : false,
-                'has_payment' => false,
-                'note' => $request->note,
-                'payment_status' => PaymentStatusEnums::PENDING->value,
-            ]);
+        // Store order items
+        OrderItemsRepository::storeByRequest($request, $order);
 
-            // Store order items
-            OrderItemsRepository::storeByRequest($request, $order);
+        // Update coupon usage
+        if ($coupon) {
+            $coupon->increment('total_applied');
+        }
 
-            // Clear Cart
-            $user->cartItems()->delete();
+        // Clear Cart & Session
+        $user->cartItems()->delete();
+        session()->forget('coupon_id');
 
-            // Clear Coupon Session
-            session()->forget('coupon_id');
-
-            return $order;
-        });
+        return $order;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AddressTypeEnums;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,6 +23,18 @@ class Order extends Model
     public function addresses()
     {
         return $this->hasMany(OrderAddress::class);
+    }
+
+    public function getDisplayAddressAttribute()
+    {
+        $address = $this->addresses->firstWhere('address_type', AddressTypeEnums::SHIPPING->value);
+
+        // If no shipping address, use billing address
+        if (!$address) {
+            $address = $this->addresses->firstWhere('address_type', AddressTypeEnums::BILLING->value);
+        }
+
+        return $address;
     }
 
     // public function coupon()
