@@ -9,7 +9,6 @@ use App\Models\Coupon;
 use App\Models\Order;
 use Arafat\LaravelRepository\Repository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class OrderRepository extends Repository
 {

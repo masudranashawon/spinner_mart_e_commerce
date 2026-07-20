@@ -52,7 +52,7 @@ class OrderItemsRepository extends Repository
                 'product_id' => $item->product_id,
                 'product_variant_id' => $item->product_variant_id,
                 'product_name' => $product->name,
-                'sku' => $product->sku_code,
+                'sku' => $variant->sku_code,
                 'price' => $item->price,
                 'quantity' => $item->quantity,
                 'subtotal' => $item->quantity * $item->price,

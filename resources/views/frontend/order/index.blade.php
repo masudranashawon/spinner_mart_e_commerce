@@ -22,7 +22,7 @@
 </section>
 <!-- end page-title -->
 
-<!-- cart-area start -->
+<!-- order-area start -->
 <div class="order-area section-padding">
     <div class="container">
         <div class="form">
@@ -104,7 +104,7 @@
                                         <td class="action">
                                             <ul>
                                                 <li class="w-btn-view">
-                                                    <a href="#">
+                                                    <a href="{{route('order.show', $order->id)}}">
                                                         <i class="fi ti-eye"></i>
                                                     </a>
                                                 </li>

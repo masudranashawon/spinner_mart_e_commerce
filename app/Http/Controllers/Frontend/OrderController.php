@@ -35,4 +35,13 @@ class OrderController extends Controller
 
         return to_route('order.index')->with('success', 'Order has been placed successfully!');
     }
+
+    public function show(Order $order)
+    {
+        // get billing and shipping address
+        $billingAddress = $order->addresses->where('address_type', 'billing')->first();
+        $shippingAddress = $order->addresses->where('address_type', 'shipping')->first();
+
+        return view('frontend.order.show', compact('order', 'billingAddress', 'shippingAddress'));
+    }
 }
