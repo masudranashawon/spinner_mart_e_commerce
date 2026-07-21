@@ -28,12 +28,12 @@
         <!-- Header Section -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="mb-1">{{ $order->order_number }}</h2>
+                <h2 class="mb-1">Order #{{ $order->order_number }}</h2>
                 <p class="text-muted mb-0">{{ $order->created_at->format('M d, Y h:i A') }}</p>
             </div>
             <div>
-                <a href="{{ route('order.invoice', $order->order_number) }}" target="_blank" class="theme-btn-s2 px-3 py-2">
-                    <i class="fi flaticon-print"></i> Print Invoice
+                <a href="{{ route('order.invoice', $order->order_number) }}" target="_blank" class="theme-btn-s2 px-3 py-2 d-inline-block">
+                    <i class="ti-printer"></i> Print Invoice
                 </a>
             </div>
         </div>
@@ -196,6 +196,21 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Order Notes -->
+                 @if($order->note)
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="mb-3 border-bottom pb-2">
+                            Order Notes
+                        </h5>
+
+                        <blockquote class="border-start border-4 border-warning ps-2 mb-0 text-muted">
+                            {{ $order->note }}
+                        </blockquote>
+                    </div>
+                </div>
+                @endif
 
                 <!-- Addresses -->
                 <div class="card border-0 shadow-sm">

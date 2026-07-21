@@ -44,4 +44,15 @@ class OrderController extends Controller
 
         return view('frontend.order.show', compact('order', 'billingAddress', 'shippingAddress'));
     }
+
+    public function invoice(string $orderNumber)
+    {
+        $order = Order::where('order_number', $orderNumber)->firstOrFail();
+
+        // get billing and shipping address
+        $billingAddress = $order->addresses->where('address_type', 'billing')->first();
+        $shippingAddress = $order->addresses->where('address_type', 'shipping')->first();
+
+        return view('frontend.order.invoice', compact('order', 'billingAddress', 'shippingAddress'));
+    }
 }

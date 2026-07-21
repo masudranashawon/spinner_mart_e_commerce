@@ -44,7 +44,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/orders', 'index')->name('order.index');
         Route::post('/order/store', 'store')->name('order.store');
         Route::get('/order/{order}/details', 'show')->name('order.show');
-        Route::get('/order/{order}/invoice', 'invoice')->name('order.invoice');
+        Route::get('/order/{orderNumber}/invoice', 'invoice')->name('order.invoice');
     });
 });
 

@@ -55,7 +55,7 @@
                                     @forelse ($orders as $order)
                                     <tr>
                                         <td class="images">
-                                            {{ $order->order_number }}
+                                            #{{ $order->order_number }}
                                         </td>
                                         <td class="product">
                                             {{ $order->created_at->format('d-M-Y') }}
@@ -102,10 +102,15 @@
                                         </td>
 
                                         <td class="action">
-                                            <ul>
+                                            <ul class="d-flex gap-2">
                                                 <li class="w-btn-view">
                                                     <a href="{{route('order.show', $order->id)}}">
                                                         <i class="fi ti-eye"></i>
+                                                    </a>
+                                                </li>
+                                                <li class="w-btn-view">
+                                                    <a target="_blank" href="{{ route('order.invoice', $order->order_number) }}">
+                                                        <i class="fi ti-printer"></i>
                                                     </a>
                                                 </li>
                                             </ul>
