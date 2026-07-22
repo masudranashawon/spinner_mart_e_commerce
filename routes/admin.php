@@ -11,9 +11,10 @@ use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix("admin")->group(function () {
+Route::prefix("admin")->middleware(['auth', 'role:admin'])->group(function () {
   // dashboard routes
   Route::controller(DashboardController::class)->group(function () {
     Route::get("/dashboard", "index")->name("admin.root");
@@ -96,5 +97,11 @@ Route::prefix("admin")->group(function () {
     Route::post("/coupon/store", "store")->name("coupon.store");
     Route::put("/coupon/{coupon}/update", "update")->name("coupon.update");
     Route::delete("/coupon/{coupon}/destroy", "destroy")->name("coupon.destroy");
+  });
+
+  // user routes
+  Route::controller(UserController::class)->group(function () {
+    Route::get("/customers", "index")->name("customer.index");
+    Route::put("/customers/{user}/update", "update")->name("customer.update");
   });
 });

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Cart;
 
 /**
@@ -64,5 +66,18 @@ class User extends Authenticatable
     public function wishlist()
     {
         return $this->hasMany(Wishlist::class);
+    }
+
+    public function thumbnail(): Attribute
+    {
+        $url = asset("placeholder.jpg");
+
+        if ($this->media && Storage::exists($this->media->src)) {
+            $url = Storage::url($this->media->src);
+        }
+
+        return Attribute::make(
+            get: fn() => $url,
+        );
     }
 }

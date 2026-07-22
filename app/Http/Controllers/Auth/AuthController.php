@@ -33,12 +33,19 @@ class AuthController extends Controller
             /** @var \App\Models\User $user */
             $user = Auth::user();
 
-            if (!$user->hasRole(AuthEnums::USER->value)) {
-                Auth::logout();
-                return back()->withErrors('Unauthorized access');
+            // Check if the user is an admin
+            if ($user->hasRole(AuthEnums::ADMIN->value)) {
+                return redirect()->route('admin.root')->withSuccess('Welcome Admin');
             }
 
-            return redirect()->route('home')->withSuccess('Login successfully');
+            // Check if the user is a regular user
+            if ($user->hasRole(AuthEnums::USER->value)) {
+                return redirect()->route('home')->withSuccess('Login successfully');
+            }
+
+            // Fallback for users with no valid role
+            Auth::logout();
+            return back()->withErrors('Unauthorized access');
         }
 
         return back()->withErrors('Invalid credentials');
