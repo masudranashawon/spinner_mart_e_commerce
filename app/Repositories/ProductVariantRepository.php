@@ -36,6 +36,8 @@ class ProductVariantRepository extends Repository
             ->whereNull('color_id')
             ->first();
 
+        $productVariant = null;
+
         foreach ($variants as $variant) {
             // Variant must have size or color
             if (empty($variant['color_id']) && empty($variant['size_id'])) {
@@ -79,6 +81,12 @@ class ProductVariantRepository extends Repository
 
         if ($defaultVariant) {
             $defaultVariant->delete();
+        }
+
+        if (!$productVariant) {
+            throw ValidationException::withMessages([
+                'variants' => "No variant Created for product.",
+            ]);
         }
 
         return $productVariant;
