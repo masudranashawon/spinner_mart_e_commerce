@@ -58,7 +58,7 @@ class ProductVariantRepository extends Repository
 
             $discountPercent = 0;
 
-            if ($variant['discount_price']) {
+            if ($variant['discount_price'] && $variant['selling_price'] > 0) {
                 $discountPercent = round(
                     (($variant['selling_price'] - $variant['discount_price']) / $variant['selling_price']) * 100
                 );
@@ -111,7 +111,7 @@ class ProductVariantRepository extends Repository
 
         $discountPercent = 0;
 
-        if ($request->discount_price) {
+        if ($request->discount_price && $request->selling_price > 0) {
             $discountPercent = round(
                 (($request->selling_price - $request->discount_price) / $request->selling_price) * 100
             );

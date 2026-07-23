@@ -313,7 +313,7 @@
     function calculateCartTotals() {
         let currentSubtotal = 0;
 
-        // FIX: Loop through .cart-plus-minus to correctly access the data attributes
+        // Loop through .cart-plus-minus to correctly access the data attributes
         $('.cart-plus-minus').each(function() {
             let qty = parseInt($(this).find('input').val());
             let price = parseFloat($(this).data('product-price'));
@@ -329,7 +329,7 @@
         let discountAmount = 0;
         if (activeCoupon) {
             if (currentSubtotal >= activeCoupon.min_amount) {
-                if (activeCoupon.type === 'PERCENTAGE') {
+               if (activeCoupon.type === 'percentage') {
                     discountAmount = (currentSubtotal * activeCoupon.discount) / 100;
                 } else { // FIXED
                     discountAmount = activeCoupon.discount;
@@ -377,14 +377,14 @@
                     $input.val(1);
                 }
 
-                // 1. Update the specific row's subtotal instantly
+                // Update the specific row's subtotal instantly
                 const itemSubtotal = quantity * productPrice;
                 $('.subtotal' + cartId).text('৳ ' + itemSubtotal.toFixed(2));
 
-                // 2. Recalculate full cart totals instantly
+                // Recalculate full cart totals instantly
                 calculateCartTotals();
 
-                // 3. Send AJAX to update the DB silently in the background
+                // Send AJAX to update the DB silently in the background
                 $.ajax({
                     url: "{{ route('cart.update') }}",
                     method: "POST",

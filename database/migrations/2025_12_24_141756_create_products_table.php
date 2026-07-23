@@ -17,15 +17,17 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug');
             $table->string('sku_code');
-            $table->float('selling_price');
-            $table->float('buying_price')->default(0);
-            $table->float('discount')->default(0);
-            $table->float('discount_price')->default(0);
+            $table->decimal('selling_price', 10, 2);
+            $table->decimal('buying_price', 10, 2)->default(0);
+            $table->decimal('discount', 10, 2)->default(0);
+            $table->decimal('discount_price', 10, 2)->default(0);
             $table->integer('reviews')->default(0);
             $table->integer('rating')->default(0);
             $table->foreignIdFor(Media::class)->nullable()->constrained()->cascadeOnDelete();
             $table->integer('sold_count')->default(0);
-            $table->integer('status')->default(0);
+            $table->boolean('is_deal_of_the_day')->default(false);
+            $table->boolean('is_trending')->default(false);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

@@ -44,15 +44,13 @@
                                     </tr>
                                 </thead>
 
-                                {{-- Access Enums --}}
-                                @php
-                                use App\Enums\AddressTypeEnums;
-                                use App\Enums\OrderStatusEnums;
-                                @endphp
-
                                 {{-- Loop through orders --}}
                                 <tbody>
                                     @forelse ($orders as $order)
+                                    @php
+                                    // Safely handle Enum casts
+                                    $statusValue = $order->order_status instanceof \BackedEnum ? $order->order_status->value : $order->order_status;
+                                    @endphp
                                     <tr>
                                         <td class="images">
                                             #{{ $order->order_number }}
@@ -61,9 +59,9 @@
                                             {{ $order->created_at->format('d-M-Y') }}
                                         </td>
                                         <td class="ptice">
-                                            {{ $order->items->sum('quantity') }}
+                                            {{ $order->items->sum('quantity') }} Items
                                         </td>
-                                        <td class="name" class="text-truncate" style="max-width: 250px;">
+                                        <td class="name text-truncate" style="max-width: 250px;">
                                             {{ $order->display_address?->address ?? 'N/A' }}
                                         </td>
                                         <td>
@@ -72,44 +70,30 @@
 
                                         {{-- Order Status --}}
                                         <td class="
-                                                @switch($order->order_status)
-                                                    @case(OrderStatusEnums::PENDING->value)
-                                                        stock
-                                                        @break
-                                                    @case(OrderStatusEnums::CONFIRMED->value)
-                                                        stock
-                                                        @break
-                                                    @case(OrderStatusEnums::PROCESSING->value)
-                                                        pro
-                                                        @break
-                                                    @case(OrderStatusEnums::SHIPPED->value)
-                                                        stocks
-                                                        @break
-                                                    @case(OrderStatusEnums::DELIVERED->value)
-                                                        Del
-                                                        @break
-                                                    @case(OrderStatusEnums::CANCELLED->value)
-                                                        can
-                                                        @break
-                                                    @case(OrderStatusEnums::RETURNED->value)
-                                                        can
-                                                        @break
-                                                    @default
-                                                        stock
-                                                @endswitch
-                                            ">
-                                            <span class="text-capitalize">{{ $order->order_status }}</span>
+                                        @switch(strtolower($statusValue))
+                                        @case('pending') stock @break
+                                        @case('confirmed') stock @break
+                                        @case('processing') pro @break
+                                        @case('shipped') stocks @break
+                                        @case('delivered') Del @break
+                                        @case('cancelled') can @break
+                                        @case('returned') can @break
+                                        @default stock
+                                        @endswitch">
+                                            <span class="text-capitalize">
+                                                {{ $statusValue }}
+                                            </span>
                                         </td>
 
                                         <td class="action">
                                             <ul class="d-flex gap-2">
                                                 <li class="w-btn-view">
-                                                    <a href="{{route('order.show', $order->id)}}">
+                                                    <a href="{{route('order.show', $order->id)}}" data-bs-toggle="tooltip" title="View Details">
                                                         <i class="fi ti-eye"></i>
                                                     </a>
                                                 </li>
                                                 <li class="w-btn-view">
-                                                    <a target="_blank" href="{{ route('order.invoice', $order->order_number) }}">
+                                                    <a target="_blank" href="{{ route('order.invoice', $order->order_number) }}" data-bs-toggle="tooltip" title="Print Invoice">
                                                         <i class="fi ti-printer"></i>
                                                     </a>
                                                 </li>

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('coupon_code');
             $table->string('coupon_type')->nullable();
-            $table->float('discount')->nullable()->default(0);
-            $table->float('min_amount')->nullable()->default(0);
+            $table->decimal('discount', 10, 2)->nullable()->default(0);
+            $table->decimal('min_amount', 10, 2)->nullable()->default(0);
             $table->integer('limit')->nullable()->default(0);
             $table->integer('total_applied')->nullable()->default(0);
             $table->timestamp('start_date')->nullable();

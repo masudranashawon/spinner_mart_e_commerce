@@ -37,9 +37,9 @@
               <td>{{ $product?->name }}</td>
               <td>{{ $product?->details?->category->name }}</td>
               <td>{{ $product?->details?->subCategory->name }}</td>
-              <td>{{ $product?->details?->brand->name }}</td>
+              <td>{{ $product?->details?->brand?->name ?? '-' }}</td>
               <td>
-                @if ($product?->status == 1)
+                @if ($product?->is_active)
                   <span class="badge badge-success">Active</span>
                 @else
                   <span class="badge badge-danger">Inactive</span>

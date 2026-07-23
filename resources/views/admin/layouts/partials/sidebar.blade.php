@@ -78,6 +78,9 @@
                         <li class="nav-item {{ request()->routeIs('tag.*') ? 'active' : '' }}">
                             <a href="{{ route('tag.index') }}" class="nav-link">Tag</a>
                         </li>
+                        <li class="nav-item {{ request()->routeIs('coupon.*') ? 'active' : '' }}">
+                            <a href="{{ route('coupon.index') }}" class="nav-link">Coupon</a>
+                        </li>
                     </ul>
                 </div>
             </li>

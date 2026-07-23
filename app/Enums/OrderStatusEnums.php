@@ -10,5 +10,6 @@ enum OrderStatusEnums: string
     case SHIPPED = 'shipped';
     case DELIVERED = 'delivered';
     case CANCELLED = 'cancelled';
+    case RETURN_REQUESTED = 'return_requested';
     case RETURNED = 'returned';
 }

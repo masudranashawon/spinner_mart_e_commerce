@@ -150,6 +150,29 @@
                 <x-textarea name="additional_information" label="Additional Information" placeholder="Add product additional information..." class="tinymce-editor" />
             </fieldset>
 
+            <!-- Status & Visibility -->
+            <fieldset class="p-lg-4 mt-3 rounded-lg border">
+                <legend class="w-auto m-0">
+                    <span class="small bg-light rounded-lg px-3 py-2">Status & Visibility</span>
+                </legend>
+                <div class="d-flex flex-wrap">
+                    <div class="d-flex align-items-center mx-4">
+                        <input type="checkbox" class="form-check-input mr-2" name="is_active" id="isActive" value="1" checked>
+                        <label class="form-check-label" for="isActive">Active Product</label>
+                    </div>
+
+                    <div class="d-flex align-items-center mx-4">
+                        <input type="checkbox" class="form-check-input mr-2" name="is_deal_of_the_day" id="isDeal" value="1">
+                        <label class="form-check-label" for="isDeal">Deal of the Day (Home Page)</label>
+                    </div>
+
+                    <div class="d-flex align-items-center mx-4">
+                        <input type="checkbox" class="form-check-input mr-2" name="is_trending" id="isTrending" value="1">
+                        <label class="form-check-label" for="isTrending">Trending Product (Home Page)</label>
+                    </div>
+                </div>
+            </fieldset>
+
             <!-- Images -->
             <fieldset class="p-lg-4 mt-3 rounded-lg border p-3">
                 <legend class="w-auto">

@@ -24,6 +24,7 @@ class CouponController extends Controller
             'couponCode' => 'required|unique:coupons,coupon_code',
             'type' => 'required',
             'discount' => 'required',
+            'minimumAmount' => 'nullable|numeric|min:0',
             'startDate' => 'required|date|after_or_equal:today',
             'expiryDate' => 'required|date|after:startDate',
         ]);
@@ -38,7 +39,8 @@ class CouponController extends Controller
         $request->validate([
             'editCouponType' => 'required',
             'editDiscount' => 'required',
-            'editStartDate' => 'required|date|after_or_equal:today',
+            'editMinimumAmount' => 'nullable|numeric|min:0',
+            'editStartDate' => 'required|date',
             'editExpiryDate' => 'required|date|after:editStartDate',
             'editStatus' => 'required|in:0,1',
         ]);

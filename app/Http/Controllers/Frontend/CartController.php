@@ -125,6 +125,10 @@ class CartController extends Controller
         $couponCode = $request->couponCode;
         $coupon = Coupon::where('coupon_code', $couponCode)->first();
 
+        if (!$coupon->status) {
+            return response()->json(['status' => false, 'message' => 'This coupon is inactive.'], 400);
+        }
+
         // Calculate actual subtotal from DB (Price * Quantity)
         /** @var \App\Models\User $user */
         $user = auth('web')->user();
@@ -147,20 +151,25 @@ class CartController extends Controller
             return response()->json(['status' => false, 'message' => 'Coupon is not valid at this time.'], 400);
         }
 
-        if ($coupon->total_applied >= $coupon->limit) {
+        // Check if coupon limit is reached
+        if ($coupon->limit > 0 && $coupon->total_applied >= $coupon->limit) {
             return response()->json(['status' => false, 'message' => 'Coupon usage limit has been reached.'], 400);
         }
 
-        if ($coupon->min_amount > $actualSubTotal) {
+        if ($coupon->min_amount > 0 && $coupon->min_amount > $actualSubTotal) {
             return response()->json([
                 'status' => false,
                 'message' => 'Subtotal price does not meet the minimum amount (৳' . $coupon->min_amount . ') for this coupon.'
             ], 400);
         }
 
+        $type = $coupon->coupon_type instanceof \BackedEnum ? $coupon->coupon_type->value : $coupon->coupon_type;
+        $type = strtolower($type); 
+
+
         // Calculate initial discount to send back to UI
         $discountAmount = 0;
-        if ($coupon->coupon_type == CouponTypeEnums::PERCENTAGE->value) {
+       if ($type === 'percentage') {
             $discountAmount = ($actualSubTotal * $coupon->discount) / 100;
         } else {
             $discountAmount = $coupon->discount;
@@ -180,9 +189,9 @@ class CartController extends Controller
         return response()->json([
             'message' => 'Coupon applied successfully.',
             'coupon_id' => $coupon->id,
-            'coupon_type' => $coupon->coupon_type,
+            'coupon_type' => $type,
             'discount_value' => $coupon->discount,
-            'min_amount' => $coupon->min_amount,
+            'min_amount' => $coupon->min_amount ?? 0,
             'calculated_discount' => round($discountAmount, 2),
             'calculated_total' => round($finalTotal, 2)
         ], 200);

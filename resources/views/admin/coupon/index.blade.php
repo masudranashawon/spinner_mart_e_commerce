@@ -38,7 +38,13 @@
                             <td>{{ $coupon->start_date ? date('d-M-Y', strtotime($coupon->start_date)) : 'N/A' }}</td>
                             <td>{{ $coupon->expiry_date ? date('d-M-Y', strtotime($coupon->expiry_date)) : 'N/A' }}</td>
                             <td>{{ $coupon?->total_applied }}</td>
-                            <td>{{ $coupon?->status }}</td>
+                            <td>
+                                @if ($coupon?->status == 1)
+                                    <span class="badge badge-success">Active</span>
+                                @else
+                                    <span class="badge badge-danger">Inactive</span>
+                                @endif
+                            </td>
 
                             <td class="text-center">
                                 <button type="button" class="editBtn btn btn-primary btn-icon btn-md" data-coupon='@json($coupon)' data-url="{{ route('coupon.update', $coupon->id) }}" data-toggle="modal" data-target="#couponModal"><i data-feather="edit"></i></button>
@@ -73,7 +79,9 @@
 
                     <x-select name="type" label="Coupon Type" placeholder="Coupon Type">
                         @foreach ($couponTypes ?? [] as $type)
-                        <option value="{{$type->name}}" {{ old('type') == $type->name ? 'selected' : '' }}>{{ ucfirst($type->value) }}</option>
+                        <option value="{{$type->value}}" {{ old('type') == $type->value ? 'selected' : '' }}>
+                            {{ ucfirst($type->value) }}
+                        </option>
                         @endforeach
                     </x-select>
 
@@ -115,7 +123,7 @@
 
                     <x-select name="editCouponType" id="editCouponType" label="Coupon Type">
                         @foreach ($couponTypes ?? [] as $type)
-                        <option value="{{ $type->name }}" {{ old('editCouponType') == $type->name ? 'selected' : '' }}>
+                        <option value="{{ $type->value }}" {{ old('editCouponType') == $type->value ? 'selected' : '' }}>
                             {{ ucfirst($type->value) }}
                         </option>
                         @endforeach

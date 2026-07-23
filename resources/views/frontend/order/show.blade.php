@@ -59,18 +59,16 @@
                                     <tr class="border-bottom">
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="{{ $item->product?->thumbnail}}" alt="{{ $item->product_name }}" class="rounded" width="60">
+                                                <img src="{{ $item?->product?->thumbnail}}" alt="{{ $item->product_name }}" class="rounded" width="60">
                                                 <div class="ms-3">
                                                     <h6 class="mb-0">{{ $item->product_name }}</h6>
-                                                    @if($item->variant->sku_code) <small class="text-muted">SKU: {{ $item->variant->sku_code }}</small> @endif
+                                                  
+                                                    @if($item->sku_code) 
+                                                            <small class="text-muted">SKU: {{ $item->sku_code }}</small> 
+                                                    @endif
+                                                        
                                                     <p class="text-muted small">
-                                                        @php
-                                                        $attrs = [];
-                                                        if ($item->variant->color?->name) $attrs[] = 'Color: ' . $item->variant->color->name;
-                                                        if ($item->variant->size?->name) $attrs[] = 'Size: ' . $item->variant->size->name;
-                                                        @endphp
-
-                                                        {{ implode(' | ', $attrs) }}
+                                                        {{ $item->variant_name }}
                                                     </p>
                                                 </div>
                                             </div>
@@ -93,19 +91,15 @@
                             <div class="col-md-6">
                                 <table class="table table-borderless mb-0">
                                     <tbody>
-                                        @php
-                                        $subtotal = $order->items->sum('subtotal');
-                                        @endphp
-
                                         <tr>
                                             <td class="text-muted">Subtotal:</td>
-                                            <td class="text-end fw-bold">৳{{ number_format($subtotal, 2) }}</td>
+                                           <td class="text-end fw-bold">৳{{ number_format($order->subtotal, 2) }}</td>
                                         </tr>
 
-                                        @if($order->has_coupon)
+                                        @if($order->coupon_code)
                                         <tr>
                                             <td class="text-muted">Coupon Discount:</td>
-                                            <td class="text-end text-danger fw-bold">- ৳{{ number_format($subtotal - $order->grand_total, 2) }}</td>
+                                           <td class="text-end text-danger fw-bold">- ৳{{ number_format($order->discount_amount, 2) }}</td>
                                         </tr>
                                         @endif
 
@@ -116,7 +110,7 @@
 
                                         <tr class="border-top">
                                             <td class="fs-5 fw-bold text-dark pt-3">Grand Total:</td>
-                                            <td class="text-end fs-5 fw-bold text-primary pt-3">৳{{ number_format($order->grand_total + $order->shipping_charge, 2) }}</td>
+                                           <td class="text-end fs-5 fw-bold text-primary pt-3">৳{{ number_format($order->grand_total, 2) }}</td>
                                         </tr>
                                     </tbody>
                                 </table>

@@ -74,7 +74,7 @@
                     <span class="small bg-light rounded-lg px-3 py-2">Product Information</span>
                 </legend>
                 <x-input name="name" label="Product Name" placeholder="Product Name" :value="$product?->name" />
-                <x-textarea name="short_description" label="Short Description" placeholder="Short Description..." :value="$product->details?->short_description" />
+                <x-textarea name="short_description" label="Short Description" placeholder="Short Description..." :value="$product->details?->short_description ?? ''" />
 
                 <x-select label="Select Tags" name="tags[]" class="tags-select-multiple" :multiple="true">
                     @foreach ($tags ?? [] as $tag)
@@ -147,9 +147,32 @@
                     <span class="small bg-light rounded-lg px-3 py-2">Product Description</span>
                 </legend>
 
-                <x-textarea name="description" label="Description" placeholder="Write product description..." class="tinymce-editor" :value="$product?->details?->description" />
+                <x-textarea name="description" label="Description" placeholder="Write product description..." class="tinymce-editor" :value="$product?->details?->description ?? ''" />
 
-                <x-textarea name="additional_information" label="Additional Information" placeholder="Add product additional information..." class="tinymce-editor" :value="$product?->details?->additional_info" />
+                <x-textarea name="additional_information" label="Additional Information" placeholder="Add product additional information..." class="tinymce-editor" :value="$product?->details?->additional_info ?? ''" />
+            </fieldset>
+
+             <!-- Status & Visibility -->
+            <fieldset class="p-lg-4 mt-3 rounded-lg border">
+                <legend class="w-auto m-0">
+                    <span class="small bg-light rounded-lg px-3 py-2">Status & Visibility</span>
+                </legend>
+                <div class="d-flex flex-wrap">
+                    <div class="d-flex align-items-center mx-4">
+                        <input type="checkbox" class="form-check-input mr-2" name="is_active" id="isActive" value="1" {{ $product->is_active ? 'checked' : '' }}>
+                        <label class="form-check-label" for="isActive">Active Product</label>
+                    </div>
+
+                    <div class="d-flex align-items-center mx-4">
+                        <input type="checkbox" class="form-check-input mr-2" name="is_deal_of_the_day" id="isDeal" value="1" {{ $product->is_deal_of_the_day ? 'checked' : '' }}>
+                        <label class="form-check-label" for="isDeal">Deal of the Day (Home Page)</label>
+                    </div>
+
+                    <div class="d-flex align-items-center mx-4">
+                        <input type="checkbox" class="form-check-input mr-2" name="is_trending" id="isTrending" value="1" {{ $product->is_trending ? 'checked' : '' }}>
+                        <label class="form-check-label" for="isTrending">Trending Product (Home Page)</label>
+                    </div>
+                </div>
             </fieldset>
 
             <!-- Images -->
@@ -280,127 +303,6 @@
     });
 
 </script>
-
-{{-- <script>
-    $(function() {
-
-      const MAX_FILES = 5;
-      const MAX_FILE_SIZE = 2 * 1024 * 1024;
-
-      const $preview = $('#galleryPreview');
-      const $realInput = $('#galleryInput');
-      const $dummyInput = $('#dummyGalleryInput');
-      const $dropArea = $('#galleryDropArea');
-      const $deletedInput = $('#deleted_gallery_ids');
-
-      let newFiles = [];
-      let deletedExistingIds = [];
-
-      // Click → dummy input open
-      $dropArea.on('click', () => $dummyInput.click());
-
-      // Drag effects
-      $dropArea.on('dragover', e => {
-        e.preventDefault();
-        $dropArea.addClass('border-primary');
-      });
-
-      $dropArea.on('dragleave', () => $dropArea.removeClass('border-primary'));
-
-      $dropArea.on('drop', e => {
-        e.preventDefault();
-        $dropArea.removeClass('border-primary');
-        handleNewFiles(e.originalEvent.dataTransfer.files);
-      });
-
-
-
-      $dummyInput.on('change', function() {
-        addNewFiles(this.files);
-        this.value = '';
-      });
-
-      function addNewFiles(files) {
-        for (let file of files) {
-
-          if (!file.type.startsWith('image/')) return;
-          if (file.size > MAX_FILE_SIZE) return;
-          if (newFiles.length >= MAX_FILES) return;
-
-          newFiles.push(file);
-          renderNewImage(file, newFiles.length - 1);
-        }
-      }
-
-      function renderNewImage(file, index) {
-        const reader = new FileReader();
-
-        reader.onload = e => {
-          const html = `
-        <div class="gallery-item position-relative"
-            data-new="1"
-            data-index="${index}">
-          <img src="${e.target.result}" class="w-100 h-100 rounded border" style="object-fit: cover;" alt="Gallery Image">
-          <div class="overlay d-flex justify-content-end align-items-start">
-            <button type="button"
-                    class="btn btn-sm btn-danger rounded-circle p-1 remove-gallery">
-              <i data-feather="trash-2"></i>
-            </button>
-          </div>
-        </div>`;
-
-          $preview.append(html);
-          feather.replace();
-        };
-        reader.readAsDataURL(file);
-      }
-
-      // DELETE (event delegation) with confirmation
-      $preview.on('click', '.remove-gallery', function() {
-        const $item = $(this).closest('.gallery-item');
-
-        Swal.fire({
-          title: 'Are you sure?',
-          text: "This image will be marked for deletion.",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Yes, remove it!',
-          cancelButtonText: 'Cancel'
-        }).then((result) => {
-          if (!result.isConfirmed) return;
-
-          // Existing image
-          if ($item.data('existing')) {
-            const id = $item.data('id');
-            deletedExistingIds.push(id);
-            $deletedInput.val(deletedExistingIds.join(','));
-            $item.remove();
-            return;
-          }
-
-          // New image
-          if ($item.data('new')) {
-            const index = $item.data('index');
-            newFiles.splice(index, 1);
-            refreshNewImages();
-          }
-        });
-      });
-
-      function refreshNewImages() {
-        $preview.find('[data-new]').remove();
-        newFiles.forEach((file, i) => renderNewImage(file, i));
-      }
-
-      // FORM SUBMIT
-      $('form').on('submit', function() {
-        const dt = new DataTransfer();
-        newFiles.forEach(f => dt.items.add(f));
-        $realInput[0].files = dt.files;
-      });
-
-    });
-  </script> --}}
 
 <script>
     $(function() {

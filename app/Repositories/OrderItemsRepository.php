@@ -46,13 +46,22 @@ class OrderItemsRepository extends Repository
                 ]);
             }
 
-            // Create order item
+            $variantNameStr = null;
+            if ($variant) {
+                $attrs = [];
+                if ($variant->color) $attrs[] = 'Color: ' . $variant->color->name;
+                if ($variant->size) $attrs[] = 'Size: ' . $variant->size->name;
+                $variantNameStr = !empty($attrs) ? implode(' | ', $attrs) : 'Default Variant';
+            }
+
+            // Create order item with Snapshot data
             self::create([
                 'order_id' => $order->id,
                 'product_id' => $item->product_id,
                 'product_variant_id' => $item->product_variant_id,
                 'product_name' => $product->name,
-                'sku' => $variant->sku_code,
+                'variant_name' => $variantNameStr, // Snapshot added
+                'sku_code' => $variant->sku_code,
                 'price' => $item->price,
                 'quantity' => $item->quantity,
                 'subtotal' => $item->quantity * $item->price,

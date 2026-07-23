@@ -11,6 +11,16 @@ class Product extends Model
 {
     protected $guarded = ["id"];
 
+    protected $casts = [
+        'is_active' => 'boolean',
+        'is_deal_of_the_day' => 'boolean',
+        'is_trending' => 'boolean',
+        'selling_price' => 'decimal:2',
+        'buying_price' => 'decimal:2',
+        'discount_price' => 'decimal:2',
+        'discount' => 'decimal:2',
+    ];
+
     public function details()
     {
         return $this->hasOne(ProductDetails::class);

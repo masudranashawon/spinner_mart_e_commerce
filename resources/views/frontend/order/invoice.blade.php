@@ -246,19 +246,12 @@
                         <td>
                             <strong class="d-block text-dark">{{ $item?->product_name }}</strong>
 
-                            {{-- SKU Code --}}
-                            @if($item?->variant?->sku_code)
-                            <small class="text-muted d-block">SKU: {{ $item?->variant?->sku_code }}</small>
+                            @if($item?->sku_code)
+                            <small class="text-muted d-block">SKU: {{ $item?->sku_code }}</small>
                             @endif
 
-                            @php
-                            $attrs = [];
-                            if ($item?->variant?->color?->name) $attrs[] = 'Color: ' . $item?->variant?->color?->name;
-                            if ($item?->variant?->size?->name) $attrs[] = 'Size: ' . $item?->variant?->size?->name;
-                            @endphp
-
-                            @if(count($attrs) > 0)
-                            <small class="text-muted">{{ implode(' | ', $attrs) }}</small>
+                            @if($item?->variant_name && $item?->variant_name !== 'Default Variant')
+                            <small class="text-muted">{{ $item?->variant_name }}</small>
                             @endif
                         </td>
                         <td class="text-end amount-text">৳{{ number_format($item?->price, 2) }}</td>
@@ -288,12 +281,12 @@
                     <tbody>
                         <tr>
                             <td class="text-end text-muted"><strong>Subtotal:</strong></td>
-                            <td class="text-end amount-text" width="35%">৳{{ number_format($subtotal, 2) }}</td>
+                            <td class="text-end amount-text" width="35%">৳{{ number_format($order?->subtotal, 2) }}</td>
                         </tr>
-                        @if($order?->has_coupon)
+                        @if($order?->coupon_code)
                         <tr>
-                            <td class="text-end text-muted"><strong>Coupon Discount:</strong></td>
-                            <td class="text-end amount-text text-danger">- ৳{{ number_format($subtotal - $order?->grand_total, 2) }}</td>
+                            <td class="text-end text-muted"><strong>Coupon Discount ({{ $order->coupon_code }}):</strong></td>
+                            <td class="text-end amount-text text-danger">- ৳{{ number_format($order?->discount_amount, 2) }}</td>
                         </tr>
                         @endif
                         <tr>
@@ -302,7 +295,7 @@
                         </tr>
                         <tr class="grand-total-row">
                             <td class="text-end">Grand Total:</td>
-                            <td class="text-end amount-text">৳{{ number_format($order?->grand_total + $order?->shipping_charge, 2) }}</td>
+                            <td class="text-end amount-text">৳{{ number_format($order?->grand_total, 2) }}</td>
                         </tr>
                     </tbody>
                 </table>

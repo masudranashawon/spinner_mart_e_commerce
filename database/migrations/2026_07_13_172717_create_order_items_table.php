@@ -26,7 +26,8 @@ return new class extends Migration
                 ->nullable()
                 ->constrained();
             $table->string('product_name');
-            $table->string('sku');
+            $table->string('variant_name')->nullable();
+            $table->string('sku_code');
             $table->decimal('price', 10, 2);
             $table->unsignedInteger('quantity');
             $table->decimal('subtotal', 10, 2);

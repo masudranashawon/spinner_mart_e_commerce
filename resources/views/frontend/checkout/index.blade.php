@@ -205,8 +205,20 @@
                                         </li>
                                     </ul>
                                 </div>
+                                <div class="title s2" style="border-top: 1px solid #e5e5e5; padding-top: 15px;">
+                                    <h4 style="display:flex; justify-content:space-between; font-size: 16px;">
+                                        Subtotal: <span>৳{{ number_format($subtotal, 2) }}</span>
+                                    </h4>
+                                    
+                                    @if($coupon)
+                                    <h4 style="display:flex; justify-content:space-between; font-size: 16px; color: #28a745;">
+                                        Discount ({{ $coupon->coupon_code }}): <span>- ৳{{ number_format($discountAmount, 2) }}</span>
+                                    </h4>
+                                    @endif
+                                </div>
+
                                 <div class="title s2">
-                                    <h2>Total<span> ৳ {{ $cartItems?->sum('total') ?? 0 }}</span></h2>
+                                    <h2>Total <span id="grandTotalDisplay">৳{{ number_format($subtotal - $discountAmount + 60, 2) }}</span></h2>
                                 </div>
                             </div>
                         </div>
@@ -270,4 +282,19 @@
 @endsection
 
 @push('script')
+<script>
+    $(document).ready(function() {
+        // Initial grand total
+        let baseTotal = {{ $subtotal - $discountAmount }};
+
+        // Update grand total on delivery charge change
+        $('input[name="deliveryCharge"]').on('change', function() {
+            let deliveryCharge = parseFloat($(this).val());
+            let grandTotal = baseTotal + deliveryCharge;
+            
+            // Update grand total display
+            $('#grandTotalDisplay').text('৳' + grandTotal.toFixed(2));
+        });
+    });
+</script>
 @endpush

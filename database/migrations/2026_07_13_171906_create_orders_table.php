@@ -24,14 +24,18 @@ return new class extends Migration
                 ->nullable()
                 ->constrained()
                 ->nullOnDelete();
+            $table->string('coupon_code')->nullable();
+            $table->decimal('discount_amount', 10, 2)->default(0);
+            $table->decimal('subtotal', 10, 2);
             $table->decimal('grand_total', 10, 2);
-            $table->boolean('has_coupon')->default(false);
             $table->string('order_status')->nullable();
             $table->decimal('shipping_charge', 10, 2)->default(0);
             $table->string('payment_method')->nullable();
             $table->boolean('has_payment')->default(false);
             $table->text('note')->nullable();
             $table->string('payment_status');
+            $table->text('cancel_reason')->nullable();
+            $table->text('return_reason')->nullable();
 
             $table->timestamps();
         });

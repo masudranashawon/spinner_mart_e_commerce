@@ -41,6 +41,9 @@ class ProductRequest extends FormRequest
             'gallery_images.*' => 'nullable|image|max:2048',
             'deleted_gallery_ids' => 'nullable|string',
             'tags' => 'nullable|array',
+            'is_active' => 'nullable|boolean',
+            'is_deal_of_the_day' => 'nullable|boolean',
+            'is_trending' => 'nullable|boolean',
         ];
     }
 

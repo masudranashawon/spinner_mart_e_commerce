@@ -9,6 +9,13 @@ class ProductVariant extends Model
 {
     protected $guarded = ["id"];
 
+    protected $casts = [
+        'selling_price' => 'decimal:2',
+        'buying_price' => 'decimal:2',
+        'discount_price' => 'decimal:2',
+        'discount' => 'decimal:2',
+    ];
+
     public function product()
     {
         return $this->belongsTo(Product::class);

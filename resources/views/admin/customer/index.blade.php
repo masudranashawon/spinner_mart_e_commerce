@@ -15,6 +15,7 @@
                     <th>Customer Name</th>
                     <th>Customer Email</th>
                     <th>Verified</th>
+                    <th>Status</th>
                     <th>Registered Date</th>
                 </tr>
             </thead>
@@ -32,11 +33,18 @@
                         <span class="badge badge-success">Verified</span>
                         @endif
                     </td>
+                    <td>
+                        @if ($user?->is_active == 0)
+                        <span class="badge badge-danger">Inactive</span>
+                        @else
+                        <span class="badge badge-success">Active</span>
+                        @endif
+                    </td>
                     <td>{{ $user?->created_at?->format('M d, Y') }}</td>
                 </tr>
                 @empty
                 <tr class="text-center">
-                    <td colspan="7">No Customer Found</td>
+                    <td colspan="8">No Customer Found</td>
                 </tr>
                 @endforelse
             </tbody>

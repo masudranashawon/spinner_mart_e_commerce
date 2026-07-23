@@ -33,31 +33,40 @@ class OrderRepository extends Repository
         $couponId = session('coupon_id');
         $discount = 0;
         $coupon = null;
+        $couponCode = null;
 
         // Check if coupon is active
         if ($couponId) {
             $coupon = Coupon::find($couponId);
 
-            if ($coupon && $coupon->status == 1 && $coupon->limit > $coupon->total_applied) {
-                $discount = $coupon->coupon_type == CouponTypeEnums::PERCENTAGE->value
+            if ($coupon && $coupon->status == 1 && ($coupon->limit == 0 || $coupon->limit > $coupon->total_applied)) {
+
+                $type = $coupon->coupon_type instanceof \BackedEnum ? $coupon->coupon_type->value : $coupon->coupon_type;
+                $type = strtolower($type);
+
+                $discount = $type === 'percentage'
                     ? ($subTotal * $coupon->discount) / 100
                     : $coupon->discount;
+
+                $couponCode = $coupon->coupon_code;
             } else {
                 $coupon = null; // invalid coupon
             }
         }
 
-        $grandTotal = $subTotal - $discount;
+        $grandTotal = $subTotal - $discount + $shippingCharge;
 
         // Create order
         $order = self::create([
             'user_id' => $user->id,
+            'coupon_id' => $coupon?->id ?? null,
+            'coupon_code' => $couponCode,
+            'discount_amount' => $discount,
+            'subtotal' => $subTotal,
             'shipping_charge' => $shippingCharge,
             'grand_total' => $grandTotal,
-            'coupon_id' => $coupon?->id ?? null,
             'order_status' => OrderStatusEnums::PENDING->value,
             'payment_method' => $request->payment_method,
-            'has_coupon' => $coupon?->id ? true : false,
             'has_payment' => false,
             'note' => $request->note,
             'payment_status' => PaymentStatusEnums::PENDING->value,

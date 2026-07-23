@@ -105,10 +105,26 @@
               <tr>
                 <td class="text-muted">Status</td>
                 <td>
-                  @if (($product->status ?? 1) == 1)
+                  @if ($product->is_active)
                     <span class="badge badge-success">Active</span>
                   @else
                     <span class="badge badge-danger">Inactive</span>
+                  @endif
+                </td>
+              </tr>
+              <tr>
+                <td class="text-muted">Visibility Flags</td>
+                <td>
+                  @if ($product->is_deal_of_the_day)
+                    <span class="badge badge-info mb-1">Deal of the Day</span> <br>
+                  @endif
+                  
+                  @if ($product->is_trending)
+                    <span class="badge badge-primary">Trending</span>
+                  @endif
+
+                  @if (!$product->is_deal_of_the_day && !$product->is_trending)
+                     <span class="text-muted">Normal Product</span>
                   @endif
                 </td>
               </tr>

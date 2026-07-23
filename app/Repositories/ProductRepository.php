@@ -33,7 +33,7 @@ class ProductRepository extends Repository
 
         $discountPercent = 0;
 
-        if ($request->discount_price) {
+        if ($request->discount_price && $request->selling_price > 0) {
             $discountPercent = round(
                 (($request->selling_price - $request->discount_price) / $request->selling_price) * 100
             );
@@ -47,6 +47,9 @@ class ProductRepository extends Repository
             "discount_price" => $request->discount_price,
             "discount" => $discountPercent,
             "media_id" =>   $thumbnail->id ?? null,
+            "is_active" => $request->boolean('is_active'),
+            "is_deal_of_the_day" => $request->boolean('is_deal_of_the_day'),
+            "is_trending" => $request->boolean('is_trending'),
         ]);
 
         ProductDetails::create([
@@ -108,7 +111,7 @@ class ProductRepository extends Repository
 
             $discountPercent = 0;
 
-            if ($request->discount_price) {
+            if ($request->discount_price && $request->selling_price > 0) {
                 $discountPercent = round(
                     (($request->selling_price - $request->discount_price) / $request->selling_price) * 100
                 );
@@ -121,6 +124,9 @@ class ProductRepository extends Repository
                 'selling_price' => $request->selling_price,
                 "discount_price" => $request->discount_price,
                 "discount" =>  $discountPercent,
+                "is_active" => $request->boolean('is_active'),
+                "is_deal_of_the_day" => $request->boolean('is_deal_of_the_day'),
+                "is_trending" => $request->boolean('is_trending'),
             ]);
 
             // Product details table
