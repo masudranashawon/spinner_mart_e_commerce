@@ -85,11 +85,17 @@
                             @if($user)
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fi flaticon-user-profile"></i><span>{{ $user->name }}</span>
+                                    @if($user->media_id)
+                                    <img src="{{ $user->thumbnail }}" alt="{{ $user->name }}" class="rounded-circle border" style="width: 2.5rem; height: 2.5rem; object-fit: cover;">
+                                    @else
+                                    <i class="fi flaticon-user-profile"></i>
+                                    @endif
+
+                                    <span class="ms-2">{{ Str::before($user->name, ' ') }}</span>
                                 </a>
 
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('profile.index') }}">Profile</a></li>
                                     <li><a class="dropdown-item" href="{{ route('order.index') }}">My Orders</a></li>
                                     <li>
                                         <hr class="dropdown-divider">

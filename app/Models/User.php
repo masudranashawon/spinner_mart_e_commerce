@@ -33,6 +33,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'media_id',
     ];
 
     /**
@@ -66,6 +67,12 @@ class User extends Authenticatable
     public function wishlist()
     {
         return $this->hasMany(Wishlist::class);
+    }
+
+
+    public function media()
+    {
+        return  $this->belongsTo(Media::class);
     }
 
     public function thumbnail(): Attribute

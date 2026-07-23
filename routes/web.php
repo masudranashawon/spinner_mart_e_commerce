@@ -5,6 +5,7 @@ use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\OrderController;
+use App\Http\Controllers\Frontend\ProfileController;
 use App\Http\Controllers\Frontend\ShopController;
 use App\Http\Controllers\Frontend\WishlistController;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/order/store', 'store')->name('order.store');
         Route::get('/order/{order}/details', 'show')->name('order.show');
         Route::get('/order/{orderNumber}/invoice', 'invoice')->name('order.invoice');
+    });
+
+    Route::controller(ProfileController::class)->group(function () {
+        Route::get('/profile', 'index')->name('profile.index');
+        Route::put('/profile', 'update')->name('profile.update');
+        Route::put('/profile/password', 'updatePassword')->name('profile.password.update');
     });
 });
 
