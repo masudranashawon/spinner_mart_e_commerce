@@ -149,9 +149,18 @@
                                     {{ $defaultVariant?->current_stock > 0 ? $defaultVariant?->current_stock . ' available' : 'Out of stock' }}
                                 </span>
                             </li>
-                            <li><span>Category:</span> {{ $product->details->category->name }}</li>
+                            <li>Sold: 
+                                <span>
+                                @if($product?->sold_count)
+                                    {{ $product->sold_count }} {{ Str::plural('Item', $product->sold_count) }}
+                                @else
+                                    Not sold
+                                @endif
+                                </span>
+                            </li>
+                            <li>Category: <span>{{ $product->details->category->name }}</span></li>
                             <li>
-                                <span>Tags:</span>
+                                Tags: 
                                 @foreach($product->tags as $tag)
                                 <span class="badge bg-secondary px-2 py-0 small text-light fw-normal mb-2 mb-md-0">{{ $tag->name }}</span>
                                 @endforeach

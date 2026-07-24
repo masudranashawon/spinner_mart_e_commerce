@@ -7,6 +7,7 @@ use App\Http\Requests\OrderRequest;
 use App\Models\Order;
 use App\Repositories\OrderAddressRepository;
 use App\Repositories\OrderRepository;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
@@ -54,5 +55,49 @@ class OrderController extends Controller
         $shippingAddress = $order->addresses->where('address_type', 'shipping')->first();
 
         return view('frontend.order.invoice', compact('order', 'billingAddress', 'shippingAddress'));
+    }
+
+    public function cancelOrder(Request $request, Order $order)
+    {
+        $userId = auth('web')->user()->id;
+
+        $request->validate([
+            'cancel_reason' => 'required|string|max:1000',
+        ]);
+
+        if ($order->user_id !== $userId) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Check if order is eligible for cancellation
+        if ($order->order_status !== 'pending') {
+            return back()->with('error', 'You can only cancel pending orders.');
+        }
+
+        OrderRepository::cancelOrderByUser($order, $request->cancel_reason);
+
+        return back()->with('success', 'Your order has been cancelled successfully.');
+    }
+
+    public function returnRequest(Request $request, Order $order)
+    {
+        $userId = auth('web')->user()->id;
+
+        $request->validate([
+            'return_reason' => 'required|string|max:1000',
+        ]);
+
+        if ($order->user_id !== $userId) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Check if order is eligible for return
+        if ($order->order_status !== 'delivered') {
+            return back()->with('error', 'You can only request a return for delivered orders.');
+        }
+
+        OrderRepository::requestReturnByUser($order, $request->return_reason);
+
+        return back()->with('success', 'Your return request has been submitted successfully.');
     }
 }

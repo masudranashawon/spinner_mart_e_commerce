@@ -70,18 +70,19 @@
 
                                         {{-- Order Status --}}
                                         <td class="
-                                        @switch(strtolower($statusValue))
+                                        @switch($statusValue)
                                         @case('pending') stock @break
                                         @case('confirmed') stock @break
                                         @case('processing') pro @break
                                         @case('shipped') stocks @break
                                         @case('delivered') Del @break
                                         @case('cancelled') can @break
+                                        @case('return_requested') can @break
                                         @case('returned') can @break
                                         @default stock
                                         @endswitch">
-                                            <span class="text-capitalize">
-                                                {{ $statusValue }}
+                                            <span class="text-capitalize" style="width: 140px;">
+                                               {{ ucwords(str_replace('_', ' ', $statusValue)) }}
                                             </span>
                                         </td>
 

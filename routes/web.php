@@ -46,6 +46,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/order/store', 'store')->name('order.store');
         Route::get('/order/{order}/details', 'show')->name('order.show');
         Route::get('/order/{orderNumber}/invoice', 'invoice')->name('order.invoice');
+        Route::post('/order/{order}/cancel', 'cancelOrder')->name('order.cancel');
+        Route::post('/order/{order}/return', 'returnRequest')->name('order.return');
     });
 
     Route::controller(ProfileController::class)->group(function () {
