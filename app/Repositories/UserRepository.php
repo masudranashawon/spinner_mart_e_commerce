@@ -20,7 +20,7 @@ class UserRepository extends Repository
         return User::class;
     }
 
-    public static function updateProfile(User $user, Request $request, Media $media): User
+    public static function updateProfile(User $user, Request $request, ?Media $media = null): User
     {
         $user->update([
             'name' => $request->name,

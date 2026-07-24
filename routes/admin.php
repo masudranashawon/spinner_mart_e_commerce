@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InventoryStockController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\TagController;
@@ -104,4 +105,11 @@ Route::prefix("admin")->middleware(['auth', 'role:admin'])->group(function () {
     Route::get("/customers", "index")->name("customer.index");
     Route::put("/customers/{user}/update", "update")->name("customer.update");
   });
+
+  // profile routes
+  Route::controller(ProfileController::class)->group(function () {
+        Route::get('/profile', 'index')->name('admin.profile.index');
+        Route::put('/profile', 'update')->name('admin.profile.update');
+        Route::put('/profile/password', 'updatePassword')->name('admin.profile.password.update');
+    });
 });

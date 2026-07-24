@@ -101,6 +101,23 @@
                     </ul>
                 </div>
             </li>
+
+            {{-- <li class="nav-item nav-category">Orders</li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#orders" role="button" aria-expanded="false" aria-controls="orders">
+                    <i class="link-icon" data-feather="list"></i>
+                    <span class="link-title">Orders</span>
+                    <i class="link-arrow" data-feather="chevron-down"></i>
+                </a>
+                <div class="collapse" id="orders">
+                    <ul class="nav sub-menu">
+                        <li class="nav-item {{ request()->routeIs('orders.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.order.index') }}" class="nav-link">All orders</a>
+                        </li>
+                    </ul>
+                </div>
+            </li> --}}
+
             <li class="nav-item nav-category">Users</li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#customers" role="button" aria-expanded="false" aria-controls="customers">

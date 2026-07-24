@@ -15,7 +15,7 @@ class Input extends Component
         public string $name,
         public string $label = "",
         public string $type = "text",
-        public string $value = "",
+        public ?string $value = "",
         public string $placeholder = "",
         public bool $required = false,
         public bool $readonly = false,
