@@ -90,10 +90,10 @@
                                                 <input type="text" placeholder="Postcode / ZIP*" id="Post2" name="postCode" value="{{old('postCode')}}">
                                             </div>
                                             <div class="col-lg-6 col-md-12 col-12">
-                                                <input type="text" placeholder="Company Name*" id="Company" name="company" value="{{old('company')}}">
+                                                <input type="text" placeholder="Company Name" id="Company" name="company" value="{{old('company')}}">
                                             </div>
                                             <div class="col-lg-6 col-md-12 col-12">
-                                                <input type="email" placeholder="Email Address*" id="email4" name="email" value="{{old('email') ?? $user->email}}">
+                                                <input type="email" placeholder="Email Address" id="email4" name="email" value="{{old('email') ?? $user->email}}">
                                             </div>
                                             <div class="col-lg-6 col-md-12 col-12">
                                                 <input type="tel" placeholder="Phone*" id="email2" name="phone" value="{{old('phone')}}">
@@ -137,10 +137,10 @@
                                                     <input type="text" placeholder="Postcode / ZIP*" id="Post1" name="shippingPostCode" value="{{old('shippingPostCode')}}">
                                                 </div>
                                                 <div class="col-lg-6 col-md-12 col-12">
-                                                    <input type="text" placeholder="Company Name*" id="Company1" name="shippingCompany" value="{{old('shippingCompany')}}">
+                                                    <input type="text" placeholder="Company Name" id="Company1" name="shippingCompany" value="{{old('shippingCompany')}}">
                                                 </div>
                                                 <div class="col-lg-6 col-md-12 col-12">
-                                                    <input type="email" placeholder="Email Address*" id="email5" name="shippingEmail" value="{{old('shippingEmail')}}">
+                                                    <input type="email" placeholder="Email Address" id="email5" name="shippingEmail" value="{{old('shippingEmail')}}">
                                                 </div>
                                                 <div class="col-lg-6 col-md-12 col-12">
                                                     <input type="tel" placeholder="Phone*" id="phone1" name="shippingPhone" value="{{old('shippingPhone')}}">
@@ -209,7 +209,7 @@
                                     <h4 style="display:flex; justify-content:space-between; font-size: 16px;">
                                         Subtotal: <span>৳{{ number_format($subtotal, 2) }}</span>
                                     </h4>
-                                    
+
                                     @if($coupon)
                                     <h4 style="display:flex; justify-content:space-between; font-size: 16px; color: #28a745;">
                                         Discount ({{ $coupon->coupon_code }}): <span>- ৳{{ number_format($discountAmount, 2) }}</span>
@@ -285,16 +285,21 @@
 <script>
     $(document).ready(function() {
         // Initial grand total
-        let baseTotal = {{ $subtotal - $discountAmount }};
+        let baseTotal = {
+            {
+                $subtotal - $discountAmount
+            }
+        };
 
         // Update grand total on delivery charge change
         $('input[name="deliveryCharge"]').on('change', function() {
             let deliveryCharge = parseFloat($(this).val());
             let grandTotal = baseTotal + deliveryCharge;
-            
+
             // Update grand total display
             $('#grandTotalDisplay').text('৳' + grandTotal.toFixed(2));
         });
     });
+
 </script>
 @endpush

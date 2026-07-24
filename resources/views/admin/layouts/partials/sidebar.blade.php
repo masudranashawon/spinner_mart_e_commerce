@@ -102,7 +102,7 @@
                 </div>
             </li>
 
-            {{-- <li class="nav-item nav-category">Orders</li>
+            <li class="nav-item nav-category">Orders</li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#orders" role="button" aria-expanded="false" aria-controls="orders">
                     <i class="link-icon" data-feather="list"></i>
@@ -116,7 +116,7 @@
                         </li>
                     </ul>
                 </div>
-            </li> --}}
+            </li>
 
             <li class="nav-item nav-category">Users</li>
             <li class="nav-item">

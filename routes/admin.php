@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InventoryStockController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -108,8 +109,18 @@ Route::prefix("admin")->middleware(['auth', 'role:admin'])->group(function () {
 
   // profile routes
   Route::controller(ProfileController::class)->group(function () {
-        Route::get('/profile', 'index')->name('admin.profile.index');
-        Route::put('/profile', 'update')->name('admin.profile.update');
-        Route::put('/profile/password', 'updatePassword')->name('admin.profile.password.update');
-    });
+    Route::get('/profile', 'index')->name('admin.profile.index');
+    Route::put('/profile', 'update')->name('admin.profile.update');
+    Route::put('/profile/password', 'updatePassword')->name('admin.profile.password.update');
+  });
+
+  // order routes
+  Route::controller(OrderController::class)->group(function () {
+    Route::get('/orders', 'index')->name('admin.order.index');
+    Route::get('/order/{order}', 'show')->name('admin.order.show');
+    Route::put('/order/{order}/status', 'updateStatus')->name('admin.order.status.update');
+    Route::put('/order/{order}/payment', 'updatePayment')->name('admin.order.payment.update');
+    Route::get('/order/invoice/{orderNumber}', 'invoice')->name('admin.order.invoice');
+    Route::delete('/order/{order}/destroy', 'destroy')->name('admin.order.destroy');
+  });
 });
