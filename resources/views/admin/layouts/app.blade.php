@@ -172,6 +172,9 @@
 
   <script>
     $(document).ready(function() {
+      // Init feather icons
+      feather.replace();
+
       $('.data-table').DataTable({
         "aLengthMenu": [
           [5, 10, 30, 50, -1],
