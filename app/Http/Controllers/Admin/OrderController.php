@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Repositories\OrderRepository;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -14,6 +15,37 @@ class OrderController extends Controller
         $orders = Order::latest()->get();
 
         return view('admin.order.index', compact('orders'));
+    }
+
+    public function show(Order $order)
+    {
+        $billingAddress = $order->addresses->where('address_type', 'billing')->first();
+        $shippingAddress = $order->addresses->where('address_type', 'shipping')->first();
+
+        return view('admin.order.show', compact('order', 'billingAddress', 'shippingAddress'));
+    }
+
+    public function updateStatus(Request $request, Order $order)
+    {
+        $request->validate([
+            'order_status' => 'required|string',
+            'cancel_reason' => 'nullable|string|max:1000',
+        ]);
+
+        OrderRepository::adminUpdateStatus($order, $request);
+
+        return back()->with('success', 'Order status updated successfully.');
+    }
+
+    public function updatePayment(Request $request, Order $order)
+    {
+        $request->validate([
+            'payment_status' => 'required|string',
+        ]);
+
+        OrderRepository::adminUpdatePayment($order, $request->payment_status);
+
+        return back()->with('success', 'Payment status updated successfully.');
     }
 
     public function invoice(string $orderNumber)

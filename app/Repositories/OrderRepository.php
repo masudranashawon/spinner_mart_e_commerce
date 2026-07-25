@@ -136,4 +136,90 @@ class OrderRepository extends Repository
             'return_reason' => $reason,
         ]);
     }
+
+    public static function adminUpdateStatus(Order $order, Request $request)
+    {
+        DB::transaction(function () use ($order, $request) {
+
+            $newStatus = $request->order_status;
+            $oldStatus = $order->order_status;
+
+            $restockStates = [
+                OrderStatusEnums::CANCELLED->value,
+                OrderStatusEnums::RETURNED->value
+            ];
+
+            $oldWasRestocked = in_array($oldStatus, $restockStates);
+            $newIsRestock = in_array($newStatus, $restockStates);
+
+            // Restore Stock (If moving to Cancelled/Returned from normal status)
+            if ($newIsRestock && !$oldWasRestocked) {
+                self::adjustStockForAdmin($order, true, $newStatus);
+            }
+
+            // Deduct Stock (If admin un-cancels an order back to processing/shipped)
+            elseif (!$newIsRestock && $oldWasRestocked) {
+                self::adjustStockForAdmin($order, false, $newStatus);
+            }
+
+            // update new status
+            $updateData = [
+                'order_status' => $newStatus,
+            ];
+
+            // if admin cancel order & give cancel reason
+            if ($newStatus === OrderStatusEnums::CANCELLED->value && $request->filled('cancel_reason')) {
+                $updateData['cancel_reason'] = $request->cancel_reason;
+            }
+
+            // Update Order
+            $order->update($updateData);
+        });
+
+        return $order;
+    }
+
+    public static function adminUpdatePayment(Order $order, string $paymentStatus)
+    {
+        // Update Order Status
+        $order->update([
+            'payment_status' => $paymentStatus
+        ]);
+
+        return $order;
+    }
+
+    private static function adjustStockForAdmin(Order $order, bool $isRestoring, string $status)
+    {
+        foreach ($order->items as $item) {
+
+            $variant = $item->variant;
+            $product = $item->product;
+
+            if ($variant) {
+                // Restore or Deduct Stock
+                if ($isRestoring) {
+                    $variant->increment('current_stock', $item->quantity);
+                } else {
+                    $variant->decrement('current_stock', $item->quantity);
+                }
+
+                InventoryStock::create([
+                    'product_variant_id' => $variant->id,
+                    'quantity'           => $isRestoring ? $item->quantity : -$item->quantity,
+                    'type'               => $isRestoring ? 'return' : 'stock_out',
+                    'note'               => "Admin Status Update ({$status}) - Order #{$order->order_number}",
+                ]);
+            }
+
+            if ($product) {
+                // Update Sold Count
+                if ($isRestoring) {
+                    $product->decrement('sold_count', $item->quantity);
+                } else {
+                    $product->increment('sold_count', $item->quantity);
+                }
+            }
+        }
+    }
 }

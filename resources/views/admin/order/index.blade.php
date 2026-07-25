@@ -49,7 +49,7 @@
 
                     {{-- Payment Status Badge --}}
                     <td>
-                        <span class="badge 
+                        <span class="badge text-capitalize 
                                     @if($order->payment_status === 'paid') badge-success 
                                     @elseif($order->payment_status === 'failed') badge-danger 
                                     @elseif($order->payment_status === 'refunded') badge-secondary 
@@ -69,8 +69,8 @@
                                         @case('shipped') badge-dark @break
                                         @case('delivered') badge-success @break
                                         @case('cancelled') badge-danger @break
-                                        @case('return_requested') badge-warning @break
-                                        @case('returned') badge-secondary @break
+                                        @case('return_requested') badge-danger-muted text-white @break
+                                        @case('returned') badge-danger @break
                                         @default badge-light
                                     @endswitch
                                 ">
@@ -80,7 +80,7 @@
 
                     {{-- Actions --}}
                     <td class="text-center">
-                        <a href="{{ route('admin.order.show',$order->id) }}"><button class="btn btn-secondary btn-icon btn-md"><i data-feather="eye"></i></button></a>
+                        <a href="{{ route('admin.order.show', $order->id) }}"><button class="btn btn-secondary btn-icon btn-md"><i data-feather="eye"></i></button></a>
                         <a target="_blank" href="{{ route('admin.order.invoice', $order->order_number) }}"><button class="btn btn-primary btn-icon btn-md"><i data-feather="printer"></i></button></a>
                         <a href="{{ route('admin.order.destroy', $order->id) }}" class="delete-confirm btn btn-danger btn-icon btn-md">
                             <i data-feather="trash-2"></i>
