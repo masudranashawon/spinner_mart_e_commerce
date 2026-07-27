@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ProductVariant;
 use App\Models\Size;
 use Illuminate\Http\Request;
 
@@ -52,15 +53,21 @@ class SizeController extends Controller
         }
     }
 
-
     public function destroy(Size $size)
     {
-        $size->delete();
+        $hasProducts = ProductVariant::where('size_id', $size->id)->exists();
 
-        if ($size) {
-            return to_route("size.index")->withSuccess("Size deleted successfully");
+        if ($hasProducts) {
+            return back()->withError("This size cannot be deleted because it is associated with existing products. Please remove them first.");
+        }
+
+        // If there are no products, delete the size
+        $isDeleted = $size->delete();
+
+        if ($isDeleted) {
+            return to_route("size.index")->withSuccess("size deleted successfully");
         } else {
-            return to_route("size.index")->withError("Size not deleted");
+            return back()->withError("size not deleted");
         }
     }
 }

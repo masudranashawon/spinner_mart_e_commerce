@@ -28,6 +28,7 @@ Route::prefix("admin")->middleware(['auth', 'role:admin'])->group(function () {
     Route::post("/category/store", "store")->name("category.store");
     Route::get("/category/{category}/edit", "edit")->name("category.edit");
     Route::put("/category/{category}/update", "update")->name("category.update");
+    Route::delete("/category/{category}/destroy", "destroy")->name("category.destroy");
   });
 
   // sub category routes
@@ -36,6 +37,7 @@ Route::prefix("admin")->middleware(['auth', 'role:admin'])->group(function () {
     Route::post("/sub-category/store", "store")->name("subCategory.store");
     Route::get("/sub-category/{subCategory}/edit", "edit")->name("subCategory.edit");
     Route::put("/sub-category/{subCategory}/update", "update")->name("subCategory.update");
+    Route::delete("/sub-category/{subCategory}/destroy", "destroy")->name("subCategory.destroy");
   });
 
   // brand routes

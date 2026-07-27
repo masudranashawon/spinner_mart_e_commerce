@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Color;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 
 class ColorController extends Controller
@@ -58,12 +59,19 @@ class ColorController extends Controller
 
     public function destroy(Color $color)
     {
-        $color->delete();
+        $hasProducts = ProductVariant::where('color_id', $color->id)->exists();
 
-        if ($color) {
+        if ($hasProducts) {
+            return back()->withError("This color cannot be deleted because it is associated with existing products. Please remove them first.");
+        }
+
+        // If there are no products, delete the color
+        $isDeleted = $color->delete();
+
+        if ($isDeleted) {
             return to_route("color.index")->withSuccess("Color deleted successfully");
         } else {
-            return to_route("color.index")->withError("Color not deleted");
+            return back()->withError("Color not deleted");
         }
     }
 }

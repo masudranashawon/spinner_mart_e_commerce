@@ -27,19 +27,19 @@
     {{-- Product Images and Info --}}
     <div class="row">
       {{-- Product Images --}}
-      <div class="col-md-5">
+      <div class="col-md-4">
         <div class="card mb-3">
 
           <div class="row card-body text-center">
             {{-- Product Thumbnail --}}
-            <div class="col-lg-6 border-right">
+            <div class="col-lg-5 border-right">
               <h5 class="font-weight-bold mb-2">Product Thumbnail</h5>
               <img src="{{ $product?->thumbnail }}" class="img-fluid img-thumbnail mb-3 border" style="max-height: 360px;"
                 alt="Product Image">
             </div>
 
             {{-- Product Gallery --}}
-            <div class="col-lg-6 d-flex flex-column align-items-center" style="min-height: 250px;">
+            <div class="col-lg-7 d-flex flex-column align-items-center" style="min-height: 250px;">
 
               <h5 class="font-weight-bold mb-2">Product Gallery</h5>
 
@@ -135,7 +135,7 @@
       </div>
 
       {{-- Stock Info  --}}
-      <div class="col-md-4">
+      <div class="col-md-5">
         <div class="card">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="font-weight-bold">Stock Information</h5>
@@ -144,14 +144,14 @@
             </button>
           </div>
 
-          <div class="card-footer table-responsive">
+          <div class="card-footer table-responsive" style="max-height: 300px; overflow-y: scroll;">
             <table class="table-bordered table">
               <thead>
                 <tr>
                   <th>Date</th>
                   <th>Variant</th>
                   <th>Quantity</th>
-                  <th>Action</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>

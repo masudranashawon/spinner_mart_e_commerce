@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
+use App\Models\ProductDetails;
+use App\Models\SubCategory;
 use App\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
 
@@ -42,6 +44,24 @@ class CategoryController extends Controller
             return to_route("category.index")->withSuccess("Category updated successfully");
         } else {
             return to_route("category.index")->withError("Category not updated");
+        }
+    }
+
+    public function destroy(Category $category)
+    {
+        $hasProducts = ProductDetails::where('category_id', $category->id)->exists();
+
+        if ($hasProducts) {
+            return back()->withError("This category cannot be deleted because it is associated with existing products. Please remove them first.");
+        }
+
+        // If there are no products, delete the Category
+        $isDeleted = $category->delete();
+
+        if ($isDeleted) {
+            return to_route("category.index")->withSuccess("Category deleted successfully.");
+        } else {
+            return back()->withError("Category not deleted.");
         }
     }
 }

@@ -95,8 +95,24 @@
                                 </a>
 
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{ route('profile.index') }}">Profile</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('order.index') }}">My Orders</a></li>
+                                    @role('admin')
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('admin.root') }}">
+                                            Dashboard
+                                        </a>
+                                    </li>
+                                    @else
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('profile.index') }}">
+                                            Profile
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('order.index') }}">
+                                            My Orders
+                                        </a>
+                                    </li>
+                                    @endrole
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>

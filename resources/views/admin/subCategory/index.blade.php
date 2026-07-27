@@ -34,7 +34,10 @@
                   <td class="text-center">
                     <a href="{{ route('subCategory.edit', $subCategory?->id) }}"><button
                         class="btn btn-primary btn-icon btn-md"><i data-feather="edit"></i></button></a>
-                    <button class="btn btn-danger btn-icon btn-md"><i data-feather="trash-2"></i></button>
+                    <a href="{{ route('subCategory.destroy', $subCategory->id) }}"
+                    class="delete-confirm btn btn-danger btn-icon btn-md">
+                    <i data-feather="trash-2"></i>
+                    </a>
                   </td>
                 </tr>
               @empty

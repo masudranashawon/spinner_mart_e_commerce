@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TagController extends Controller
 {
@@ -53,12 +54,20 @@ class TagController extends Controller
 
     public function destroy(Tag $tag)
     {
-        $tag->delete();
+        // Check if there are any products associated with this tag
+        $hasProducts = DB::table('product_tags')->where('tag_id', $tag->id)->exists();
 
-        if ($tag) {
-            return to_route("tag.index")->withSuccess("Tag deleted successfully");
+        if ($hasProducts) {
+            return back()->withError("This tag cannot be deleted because it is associated with existing products. Please remove it from the products first.");
+        }
+
+        // If there are no products, delete the tag
+        $isDeleted = $tag->delete();
+
+        if ($isDeleted) {
+            return to_route("tag.index")->withSuccess("Tag deleted successfully.");
         } else {
-            return to_route("tag.index")->withError("Tag not deleted");
+            return back()->withError("Tag not deleted.");
         }
     }
 }

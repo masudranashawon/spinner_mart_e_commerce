@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubCategoryRequest;
 use App\Models\Category;
+use App\Models\ProductDetails;
 use App\Models\SubCategory;
 use App\Repositories\MediaRepository;
 use App\Repositories\SubCategoryRepository;
@@ -65,6 +66,24 @@ class SubCategoryController extends Controller
             return to_route("subCategory.index")->withSuccess("Sub Category updated successfully");
         } else {
             return to_route("subCategory.index")->withError("Sub Category not updated");
+        }
+    }
+
+    public function destroy(SubCategory $subCategory)
+    {
+        $hasProducts = ProductDetails::where('sub_category_id', $subCategory->id)->exists();
+
+        if ($hasProducts) {
+            return back()->withError("This sub-category cannot be deleted because it is associated with existing products. Please remove them first.");
+        }
+
+        // If there are no products, delete the sub-category
+        $isDeleted = $subCategory->delete();
+
+        if ($isDeleted) {
+            return to_route("subCategory.index")->withSuccess("Sub-category deleted successfully.");
+        } else {
+            return back()->withError("Sub-category not deleted.");
         }
     }
 }
