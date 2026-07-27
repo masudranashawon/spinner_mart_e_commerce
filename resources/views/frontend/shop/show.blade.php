@@ -544,6 +544,11 @@
             },
 
             error: function(xhr) {
+                if (xhr.status === 401 || xhr.status === 403 || xhr.status === 419 || xhr.status === 302) {
+                    window.location.href = "{{ route('login') }}";
+                    return;
+                }
+    
                 Swal.fire({
                     toast: true,
                     position: 'top-end',

@@ -12,8 +12,39 @@ class HomeController extends Controller
     public function index()
     {
         $categories = Category::latest('id')->get();
-        $recentlyAdded = Product::latest('id')->take(3)->get();
 
-        return view('frontend.index', compact('categories', 'recentlyAdded'));
+        $interestedProducts = Product::where('is_active', 1)
+            ->inRandomOrder()
+            ->take(8)
+            ->get();
+
+        $dealsOfTheDay = Product::where('is_active', 1)
+            ->where('is_deal_of_the_day', 1)
+            ->take(2)
+            ->get();
+
+        $trendingProducts = Product::where('is_active', 1)
+            ->where('is_trending', 1)
+            ->take(4)
+            ->get();
+
+        $topSellingProducts = Product::where('is_active', 1)
+            ->orderBy('sold_count', 'desc')
+            ->take(3)
+            ->get();
+
+        $recentlyAdded = Product::where('is_active', 1)
+            ->latest()
+            ->take(3)
+            ->get();
+
+        return view('frontend.index', compact(
+            'categories',
+            'interestedProducts',
+            'dealsOfTheDay',
+            'trendingProducts',
+            'topSellingProducts',
+            'recentlyAdded',
+        ));
     }
 }
