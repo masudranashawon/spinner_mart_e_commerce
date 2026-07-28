@@ -138,11 +138,14 @@
                 </div>
             </div>
         </div>
+        
         <div class="product-wrap">
-            <div class="row">
-                @foreach($interestedProducts as $product)
-                <x-product-card :product="$product" />
-                @endforeach
+            <div>
+                <div  class="row row-cols-lg-4 row-cols-md-6 row-cols-sm-12">
+                    @foreach($interestedProducts as $product)
+                    <x-product-card :product="$product" />
+                    @endforeach
+                </div>
 
                 <div class="more-btn">
                     <a class="theme-btn-s2" href="product.html">View All</a>
@@ -270,35 +273,11 @@
                 </div>
             </div>
         </div>
+
         <div class="trendin-slider owl-carousel">
             @foreach($trendingProducts as $product)
             <x-product-card :product="$product" />
             @endforeach
-
-            <div class="product-item">
-                <div class="image">
-                    <img src="{{ asset('frontend/assets/images/trending-product/1.png') }}" alt="">
-                    <div class="tag new">New</div>
-                </div>
-                <div class="text">
-                    <h2><a href="product-single.html">Pink Baby Shoes</a></h2>
-                    <div class="rating-product">
-                        <i class="fi flaticon-star"></i>
-                        <i class="fi flaticon-star"></i>
-                        <i class="fi flaticon-star"></i>
-                        <i class="fi flaticon-star"></i>
-                        <i class="fi flaticon-star"></i>
-                        <span>130</span>
-                    </div>
-                    <div class="price">
-                        <span class="present-price">$120.00</span>
-                        <del class="old-price">$200.00</del>
-                    </div>
-                    <div class="shop-btn">
-                        <a class="theme-btn-s2" href="product.html">Shop Now</a>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </section>
@@ -311,72 +290,30 @@
             <div class="col-lg-4 col-md-6 col-12">
                 <div class="highlight-wrap">
                     <h2>Top Selling</h2>
+                    @foreach($topSellingProducts ?? [] as $product)
                     <div class="product-card">
                         <div class="card-image">
-                            <div class="image">
-                                <img src="{{ asset('frontend/assets/images/top-selling/1.png') }}" alt="">
+                            <div class="image overflow-hidden">
+                                <img src="{{ $product?->thumbnail }}" alt="{{$product?->name}}" class="w-100 h-100" style="object-fit: cover;">
                             </div>
                         </div>
                         <div class="content">
-                            <h3><a href="product.html">Yellow Ladies Bag </a></h3>
+                            <h3><a href="product.html" class="text-truncate" style="max-width:180px">{{$product?->name}}</a></h3>
                             <div class="rating-product">
                                 <i class="fi flaticon-star"></i>
                                 <i class="fi flaticon-star"></i>
                                 <i class="fi flaticon-star"></i>
                                 <i class="fi flaticon-star"></i>
                                 <i class="fi flaticon-star"></i>
-                                <span>130</span>
+                                <span>{{$product?->rating}}</span>
                             </div>
                             <div class="price">
-                                <span class="present-price">$120.00</span>
-                                <del class="old-price">$200.00</del>
+                                <span class="present-price">{{$product?->discount_price}} </span>
+                                <del class="old-price">{{$product?->selling_price}}</del>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
-                        <div class="card-image">
-                            <div class="image">
-                                <img src="{{ asset('frontend/assets/images/top-selling/2.png') }}" alt="">
-                            </div>
-                        </div>
-                        <div class="content">
-                            <h3><a href="product.html">Pink Shoes</a></h3>
-                            <div class="rating-product">
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <span>130</span>
-                            </div>
-                            <div class="price">
-                                <span class="present-price">$120.00</span>
-                                <del class="old-price">$200.00</del>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="card-image">
-                            <div class="image">
-                                <img src="{{ asset('frontend/assets/images/top-selling/3.png') }}" alt="">
-                            </div>
-                        </div>
-                        <div class="content">
-                            <h3><a href="product.html">Parple Pant</a></h3>
-                            <div class="rating-product">
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <span>130</span>
-                            </div>
-                            <div class="price">
-                                <span class="present-price">$120.00</span>
-                                <del class="old-price">$200.00</del>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 col-12">
@@ -397,7 +334,7 @@
                                 <i class="fi flaticon-star"></i>
                                 <i class="fi flaticon-star"></i>
                                 <i class="fi flaticon-star"></i>
-                                <span>120</span>
+                                <span>{{$product?->rating}}</span>
                             </div>
                             <div class="price">
                                 <span class="present-price">{{$product?->discount_price}} </span>

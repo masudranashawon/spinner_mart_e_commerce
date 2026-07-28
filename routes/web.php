@@ -11,7 +11,7 @@ use App\Http\Controllers\Frontend\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/shop', [ShopController::class, 'index'])->name('shop');
+Route::get('/products', [ShopController::class, 'index'])->name('shop');
 Route::get('/products/{slug}', [ShopController::class, 'show'])->name('productDetails');
 
 Route::controller(AuthController::class)->group(function () {

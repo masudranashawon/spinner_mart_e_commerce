@@ -20,12 +20,11 @@ class HomeController extends Controller
 
         $dealsOfTheDay = Product::where('is_active', 1)
             ->where('is_deal_of_the_day', 1)
-            ->take(2)
             ->get();
 
         $trendingProducts = Product::where('is_active', 1)
             ->where('is_trending', 1)
-            ->take(4)
+            ->take(8)
             ->get();
 
         $topSellingProducts = Product::where('is_active', 1)

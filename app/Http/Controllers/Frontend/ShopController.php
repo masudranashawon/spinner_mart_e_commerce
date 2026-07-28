@@ -25,7 +25,7 @@ class ShopController extends Controller
         return view('frontend.shop.index', compact('categories', 'products', 'recentlyAdded', 'tags', 'sizes', 'colors'));
     }
 
-    public function show($slug)
+    public function show(string $slug)
     {
         $product = Product::with([
             'variants.color:id,name,color_code',
