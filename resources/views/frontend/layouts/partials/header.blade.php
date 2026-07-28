@@ -1,5 +1,5 @@
 <?php 
-    $categories = App\Models\Category::with('subCategories')->latest('id')->get();
+    $categories = App\Models\Category::with('subCategories')->get();
     $user = auth('web')?->user();
     $cartItems = $user?->cartItems()?->latest()->get();
     $wishlist = $user?->wishlist()?->latest()->get();
@@ -273,15 +273,16 @@
                                     @foreach($categories ?? [] as $category)
                                     <li class="header-catagory-item">
                                         @if($category?->subCategories && count($category?->subCategories)>0)
-                                        <a class="menu-down-arrow" href="">{{$category->name}}</a>
+                                        <a class="menu-down-arrow" href="{{ route('shop', ['category' => $category->slug]) }}">{{$category->name}}</a>
+
                                         <ul class="header-catagory-single">
                                             @foreach($category?->subCategories as $subCategory)
-                                            <li><a href="{{ $subCategory->slug}}">{{ $subCategory->name}}</a></li>
+                                            <li><a href="{{ route('shop', ['subcategory' => $subCategory->slug]) }}">{{ $subCategory->name}}</a></li>
                                             @endforeach
                                         </ul>
                                         @else
                                     <li>
-                                        <a href="{{$category->slug}}">{{$category->name}}</a>
+                                        <a href="{{ route('shop', ['category' => $category->slug]) }}">{{$category->name}}</a>
                                     </li>
                                     @endif
                                     </li>

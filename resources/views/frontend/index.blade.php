@@ -16,7 +16,7 @@
                         <h2>Trendy & Unique
                             Collection</h2>
                     </div>
-                    <a class="theme-btn" href="product.html">Shop Now</a>
+                    <a class="theme-btn" href="{{ route('shop') }}">Shop Now</a>
                 </div>
             </div>
             <div class="hero-slider-item">
@@ -28,7 +28,7 @@
                         <h2>Trendy & Unique
                             Collection</h2>
                     </div>
-                    <a class="theme-btn" href="product.html">Shop Now</a>
+                    <a class="theme-btn" href="{{ route('shop') }}">Shop Now</a>
                 </div>
             </div>
             <div class="hero-slider-item">
@@ -40,7 +40,7 @@
                         <h2>Trendy & Unique
                             Collection</h2>
                     </div>
-                    <a class="theme-btn" href="product.html">Shop Now</a>
+                    <a class="theme-btn" href="{{ route('shop') }}">Shop Now</a>
                 </div>
             </div>
         </div>
@@ -74,14 +74,18 @@
         </div>
         <div class="featured-categorie-slider owl-carousel">
             @foreach($categories ?? [] as $category)
-            <div class="featured-item">
-                <div class="images">
-                    <img src="{{ $category?->thumbnail }}" alt="{{$category?->name}}" class="w-100 h-100 object-fit-contain" style="object-fit:contain !important;">
+
+                <div class="featured-item">
+                        <div class="images">
+                            <a href="{{ route('shop', ['category' => $category->slug]) }}">
+                                <img src="{{ $category?->thumbnail }}" alt="{{$category?->name}}" class="w-100 h-100 object-fit-contain" style="object-fit:contain !important;">
+                            </a>
+                        </div>
+                        <div class="text">
+                            <h2><a href="{{ route('shop', ['category' => $category->slug]) }}l">{{$category?->name}}</a></h2>
+                        </div>
                 </div>
-                <div class="text">
-                    <h2><a href="product.html">{{$category?->name}}</a></h2>
-                </div>
-            </div>
+          
             @endforeach
         </div>
     </div>
@@ -148,7 +152,7 @@
                 </div>
 
                 <div class="more-btn">
-                    <a class="theme-btn-s2" href="product.html">View All</a>
+                    <a class="theme-btn-s2" href="{{ route('shop') }}">View All</a>
                 </div>
             </div>
         </div>
@@ -201,7 +205,7 @@
                                 </div>
                                 50
                             </div>% Off</div>
-                        <a class="upcoming-btn" href="product.html">Shop Now</a>
+                        <a class="upcoming-btn" href="{{ route('shop') }}">Shop Now</a>
                     </div>
                 </div>
             </div>

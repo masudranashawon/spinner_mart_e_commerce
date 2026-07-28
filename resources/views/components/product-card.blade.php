@@ -1,7 +1,4 @@
 @props(['product'])
-@php
-use Illuminate\Support\Str;
-@endphp
 
 <div class="col">
     <div class="product-item">
@@ -14,7 +11,7 @@ use Illuminate\Support\Str;
                 <div class="d-flex flex-wrap gap-1 flex-column">
                     {{-- 7 Days 'New' Logic --}}
                     @if($product->created_at->diffInDays(now()) <= 7) 
-                    <div class="px-1 rounded fw-bold text-uppercase text-white w-fit" style="background: #73c829; padding: 2px 10px; font-size: 11px;">
+                    <div class="px-1 rounded fw-bold text-uppercase text-white w-fit" style="background: linear-gradient(180deg, #95CD2F 0%, #63911F 100%); padding: 2px 10px; font-size: 11px;">
                         New
                     </div>
                     @endif
@@ -22,7 +19,7 @@ use Illuminate\Support\Str;
                     {{-- Pivot Table Tags (Max 2) --}}
                     @if($product->tags && $product->tags->count() > 0)
                         @foreach($product->tags->take(2) as $tag)
-                        <div class="px-1 rounded fw-bold text-uppercase text-white w-fit" style="background: #ff5e14; padding: 2px 10px; font-size: 11px;">
+                        <div class="px-1 rounded fw-bold text-uppercase text-white w-fit" style="background: linear-gradient(180deg, #FED700 0%, #F78914 100%); padding: 2px 10px; font-size: 11px;">
                             {{ $tag->name }}
                         </div>
                         @endforeach
@@ -33,7 +30,7 @@ use Illuminate\Support\Str;
 
         <div class="text">
             {{-- Product Name --}}
-            <h2><a href="{{route('productDetails', $product->slug)}}">{{ Str::limit($product->name, 30) }}</a></h2>
+             <h2><a href="{{ route('productDetails', $product->slug) }}" class="text-truncate w-100">{{ $product->name }}</a></h2>
 
             {{-- Rating --}}
             <div class="rating-product">
