@@ -82,7 +82,7 @@
                             </a>
                         </div>
                         <div class="text">
-                            <h2><a href="{{ route('shop', ['category' => $category->slug]) }}l">{{$category?->name}}</a></h2>
+                            <h2><a href="{{ route('shop', ['category' => $category->slug]) }}">{{$category?->name}}</a></h2>
                         </div>
                 </div>
           

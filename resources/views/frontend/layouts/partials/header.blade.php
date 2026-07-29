@@ -59,20 +59,17 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-12">
-                    <form action="#" class="middle-box">
-                        <div class="category">
-                            <select name="service" class="form-control">
-                                <option disabled="disabled" selected="">All Category</option>
-                                @foreach($categories as $category)
-                                <option value="{{$category->id}}">{{$category->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="search-box">
+                    <form class="middle-box search-box" action="{{ route('shop') }}" method="GET">
+                        <div class="header-search-form-wrapper position-relative">
                             <div class="input-group">
-                                <input type="search" class="form-control" placeholder="What are you looking for?">
+                                <input type="search" name="search" id="headerSearchInput" class="form-control border-0" placeholder="What are you looking for?" autocomplete="off">
                                 <button class="search-btn" type="submit"> <i class="fi flaticon-search"></i>
                                 </button>
+                            </div>
+
+                            {{-- Floating Search Results Box (Initially Hidden) --}}
+                            <div id="floatingSearchResults" class="bg-white shadow rounded position-absolute w-100 d-none" style="top: 110%; left: 0; z-index: 99999; max-height: 400px; overflow-y: auto; border: 1px solid #e1e1e1;">
+                                <!-- AJAX Response will come here in search_dropdown.blade.php -->
                             </div>
                         </div>
                     </form>
@@ -329,4 +326,52 @@
         overflow: inherit;
     }
 
+    .hover-bg-light:hover {
+        background-color: #f8f9fa !important;
+    }
 </style>
+
+@push('script')
+<script>
+    $(document).ready(function() {
+        let searchTimer;
+        
+        // Search Input
+        $('#headerSearchInput').on('keyup', function() {
+            clearTimeout(searchTimer);
+            let query = $(this).val();
+
+            if (query.length > 0) {
+                // Search Results
+                searchTimer = setTimeout(function() {
+                    $.ajax({
+                        url: "{{ route('ajax.search') }}",
+                        type: "GET",
+                        data: { search: query },
+                        success: function(res) {
+                            $('#floatingSearchResults').html(res.html).removeClass('d-none');
+                        }
+                    });
+                }, 300);
+            } else {
+                // Clear Search Results
+                $('#floatingSearchResults').addClass('d-none').html('');
+            }
+        });
+
+       // Close Search Results
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('.header-search-form-wrapper').length) {
+                $('#floatingSearchResults').addClass('d-none');
+            }
+        });
+        
+        // Focus Search Input
+        $('#headerSearchInput').on('focus', function() {
+            if($(this).val().length > 0 && $('#floatingSearchResults').html().trim() !== '') {
+                $('#floatingSearchResults').removeClass('d-none');
+            }
+        });
+    });
+</script>
+@endpush

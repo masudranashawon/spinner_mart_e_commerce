@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/products', [ShopController::class, 'index'])->name('shop');
 Route::get('/products/{slug}', [ShopController::class, 'show'])->name('productDetails');
+Route::get('/ajax-search', [ShopController::class, 'ajaxSearch'])->name('ajax.search');
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('register', 'register')->name('register');

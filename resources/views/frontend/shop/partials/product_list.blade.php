@@ -55,7 +55,7 @@
 </div>
     @empty
     <div class="col-12 text-center py-5">
-        <h4 class="text-muted">No products found!</h4>
+        <h4 class="text-muted">No product found!</h4>
     </div>
     @endforelse
 </div>
