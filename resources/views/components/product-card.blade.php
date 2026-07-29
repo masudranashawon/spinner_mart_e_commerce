@@ -28,9 +28,9 @@
             </div>
         </div>
 
-        <div class="text">
+        <div class="text p-3">
             {{-- Product Name --}}
-             <h2><a href="{{ route('productDetails', $product->slug) }}" class="text-truncate w-100">{{ $product->name }}</a></h2>
+             <h2><a href="{{ route('productDetails', $product->slug) }}" class="text-truncate w-100 d-block">{{ $product->name }}</a></h2>
 
             {{-- Rating --}}
             <div class="rating-product">

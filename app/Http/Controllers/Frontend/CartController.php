@@ -2,26 +2,34 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Enums\CouponTypeEnums;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Coupon;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\RecentView;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
+
 
 class CartController extends Controller
 {
     public function index()
     {
         /** @var \App\Models\User $user */
+
         $user = auth('web')->user();
         $cartItems = $user->cartItems()->latest()->get();
 
-        return  view('frontend.cart.index', compact('cartItems'));
+        $recentViews = RecentView::with('product')
+            ->where('user_id', $user->id)
+            ->latest('updated_at')
+            ->take(4)
+            ->get();
+
+        $recentViewProducts = $recentViews->map->product;
+
+        return  view('frontend.cart.index', compact('cartItems', 'recentViewProducts'));
     }
 
     public function store(Request $request)
@@ -164,12 +172,12 @@ class CartController extends Controller
         }
 
         $type = $coupon->coupon_type instanceof \BackedEnum ? $coupon->coupon_type->value : $coupon->coupon_type;
-        $type = strtolower($type); 
+        $type = strtolower($type);
 
 
         // Calculate initial discount to send back to UI
         $discountAmount = 0;
-       if ($type === 'percentage') {
+        if ($type === 'percentage') {
             $discountAmount = ($actualSubTotal * $coupon->discount) / 100;
         } else {
             $discountAmount = $coupon->discount;

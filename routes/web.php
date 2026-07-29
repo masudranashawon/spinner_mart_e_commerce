@@ -6,6 +6,7 @@ use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\OrderController;
 use App\Http\Controllers\Frontend\ProfileController;
+use App\Http\Controllers\Frontend\RecentViewController;
 use App\Http\Controllers\Frontend\ShopController;
 use App\Http\Controllers\Frontend\WishlistController;
 use Illuminate\Support\Facades\Route;
@@ -55,6 +56,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/profile', 'index')->name('profile.index');
         Route::put('/profile', 'update')->name('profile.update');
         Route::put('/profile/password', 'updatePassword')->name('profile.password.update');
+    });
+
+    Route::controller(RecentViewController::class)->group(function () {
+        Route::get('/recent-view', 'index')->name('recent-view.index');
     });
 });
 

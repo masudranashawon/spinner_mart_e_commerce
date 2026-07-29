@@ -176,7 +176,7 @@
                             <span id="totalPrice">৳{{ $cartItems->sum('total') ?? 0 }}</span>
                         </div>
 
-                         {{-- Proceed to Checkout --}}
+                        {{-- Proceed to Checkout --}}
                         <a href="{{ route('checkout.index') }}" class="theme-btn-s2 btn">Proceed To CheckOut</a>
                     </div>
                 </div>
@@ -191,123 +191,35 @@
         </div>
         @endif
 
+        @if($recentViewProducts->count() > 0)
+
         <div class="cart-prodact">
             <h2>You May be Interested in…</h2>
-            <div class="row">
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                    <div class="product-item">
-                        <div class="image">
-                            <img src="assets/images/interest-product/1.png" alt="">
-                            <div class="tag new">New</div>
-                        </div>
-                        <div class="text">
-                            <h2><a href="product-single.html">Wireless Headphones</a></h2>
-                            <div class="rating-product">
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <span>130</span>
-                            </div>
-                            <div class="price">
-                                <span class="present-price">$120.00</span>
-                                <del class="old-price">$200.00</del>
-                            </div>
-                            <div class="shop-btn">
-                                <a class="theme-btn-s2" href="product.html">Shop Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                    <div class="product-item">
-                        <div class="image">
-                            <img src="assets/images/interest-product/2.png" alt="">
-                            <div class="tag sale">Sale</div>
-                        </div>
-                        <div class="text">
-                            <h2><a href="product-single.html">Blue Bag with Lock</a></h2>
-                            <div class="rating-product">
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <span>120</span>
-                            </div>
-                            <div class="price">
-                                <span class="present-price">$160.00</span>
-                                <del class="old-price">$190.00</del>
-                            </div>
-                            <div class="shop-btn">
-                                <a class="theme-btn-s2" href="product.html">Shop Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                    <div class="product-item">
-                        <div class="image">
-                            <img src="assets/images/interest-product/3.png" alt="">
-                            <div class="tag new">New</div>
-                        </div>
-                        <div class="text">
-                            <h2><a href="product-single.html">Stylish Pink Top</a></h2>
-                            <div class="rating-product">
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <span>150</span>
-                            </div>
-                            <div class="price">
-                                <span class="present-price">$150.00</span>
-                                <del class="old-price">$200.00</del>
-                            </div>
-                            <div class="shop-btn">
-                                <a class="theme-btn-s2" href="product.html">Shop Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                    <div class="product-item">
-                        <div class="image">
-                            <img src="assets/images/interest-product/4.png" alt="">
-                            <div class="tag sale">Sale</div>
-                        </div>
-                        <div class="text">
-                            <h2><a href="product-single.html">Brown Com Boots</a></h2>
-                            <div class="rating-product">
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <span>120</span>
-                            </div>
-                            <div class="price">
-                                <span class="present-price">$120.00</span>
-                                <del class="old-price">$150.00</del>
-                            </div>
-                            <div class="shop-btn">
-                                <a class="theme-btn-s2" href="product.html">Shop Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+            <div class="row row-cols-lg-4 row-cols-md-6 row-cols-sm-12">
+                @foreach ( $recentViewProducts as $product )
+                <x-product-card :product="$product" />
+                @endforeach
             </div>
         </div>
+        @endif
     </div>
 </div>
 <!-- cart-area end -->
+
+<style>
+    /* Cart Page Specific CSS Override for Product Card Title */
+    .cart-prodact .product-item .text h2 {
+        display: block !important;
+        width: 100% !important;
+        min-width: 0 !important; 
+    }
+</style>
 @endsection
 
 @push('script')
 <script>
-    let activeCoupon = null; 
+    let activeCoupon = null;
 
     // Unified function to calculate and update the DOM
     function calculateCartTotals() {
@@ -317,7 +229,7 @@
         $('.cart-plus-minus').each(function() {
             let qty = parseInt($(this).find('input').val());
             let price = parseFloat($(this).data('product-price'));
-            
+
             if (!isNaN(qty) && !isNaN(price)) {
                 currentSubtotal += (qty * price);
             }
@@ -329,7 +241,7 @@
         let discountAmount = 0;
         if (activeCoupon) {
             if (currentSubtotal >= activeCoupon.min_amount) {
-               if (activeCoupon.type === 'percentage') {
+                if (activeCoupon.type === 'percentage') {
                     discountAmount = (currentSubtotal * activeCoupon.discount) / 100;
                 } else { // FIXED
                     discountAmount = activeCoupon.discount;
@@ -337,11 +249,11 @@
             } else {
                 // If user reduces quantity and subtotal drops below coupon minimum
                 Toast.fire({
-                    icon: 'warning',
+                    icon: 'warning', 
                     title: `Subtotal dropped below ৳${activeCoupon.min_amount}. Coupon removed.`
                 });
-                activeCoupon = null; 
-                $("#couponCodeInput").val(""); 
+                activeCoupon = null;
+                $("#couponCodeInput").val("");
             }
         }
 
@@ -349,7 +261,7 @@
 
         // Calculate Final Total
         let finalTotal = currentSubtotal - discountAmount;
-        $("#totalPrice").text("৳" + finalTotal.toFixed(2)); 
+        $("#totalPrice").text("৳" + finalTotal.toFixed(2));
     }
 
     $(document).ready(function() {
@@ -364,7 +276,7 @@
             const variantId = $button.closest('[data-variant-id]').data('variant-id');
             const cartId = $button.closest('[data-cart-id]').data('cart-id');
             const csrfToken = $('meta[name="csrf-token"]').attr('content');
-            
+
             // We use a tiny 50ms delay (setTimeout) to guarantee the Theme's JS 
             // finishes updating the input value before we try to read it.
             setTimeout(() => {
@@ -396,24 +308,30 @@
                     },
                     success: function(response) {
                         if (!response.status) {
-                            Toast.fire({ icon: "error", title: response.message });
+                            Toast.fire({
+                                icon: "error",
+                                title: response.message
+                            });
                         }
                     },
                     error: function() {
-                        Toast.fire({ icon: "error", title: "Failed to update database!" });
+                        Toast.fire({
+                            icon: "error",
+                            title: "Failed to update database!"
+                        });
                     }
                 });
             }, 50); // 50ms is instant to the human eye, but gives the DOM enough time
         });
 
-        
+
         // Coupon Code Apply
         $("#couponApplyBtn").on("click", function(e) {
             e.preventDefault();
 
             let couponCode = $("#couponCodeInput").val();
 
-            if(couponCode == "" || couponCode.length <= 2) return;
+            if (couponCode == "" || couponCode.length <= 2) return;
 
             $.ajax({
                 url: '{{route("cart.coupon.apply")}}',
@@ -421,8 +339,8 @@
                 data: {
                     couponCode: couponCode,
                     _token: '{{ csrf_token() }}',
-                }, 
-                success: function(response) {
+                    },
+                    success: function(response) {
                     Toast.fire({
                         icon: "success",
                         title: response.message
@@ -443,7 +361,7 @@
                     $(".qtybutton").css("pointer-events", "none");
                     $(".delete-cart").css("pointer-events", "none");
 
-                }, 
+                },
                 error: function(error) {
                     Toast.fire({
                         icon: "error",
@@ -452,8 +370,9 @@
                 }
             });
         });
-        
+
     });
+
 </script>
 
 <script>

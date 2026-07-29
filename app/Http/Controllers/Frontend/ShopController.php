@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
+use App\Models\RecentView;
 use App\Models\Size;
 use App\Models\SubCategory;
 use App\Models\Tag;
@@ -143,6 +144,32 @@ class ShopController extends Controller
             'tags'
         ])->where('slug', $slug)
             ->firstOrFail();
+
+        // ================= RECENTLY VIEWED LOGIC (DATABASE) =================
+
+        if (auth('web')->check()) {
+            $userId = auth('web')->id();
+
+            // update or create recent view
+            RecentView::updateOrCreate(
+                ['user_id' => $userId, 'product_id' => $product->id],
+                ['updated_at' => now()]
+            );
+
+            // check if user has more than 12 views
+            $viewCount = RecentView::where('user_id', $userId)->count();
+
+            if ($viewCount > 12) {
+                // delete oldest views
+                $oldestViews = RecentView::where('user_id', $userId)
+                    ->orderBy('updated_at', 'asc')
+                    ->limit($viewCount - 12)
+                    ->pluck('id');
+
+                RecentView::destroy($oldestViews);
+            }
+        }
+        // ================= END RECENTLY VIEWED LOGIC =================
 
 
         // Default variant
