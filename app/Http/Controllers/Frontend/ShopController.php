@@ -200,18 +200,18 @@ class ShopController extends Controller
 
     public function ajaxSearch(Request $request)
     {
-        // যদি ইনপুট ফাঁকা থাকে
+        // If search input is empty, return empty html
         if (!$request->search) {
             return response()->json(['html' => '']);
         }
 
-        // সার্চ কিওয়ার্ড দিয়ে প্রোডাক্ট খোঁজা (সর্বোচ্চ ৫-৬টি দেখাবো ফ্লোটিং বক্সে)
+        // Search for products with name like '%search%' and return first 5 results
         $products = Product::where('is_active', 1)
             ->where('name', 'like', '%' . $request->search . '%')
             ->take(5)
             ->get();
 
-        // একটি ব্লেড ফাইলের মাধ্যমে HTML জেনারেট করে রিটার্ন করা
+        // Return HTML of search dropdown
         $html = view('frontend.layouts.partials.search_dropdown', compact('products'))->render();
 
         return response()->json(['html' => $html]);

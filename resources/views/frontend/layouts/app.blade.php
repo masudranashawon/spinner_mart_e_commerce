@@ -84,6 +84,96 @@
             </div>
         </section>
         <!-- end wpo-newsletter-popup-area-section -->
+
+        <!-- Instant Quick View Modal -->
+        <div id="popup-quickview" class="modal fade" tabindex="-1">
+            <div class="modal-dialog quickview-dialog">
+                <div class="modal-content">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="ti-close"></i></button>
+
+                    <div class="modal-body d-flex">
+                        <div class="product-details">
+                            <div class="row align-items-center">
+                                <div class="col-lg-5">
+                                    <div class="product-single-img">
+                                        <div class="modal-product">
+                                            <div class="item">
+                                                <img id="qv-img" src="" alt="" class="img-fluid rounded w-100" style="object-fit: cover;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-7 mt-4 mt-lg-0">
+                                    <div class="product-single-content">
+                                        <form action="{{ route('cart.store') }}" method="POST" class="d-block">
+                                            @csrf
+
+                                            {{-- Product ID & Variant ID --}}
+                                            <input type="hidden" name="product_id" id="qv-product-id">
+                                            <input type="hidden" name="variant_id" id="qv-variant-id">
+
+                                            <h3 id="qv-title" class="mb-2 text-start me-3 me-xl-5"></h3>
+
+                                            <div class="price mb-3">
+                                                <span id="qv-price" class="present-price"></span>
+                                                <del id="qv-old-price" class="old-price"></del>
+                                            </div>
+
+                                            <ul class="mb-3 important-text">
+                                                <li>Stock: <span id="qv-stock-status" class="fw-bold"></span></li>
+                                            </ul>
+
+                                            <p id="qv-desc"></p>
+
+                                            <div id="qv-color-container" class="product-filter-item color d-none">
+                                                <div class="color-name">
+                                                    <span>Color:</span>
+                                                    <ul id="qv-colors"></ul>
+                                                </div>
+                                            </div>
+
+                                            <div id="qv-size-container" class="product-filter-item color filter-size d-none">
+                                                <div class="color-name">
+                                                    <span>Size:</span>
+                                                    <ul id="qv-sizes"></ul>
+                                                </div>
+                                            </div>
+
+                                            <div class="pro-single-btn">
+                                                <div class="quantity cart-plus-minus">
+                                                    <input type="text" name="quantity" id="qv-qty" class="text-value" value="1" min="1" readonly>
+                                                    <div class="dec qtybutton">-</div>
+                                                    <div class="inc qtybutton">+</div>
+                                                </div>
+
+                                                <button type="submit" id="qv-add-to-cart" class="btn theme-btn-s2">Add to cart</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            /* Disable quick view button when out of stock */
+            #qv-add-to-cart:disabled {
+                opacity: 0.5 !important;
+                cursor: not-allowed !important;
+                pointer-events: none;
+            }
+
+            .out-of-stock label {
+                opacity: 0.4 !important;
+                cursor: not-allowed !important;
+            }
+
+        </style>
+
     </div>
     <!-- end of page-wrapper -->
 
@@ -101,38 +191,235 @@
 
     <script>
         const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-        }
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
         });
 
-        @if (session('success'))
+        @if(session('success'))
         Toast.fire({
-        icon: "success",
-        title: "{{ session('success') }}"
+            icon: "success",
+            title: "{{ session('success') }}"
         });
         @endif
 
-        @if (session('error'))
+        @if(session('error'))
         Toast.fire({
-        icon: "error",
-        title: "{{ session('error') }}"
+            icon: "error",
+            title: "{{ session('error') }}"
         });
         @endif
 
-        @if (session('warning'))
+        @if(session('warning'))
         Toast.fire({
-        icon: "warning",
-        title: "{{ session('warning') }}"
+            icon: "warning",
+            title: "{{ session('warning') }}"
         });
         @endif
+
     </script>
+
+    <script>
+        $(document).ready(function() {
+            let currentVariants = [];
+            let qvState = {
+                color: null,
+                size: null
+            };
+
+            // Quick View Button Click
+            $(document).on('click', '.quickview-btn', function(e) {
+                e.preventDefault();
+
+                let product = $(this).data('product');
+                currentVariants = product.variants;
+
+                $('#qv-product-id').val(product.id);
+                $('#qv-title').text(product.name);
+                $('#qv-img').attr('src', product.image);
+                $('#qv-desc').text(product.short_desc);
+                $('#qv-qty').val(1);
+                $('#qv-variant-id').val('');
+
+                // Color HTML
+                let colors = [...new Map(currentVariants.filter(v => v.color_id).map(v => [v.color_id, v])).values()];
+                if (colors.length > 0) {
+                    $('#qv-color-container').removeClass('d-none');
+                    let colorHtml = colors.map((c, index) => `
+                    <li class="qv-color-wrapper">
+                        <input type="radio" name="color" id="qv-c-${c.color_id}" value="${c.color_id}" class="qv-color-select" ${index === 0 ? 'checked' : ''} style="display:none;">
+                        <label for="qv-c-${c.color_id}" style="background-color: ${c.color_code}" title="${c.color_name}"></label>
+                    </li>
+                `).join('');
+                    $('#qv-colors').html(colorHtml);
+                    qvState.color = colors[0].color_id;
+                } else {
+                    $('#qv-color-container').addClass('d-none');
+                    qvState.color = null;
+                }
+
+                // Size HTML
+                let sizes = [...new Map(currentVariants.filter(v => v.size_id).map(v => [v.size_id, v])).values()];
+                if (sizes.length > 0) {
+                    $('#qv-size-container').removeClass('d-none');
+                    let sizeHtml = sizes.map((s, index) => `
+                    <li class="qv-size-wrapper">
+                        <input type="radio" name="size" id="qv-s-${s.size_id}" value="${s.size_id}" class="qv-size-select" ${index === 0 ? 'checked' : ''} style="display:none;">
+                        <label for="qv-s-${s.size_id}">${s.size_name}</label>
+                    </li>
+                `).join('');
+                    $('#qv-sizes').html(sizeHtml);
+                    qvState.size = sizes[0].size_id;
+                } else {
+                    $('#qv-size-container').addClass('d-none');
+                    qvState.size = null;
+                }
+
+                updateSizeAvailability();
+                updateQvPriceAndVariant();
+                $('#popup-quickview').modal('show');
+            });
+
+            // Variant Change Event
+            $(document).on('change', '.qv-color-select', function() {
+                qvState.color = $(this).val();
+                updateSizeAvailability();
+                updateQvPriceAndVariant();
+            });
+
+            // Variant Change Event
+            $(document).on('change', '.qv-size-select', function() {
+                qvState.size = $(this).val();
+                updateQvPriceAndVariant();
+            });
+
+            // Out of stock logic
+            function updateSizeAvailability() {
+                if (!qvState.color) return;
+
+                // Check if variant exists with this color+size combination
+                $('.qv-size-wrapper').each(function() {
+                    let sizeInput = $(this).find('.qv-size-select');
+                    let sizeId = sizeInput.val();
+
+                    // Check if variant exists with this color+size combination
+                    let variantExists = currentVariants.some(v =>
+                        v.color_id == qvState.color &&
+                        v.size_id == sizeId &&
+                        v.stock > 0
+                    );
+
+                    // If variant exists, enable size input and remove out of stock class
+                    if (variantExists) {
+                        sizeInput.prop('disabled', false);
+                        $(this).removeClass('out-of-stock');
+                    } else {
+                        sizeInput.prop('disabled', true);
+                        $(this).addClass('out-of-stock');
+
+                        if (qvState.size == sizeId) {
+                            sizeInput.prop('checked', false);
+                            qvState.size = null;
+                        }
+                    }
+                });
+
+                // If no size is selected, select the first available size
+                if (!qvState.size) {
+                    let firstAvailable = $('.qv-size-select:not(:disabled)').first();
+                    if (firstAvailable.length > 0) {
+                        firstAvailable.prop('checked', true);
+                        qvState.size = firstAvailable.val();
+                    }
+                }
+            }
+
+            // Price and Stock Update Logic
+            function updateQvPriceAndVariant() {
+                if (currentVariants.length === 0) return;
+
+                let matchedVariant = currentVariants.find(v =>
+                    (!qvState.color || v.color_id == qvState.color) &&
+                    (!qvState.size || v.size_id == qvState.size)
+                );
+
+                if (!matchedVariant) {
+                    $('#qv-add-to-cart').text('Unavailable').prop('disabled', true);
+                    $('#qv-stock-status').text('Out of Stock').removeClass('text-success').addClass('text-danger');
+                    return;
+                }
+
+                $('#qv-variant-id').val(matchedVariant.id);
+                $('#qv-price').text('৳' + matchedVariant.price);
+
+                if (matchedVariant.old_price) {
+                    $('#qv-old-price').text('৳' + matchedVariant.old_price).show();
+                } else {
+                    $('#qv-old-price').hide();
+                }
+
+                // ====== STOCK & BUTTON LOGIC ======
+                if (matchedVariant.stock > 0) {
+                    // is stock, enable add to cart button
+                    $('#qv-add-to-cart').text('Add To Cart').prop('disabled', false);
+                    $('#qv-stock-status').text(matchedVariant.stock + ' in stock').removeClass('text-danger').addClass('text-success');
+                } else {
+                    // If out of stock, disable add to cart button
+                    $('#qv-add-to-cart').text('Out Of Stock').prop('disabled', true);
+                    $('#qv-stock-status').text('Out of Stock').removeClass('text-success').addClass('text-danger');
+                }
+            }
+
+            function checkQvQuantity() {
+                let input = $('#qv-qty');
+                let val = parseInt(input.val());
+                
+                // if quantity is less than 1 or is not a number, set quantity to 1
+                if (val <= 1 || isNaN(val)) {
+                    input.val(1);
+                   
+                    $('#popup-quickview .dec.qtybutton').css({
+                        'opacity': '0.4', 
+                        'cursor': 'not-allowed', 
+                        'pointer-events': 'none'
+                    });
+                } else {
+                    
+                    $('#popup-quickview .dec.qtybutton').css({
+                        'opacity': '1', 
+                        'cursor': 'pointer', 
+                        'pointer-events': 'auto'
+                    });
+                }
+            }
+
+            // when modal is shown, check quantity
+            $('#popup-quickview').on('shown.bs.modal', function () {
+                checkQvQuantity();
+            });
+
+            // when quantity button is clicked, check quantity
+            $(document).on('click', '#popup-quickview .qtybutton', function() {
+                setTimeout(function() {
+                    checkQvQuantity();
+                }, 50);
+            });
+
+            // when quantity input is changed, check quantity
+            $(document).on('input change', '#qv-qty', function() {
+                checkQvQuantity();
+            });
+        });
+
+    </script>
+
+
 
     @stack('script')
 </body>
