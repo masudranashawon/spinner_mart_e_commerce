@@ -138,6 +138,21 @@
                             </div>
                         </div>
 
+                        <!-- Tags -->
+                        <div class="filter-item">
+                            <div class="shop-filter-item tag-widget">
+                                <h2>Popular Tags</h2>
+                                <ul class="d-flex flex-wrap gap-2" style="max-height: 300px; overflow-y: auto;">
+                                    @foreach($tags as $tag)
+                                    <label class="tag-label" style="cursor: pointer;">
+                                        <input type="checkbox" name="tags[]" value="{{ $tag->id }}" class="d-none filter-checkbox">
+                                        <span class="badge border text-dark p-2">{{ $tag->name }}</span>
+                                    </label>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+
                         <!-- Recent products -->
                         <div class="filter-item">
                             <div class="shop-filter-item new-product">
@@ -174,21 +189,6 @@
                                 </ul>
                             </div>
                         </div>
-
-                        <!-- Tags -->
-                        <div class="filter-item">
-                            <div class="shop-filter-item tag-widget">
-                                <h2>Popular Tags</h2>
-                                <ul class="d-flex flex-wrap gap-2" style="max-height: 300px; overflow-y: auto;">
-                                    @foreach($tags as $tag)
-                                    <label class="tag-label" style="cursor: pointer;">
-                                        <input type="checkbox" name="tags[]" value="{{ $tag->id }}" class="d-none filter-checkbox">
-                                        <span class="badge border text-dark p-2">{{ $tag->name }}</span>
-                                    </label>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
                     </div>
                 </form>
             </div>
@@ -215,7 +215,7 @@
                 </div>
 
                 {{-- Product Grid Container (AJAX will replace HTML inside this div) --}}
-                <div class="product-wrap" id="product-grid-container" style="transition: all 0.3s ease;">
+                <div id="ajax-product-wrapper">
                     @include('frontend.shop.partials.product_list')
                 </div>
             </div>
@@ -293,21 +293,21 @@
                  data: formData,
                  beforeSend: function() {
                     // while data is being sent
-                    $('#product-grid-container').css('opacity', '0.4');
+                    $('#ajax-product-wrapper').css('opacity', '0.4');
                 },
                  success: function(response) {
                     // on success
-                    $('#product-grid-container').html(response.html);
+                    $('#ajax-product-wrapper').html(response.html);
                     $('#total-count').text(response.total + ' items');
 
                     // push state
                     window.history.pushState(null, '', "?" + formData);
 
-                    $('#product-grid-container').css('opacity', '1');
+                    $('#ajax-product-wrapper').css('opacity', '1');
                 },
                  error: function() {
                     console.error("Something went wrong with filtering.");
-                    $('#product-grid-container').css('opacity', '1');
+                    $('#ajax-product-wrapper').css('opacity', '1');
                 }
             });
         }

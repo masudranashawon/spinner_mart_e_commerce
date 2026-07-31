@@ -7072,6 +7072,19 @@ img {
   opacity: 1;
 }
 
+.product-item .quickview-btn i {
+    background: linear-gradient(180deg, rgba(254, 215, 0, 0.7) 0%,
+            rgba(247, 137, 20, 0.7) 100%);
+    color: #fff;
+    border-radius: 50%;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+}
+
+.product-item:hover .quickview-btn {
+    display: block !important;
+}
+
 /* 3.7 themart-trendingproduct-section */
 .themart-trendingproduct-section .trendin-slider .owl-nav .owl-prev,
 .themart-trendingproduct-section .trendin-slider .owl-nav .owl-next {

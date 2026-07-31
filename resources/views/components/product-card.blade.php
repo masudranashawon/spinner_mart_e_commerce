@@ -1,17 +1,43 @@
 @props(['product'])
 
-<div class="col">
-    <div class="product-item">
-        <div class="image position-relative">
-            {{-- Product Thumbnail --}}
-            <img src="{{ asset($product->thumbnail) }}" alt="{{ $product->name }}" style="width: 100%; object-fit: cover;">
+@php
+$qvData = [
+'id' => $product->id,
+'name' => $product->name,
+'image' => asset($product->thumbnail),
+'short_desc' => \Illuminate\Support\Str::limit($product->details?->short_description ?? 'No description available', 120),
+'base_price' => $product->discount_price > 0 ? $product->discount_price : $product->selling_price,
+'old_price' => $product->discount_price > 0 ? $product->selling_price : null,
 
-            {{-- Tags Wrapper --}}
-            <div class="tags-wrapper position-absolute z-index-2" style="top: 8%; left: 5%;">
-                <div class="d-flex flex-wrap gap-1 flex-column">
-                    {{-- 7 Days 'New' Logic --}}
-                    @if($product->created_at->diffInDays(now()) <= 7) <div class="px-1 rounded fw-bold text-uppercase text-white w-fit" style="background: linear-gradient(180deg, #95CD2F 0%, #63911F 100%); padding: 2px 10px; font-size: 11px;">
-                        New
+
+'variants' => $product->variants->map(function($v) {
+return [
+'id' => $v->id,
+'color_id' => $v->color_id,
+'color_code' => $v->color?->color_code,
+'color_name' => $v->color?->name,
+'size_id' => $v->size_id,
+'size_name' => $v->size?->name,
+'price' => $v->discount_price > 0 ? $v->discount_price : $v->selling_price,
+'old_price' => $v->discount_price > 0 ? $v->selling_price : null,
+'stock' => $v->current_stock
+];
+})->toArray()
+];
+@endphp
+
+<div class="product-item min-w-0">
+    <div class="image position-relative">
+        {{-- Product Thumbnail --}}
+        <img src="{{ asset($product->thumbnail) }}" alt="{{ $product->name }}" style="width: 100%; object-fit: cover;">
+
+        {{-- Tags Wrapper --}}
+        <div class="tags-wrapper position-absolute z-index-2" style="top: 8%; left: 5%;">
+            <div class="d-flex flex-wrap gap-1 flex-column">
+                {{-- 7 Days 'New' Logic --}}
+                @if($product->created_at->diffInDays(now()) <= 7) 
+                <div class="px-1 rounded fw-bold text-uppercase text-white w-fit" style="background: linear-gradient(180deg, #95CD2F 0%, #63911F 100%); padding: 2px 10px; font-size: 11px;">
+                    New
                 </div>
                 @endif
 
@@ -25,6 +51,11 @@
                 @endif
             </div>
         </div>
+
+        {{-- Quick View --}}
+        <a href="javascript:void(0)" class="quickview-btn transition-all position-absolute d-lg-none bottom-0 start-50 translate-middle d-block" data-product='@json($qvData)'>
+            <i class="ti-eye"></i>
+        </a>
     </div>
 
     <div class="text p-3">
@@ -51,38 +82,8 @@
             @endif
         </div>
 
-        @php
-        $qvData = [
-        'id' => $product->id,
-        'name' => $product->name,
-        'image' => asset($product->thumbnail),
-        'short_desc' => \Illuminate\Support\Str::limit($product->details?->short_description ?? 'No description available', 120),
-        'base_price' => $product->discount_price > 0 ? $product->discount_price : $product->selling_price,
-        'old_price' => $product->discount_price > 0 ? $product->selling_price : null,
-
-
-        'variants' => $product->variants->map(function($v) {
-        return [
-        'id' => $v->id,
-        'color_id' => $v->color_id,
-        'color_code' => $v->color?->color_code,
-        'color_name' => $v->color?->name,
-        'size_id' => $v->size_id,
-        'size_name' => $v->size?->name,
-        'price' => $v->discount_price > 0 ? $v->discount_price : $v->selling_price,
-        'old_price' => $v->discount_price > 0 ? $v->selling_price : null,
-        'stock' => $v->current_stock
-        ];
-        })->toArray()
-        ];
-        @endphp
-
         <div class="shop-btn">
             <a class="theme-btn-s2" href="{{route('productDetails', $product->slug)}}">Shop Now</a>
         </div>
-            <a href="javascript:void(0)" class="quickview-btn theme-btn-s2" data-product="{{ json_encode($qvData) }}">
-                Quick View
-            </a>
     </div>
-</div>
 </div>
