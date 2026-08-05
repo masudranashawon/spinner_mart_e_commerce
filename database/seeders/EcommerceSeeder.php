@@ -18,8 +18,9 @@ class EcommerceSeeder extends Seeder
             // Branding
             ['key' => 'store_name', 'value' => 'Spinner Fashion', 'group' => 'branding'],
             ['key' => 'store_tagline', 'value' => 'Premium Modern Clothing', 'group' => 'branding'],
-            ['key' => 'site_logo', 'value' => null, 'group' => 'branding'],
-            ['key' => 'site_favicon', 'value' => null, 'group' => 'branding'],
+            ['key' => 'site_logo', 'value' => 'frontend/assets/images/logo.svg', 'group' => 'branding'],
+            ['key' => 'footer_logo', 'value' => 'frontend/assets/images/logo-2.svg', 'group' => 'branding'],
+            ['key' => 'site_favicon', 'value' => 'frontend/assets/images/favicon.png', 'group' => 'branding'],
             // Contact
             ['key' => 'phone', 'value' => '+880 1711-000000', 'group' => 'contact'],
             ['key' => 'email', 'value' => 'support@spinnerfashion.com', 'group' => 'contact'],

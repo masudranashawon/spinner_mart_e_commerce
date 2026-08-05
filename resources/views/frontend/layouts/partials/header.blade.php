@@ -19,7 +19,7 @@
                 <div class="col col-lg-6 col-md-12 col-sm-12 col-12">
                     <div class="contact-info">
                         <ul>
-                            <li><a href="tel:869968236"><span>Need help? Call Us:</span> +869 968 236</a></li>
+                            <li><a href="tel:{{get_setting('phone')}}"><span>Need help? Call Us:</span> {{get_setting('phone')}}</a></li>
                             <li>
                                 <div class="dropdown">
                                     <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -55,7 +55,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-2">
                     <div class="navbar-header">
-                        <a class="navbar-brand" href="{{ route('home') }}"><img src="{{ asset('frontend/assets/images/logo.svg') }}" alt="logo"></a>
+                        <a class="navbar-brand" href="{{ route('home') }}"><img src="{{ get_setting('site_logo') }}" alt="{{ get_setting('store_name') }}"></a>
                     </div>
                 </div>
                 <div class="col-lg-6 col-12">

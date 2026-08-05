@@ -6,7 +6,7 @@
         <div class="col col-lg-3 col-md-6 col-sm-12 col-12">
           <div class="widget about-widget">
             <div class="logo widget-title">
-              <img src="{{ asset('frontend/assets/images/logo-2.svg') }}" alt="blog">
+              <img src="{{ get_setting('footer_logo') }}" alt="{{ get_setting('store_name') }}">
             </div>
             <p>Elit commodo nec urna erat morbi at hac turpis aliquam.
               In tristique elit nibh turpis. Lacus volutpat ipsum convallis tellus pellentesque
@@ -42,11 +42,18 @@
               <h3>Contact Us</h3>
             </div>
             <div class="contact-ft">
-              <ul>
-                <li><i class="fi flaticon-mail"></i>themart@gmail.com</li>
-                <li><i class="fi flaticon-phone"></i>(208) 555-0112 <br>(704) 555-0127</li>
-                <li><i class="fi flaticon-pin"></i>4517 Washington Ave. Manchter,
-                  Kentucky 495</li>
+              <ul class="d-flex flex-column gap-3">
+                <li class="d-flex align-items-center"><i class="fi flaticon-mail"></i><a class="m-0 p-0" href="mailto:{{ get_setting('email')}}">{{ get_setting('email') }}</a></li>
+
+                <li class="d-flex align-items-center">
+                  <i class="fi flaticon-phone"></i>
+                  <p class="m-0 p-0">
+                    <a class="d-block" href="tel:{{ get_setting('phone') }}">{{ get_setting('phone') }},</a>
+                    <a class="d-block" href="tel:{{ get_setting('phone_secondary') }}">{{ get_setting('phone_secondary') }}</a>
+                  </p>
+                </li>
+
+                <li class="d-flex align-items-center"><i class="fi flaticon-pin"></i>{{ get_setting('address') }}</li>
               </ul>
             </div>
           </div>
@@ -56,7 +63,7 @@
             <div class="widget-title">
               <h3>Popular</h3>
             </div>
-            <ul>
+            <ul class="d-flex flex-column gap-3">
               <li><a href="product.html">Men</a></li>
               <li><a href="product.html">Women</a></li>
               <li><a href="product.html">Kids</a></li>
@@ -99,9 +106,8 @@
     <div class="container">
       <div class="row">
         <div class="col col-xs-12">
-          <p class="copyright"> Copyright &copy; 2023 Themart by <a href="index.html">wpOceans</a>.
-            All
-            Rights Reserved.</p>
+          <p class="copyright"> Copyright &copy; {{ date('Y') . ' ' . get_setting('store_name') }}. Developed & Maintained by <a href="https://masudranashawon.vercel.app" target="_blank">Masud Rana Shawon</a>.
+            </p>
         </div>
       </div>
     </div>

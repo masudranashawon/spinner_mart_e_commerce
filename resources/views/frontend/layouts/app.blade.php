@@ -6,13 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="wpOceans">
+    <meta name="description" content="{{ get_setting('store_tagline') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('frontend/assets/images/favicon.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ get_setting('site_favicon') }}">
     <title>
         @hasSection('title')
-        @yield('title') | {{ config('app.name') }}
+        @yield('title') | {{ get_setting('store_name', config('app.name')) }}
         @else
-        {{ config('app.name') }}
+        {{ get_setting('store_name', config('app.name')) }}
         @endif
     </title>
     <link href="{{ asset('frontend/assets/css/themify-icons.css') }}" rel="stylesheet">
@@ -191,12 +192,12 @@
 
     <script>
         const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
+            toast: true
+            , position: "top-end"
+            , showConfirmButton: false
+            , timer: 3000
+            , timerProgressBar: true
+            , didOpen: (toast) => {
                 toast.onmouseenter = Swal.stopTimer;
                 toast.onmouseleave = Swal.resumeTimer;
             }
@@ -204,22 +205,22 @@
 
         @if(session('success'))
         Toast.fire({
-            icon: "success",
-            title: "{{ session('success') }}"
+            icon: "success"
+            , title: "{{ session('success') }}"
         });
         @endif
 
         @if(session('error'))
         Toast.fire({
-            icon: "error",
-            title: "{{ session('error') }}"
+            icon: "error"
+            , title: "{{ session('error') }}"
         });
         @endif
 
         @if(session('warning'))
         Toast.fire({
-            icon: "warning",
-            title: "{{ session('warning') }}"
+            icon: "warning"
+            , title: "{{ session('warning') }}"
         });
         @endif
 
@@ -229,8 +230,8 @@
         $(document).ready(function() {
             let currentVariants = [];
             let qvState = {
-                color: null,
-                size: null
+                color: null
+                , size: null
             };
 
             // Quick View Button Click
@@ -379,28 +380,28 @@
             function checkQvQuantity() {
                 let input = $('#qv-qty');
                 let val = parseInt(input.val());
-                
+
                 // if quantity is less than 1 or is not a number, set quantity to 1
                 if (val <= 1 || isNaN(val)) {
                     input.val(1);
-                   
+
                     $('#popup-quickview .dec.qtybutton').css({
-                        'opacity': '0.4', 
-                        'cursor': 'not-allowed', 
-                        'pointer-events': 'none'
+                        'opacity': '0.4'
+                        , 'cursor': 'not-allowed'
+                        , 'pointer-events': 'none'
                     });
                 } else {
-                    
+
                     $('#popup-quickview .dec.qtybutton').css({
-                        'opacity': '1', 
-                        'cursor': 'pointer', 
-                        'pointer-events': 'auto'
+                        'opacity': '1'
+                        , 'cursor': 'pointer'
+                        , 'pointer-events': 'auto'
                     });
                 }
             }
 
             // when modal is shown, check quantity
-            $('#popup-quickview').on('shown.bs.modal', function () {
+            $('#popup-quickview').on('shown.bs.modal', function() {
                 checkQvQuantity();
             });
 

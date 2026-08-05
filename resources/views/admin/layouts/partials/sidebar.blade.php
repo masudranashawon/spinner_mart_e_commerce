@@ -321,7 +321,7 @@ Noble<span>UI</span>
 <nav class="sidebar">
     <div class="sidebar-header">
         <a href="{{ route('admin.root') }}" class="sidebar-brand">
-            Noble<span>UI</span>
+            <img src="{{get_setting('site_logo')}}" alt="{{get_setting('store_name')}}" height="40">
         </a>
         <div class="sidebar-toggler not-active">
             <span></span>
@@ -465,6 +465,19 @@ Noble<span>UI</span>
                         </li>
                     </ul>
                 </div>
+            </li>
+
+            {{-- ========================================== --}}
+            {{-- CONFIG --}}
+            {{-- ========================================== --}}
+            <li class="nav-item nav-category">Config</li>
+
+            <!-- Settings -->
+            <li class="nav-item {{ request()->routeIs('settings.') ? 'active' : '' }}">
+                <a href="{{ route('admin.settings.index') }}" class="nav-link">
+                    <i class="link-icon" data-feather="settings"></i>
+                    <span class="link-title">Settings</span>
+                </a>
             </li>
         </ul>
     </div>

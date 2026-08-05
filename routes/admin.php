@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\TagController;
@@ -124,5 +125,10 @@ Route::prefix("admin")->middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/order/{order}/payment', 'updatePayment')->name('admin.order.payment.update');
     Route::get('/order/invoice/{orderNumber}', 'invoice')->name('admin.order.invoice');
     Route::delete('/order/{order}/destroy', 'destroy')->name('admin.order.destroy');
+  });
+
+  Route::controller(SettingController::class)->group(function () {
+    Route::get('/settings', 'index')->name('admin.settings.index');
+    Route::post('/settings/update', 'update')->name('admin.settings.update');
   });
 });
