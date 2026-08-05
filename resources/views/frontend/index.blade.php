@@ -216,6 +216,7 @@
 <!-- end of themart-upcoming-offer-section -->
 
 <!-- start of themart-special-product-section -->
+@if($dealsOfTheDay->count() > 0)
 <section class="themart-special-product-section">
     <div class="container">
         <div class="row justify-content-center">
@@ -265,9 +266,11 @@
         </div>
     </div>
 </section>
+@endif
 <!-- end of themart-special-product-section -->
 
 <!-- start of themart-trendingproduct-section -->
+@if($trendingProducts->count() > 0)    
 <section class="themart-trendingproduct-section section-padding">
     <div class="container">
         <div class="row">
@@ -285,6 +288,7 @@
         </div>
     </div>
 </section>
+@endif
 <!-- end of themart-trendingproduct-section -->
 
 <!-- start of themart-highlight-product-section -->
