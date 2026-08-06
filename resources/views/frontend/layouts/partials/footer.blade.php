@@ -8,9 +8,7 @@
             <div class="logo widget-title">
               <img src="{{ get_setting('footer_logo') }}" alt="{{ get_setting('store_name') }}">
             </div>
-            <p>Elit commodo nec urna erat morbi at hac turpis aliquam.
-              In tristique elit nibh turpis. Lacus volutpat ipsum convallis tellus pellentesque
-              etiam.</p>
+            <p>{{ get_setting('footer_about_text') }}</p>
             <ul>
               <li>
                 <a href="#">

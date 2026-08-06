@@ -192,12 +192,12 @@
 
     <script>
         const Toast = Swal.mixin({
-            toast: true
-            , position: "top-end"
-            , showConfirmButton: false
-            , timer: 3000
-            , timerProgressBar: true
-            , didOpen: (toast) => {
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
                 toast.onmouseenter = Swal.stopTimer;
                 toast.onmouseleave = Swal.resumeTimer;
             }
@@ -205,22 +205,22 @@
 
         @if(session('success'))
         Toast.fire({
-            icon: "success"
-            , title: "{{ session('success') }}"
+            icon: "success",
+            title: "{{ session('success') }}"
         });
         @endif
 
         @if(session('error'))
         Toast.fire({
-            icon: "error"
-            , title: "{{ session('error') }}"
+            icon: "error",
+            title: "{{ session('error') }}"
         });
         @endif
 
         @if(session('warning'))
         Toast.fire({
-            icon: "warning"
-            , title: "{{ session('warning') }}"
+            icon: "warning",
+            title: "{{ session('warning') }}"
         });
         @endif
 
@@ -230,8 +230,8 @@
         $(document).ready(function() {
             let currentVariants = [];
             let qvState = {
-                color: null
-                , size: null
+                color: null,
+                size: null
             };
 
             // Quick View Button Click

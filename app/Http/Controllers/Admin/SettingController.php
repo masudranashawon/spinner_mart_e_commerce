@@ -17,7 +17,9 @@ class SettingController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->except(['_token', '_method']);
+        $groups = $request->input('group', []);
+
+        $data = $request->except(['_token', '_method', 'group']);
 
         foreach ($data as $key => $value) {
 
@@ -25,7 +27,7 @@ class SettingController extends Controller
             if ($request->hasFile($key)) {
                 $file = $request->file($key);
                 $path = $file->store('settings', 'public');
-                $value = $path; // Store the relative path in the 'value' column
+                $value = $path;
 
                 // Delete old file to save server space
                 $oldSetting = Setting::where('key', $key)->first();
@@ -34,10 +36,13 @@ class SettingController extends Controller
                 }
             }
 
-            // Save text or image path in the database
+            // Save text or image path in the database, including the group
             Setting::updateOrCreate(
                 ['key' => $key],
-                ['value' => $value]
+                [
+                    'value' => $value,
+                    'group' => $groups[$key] ?? Setting::where('key', $key)->value('group') ?? 'general'
+                ]
             );
         }
 

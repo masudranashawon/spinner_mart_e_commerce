@@ -12,35 +12,18 @@
         <div class="container">
             <div class="row">
                 <div class="col col-lg-6 col-md-12 col-sm-12 col-12">
+                   @if(get_setting('enable_announcement_bar') == '1')
                     <div class="contact-intro">
-                        <span>A Marketplace Initiative by Themart Theme - save more with coupons</span>
+                        <a href="{{ get_setting('announcement_link') }}"><span>{{ get_setting('announcement_text') }}</span></a>
                     </div>
+                    @endif
                 </div>
                 <div class="col col-lg-6 col-md-12 col-sm-12 col-12">
                     <div class="contact-info">
                         <ul>
                             <li><a href="tel:{{get_setting('phone')}}"><span>Need help? Call Us:</span> {{get_setting('phone')}}</a></li>
-                            <li>
-                                <div class="dropdown">
-                                    <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                        English
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                        <li><a class="dropdown-item" href="#">English</a></li>
-                                        <li><a class="dropdown-item" href="#">Bangla</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="dropdown">
-                                    <button class="dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                                        USD
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                        <li><a class="dropdown-item" href="#">BDT</a></li>
-                                        <li><a class="dropdown-item" href="#">USD</a></li>
-                                    </ul>
-                                </div>
+                            <li class="pl-0">
+                               | <a href="#" class="text-decoration-underline"> Help</a>
                             </li>
                         </ul>
                     </div>
