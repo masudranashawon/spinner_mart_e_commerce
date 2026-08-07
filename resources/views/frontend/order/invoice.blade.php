@@ -254,9 +254,9 @@
                             <small class="text-muted">{{ $item?->variant_name }}</small>
                             @endif
                         </td>
-                        <td class="text-end amount-text">৳{{ number_format($item?->price, 2) }}</td>
+                        <td class="text-end amount-text">{{ format_price($item?->price) }}</td>
                         <td class="text-center">{{ $item?->quantity }}</td>
-                        <td class="text-end fw-bold amount-text">৳{{ number_format($item?->subtotal, 2) }}</td>
+                        <td class="text-end fw-bold amount-text">{{ format_price($item?->subtotal) }}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -281,21 +281,21 @@
                     <tbody>
                         <tr>
                             <td class="text-end text-muted"><strong>Subtotal:</strong></td>
-                            <td class="text-end amount-text" width="35%">৳{{ number_format($order?->subtotal, 2) }}</td>
+                            <td class="text-end amount-text" width="35%">{{ format_price($order?->subtotal) }}</td>
                         </tr>
                         @if($order?->coupon_code)
                         <tr>
                             <td class="text-end text-muted"><strong>Coupon Discount ({{ $order->coupon_code }}):</strong></td>
-                            <td class="text-end amount-text text-danger">- ৳{{ number_format($order?->discount_amount, 2) }}</td>
+                            <td class="text-end amount-text text-danger">- {{ format_price($order?->discount_amount) }}</td>
                         </tr>
                         @endif
                         <tr>
                             <td class="text-end text-muted"><strong>Shipping Charge:</strong></td>
-                            <td class="text-end amount-text">+ ৳{{ number_format($order?->shipping_charge, 2) }}</td>
+                            <td class="text-end amount-text">+ {{ format_price($order?->shipping_charge) }}</td>
                         </tr>
                         <tr class="grand-total-row">
                             <td class="text-end">Grand Total:</td>
-                            <td class="text-end amount-text">৳{{ number_format($order?->grand_total, 2) }}</td>
+                            <td class="text-end amount-text">{{ format_price($order?->grand_total) }}</td>
                         </tr>
                     </tbody>
                 </table>

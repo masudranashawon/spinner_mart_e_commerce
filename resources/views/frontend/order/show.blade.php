@@ -73,9 +73,9 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>৳{{ number_format($item->price, 2) }}</td>
+                                        <td>{{ format_price($item->price) }}</td>
                                         <td class="text-center">{{ $item->quantity }}</td>
-                                        <td class="text-end fw-bold">৳{{ number_format($item->subtotal, 2) }}</td>
+                                        <td class="text-end fw-bold">{{ format_price($item->subtotal) }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -93,24 +93,24 @@
                                     <tbody>
                                         <tr>
                                             <td class="text-muted">Subtotal:</td>
-                                            <td class="text-end fw-bold">৳{{ number_format($order->subtotal, 2) }}</td>
+                                            <td class="text-end fw-bold">{{ format_price($order->subtotal) }}</td>
                                         </tr>
 
                                         @if($order->coupon_code)
                                         <tr>
                                             <td class="text-muted">Coupon Discount:</td>
-                                            <td class="text-end text-danger fw-bold">- ৳{{ number_format($order->discount_amount, 2) }}</td>
+                                            <td class="text-end text-danger fw-bold">- {{ format_price($order->discount_amount) }}</td>
                                         </tr>
                                         @endif
 
                                         <tr>
                                             <td class="text-muted">Shipping Charge:</td>
-                                            <td class="text-success text-end fw-bold">+ ৳{{ number_format($order->shipping_charge, 2) }}</td>
+                                            <td class="text-success text-end fw-bold">+ {{ format_price($order->shipping_charge) }}</td>
                                         </tr>
 
                                         <tr class="border-top">
                                             <td class="fs-5 fw-bold text-dark pt-3">Grand Total:</td>
-                                            <td class="text-end fs-5 fw-bold text-primary pt-3">৳{{ number_format($order->grand_total, 2) }}</td>
+                                            <td class="text-end fs-5 fw-bold text-primary pt-3">{{ format_price($order->grand_total) }}</td>
                                         </tr>
                                     </tbody>
                                 </table>

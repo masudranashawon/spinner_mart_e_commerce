@@ -80,10 +80,10 @@
                                     </td>
                                     <td class="ptice">
                                         @if($wishlist?->product?->discount_price)
-                                        <del class="me-1">৳{{ number_format($wishlist?->product?->selling_price,2) }}</del>
-                                        ৳{{ number_format($wishlist?->product?->discount_price,2) }}
+                                        <del class="me-1">{{ format_price($wishlist?->product?->selling_price) }}</del>
+                                        {{ format_price($wishlist?->product?->discount_price) }}
                                         @else
-                                        ৳{{ number_format($wishlist?->product?->selling_price,2) }}
+                                        {{ format_price($wishlist?->product?->selling_price) }}
                                         @endif
                                     </td>
 

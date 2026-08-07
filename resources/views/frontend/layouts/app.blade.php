@@ -228,6 +228,7 @@
 
     <script>
         $(document).ready(function() {
+            let currencySymbol = "{{ get_setting('currency_symbol') }}";
             let currentVariants = [];
             let qvState = {
                 color: null,
@@ -357,10 +358,10 @@
                 }
 
                 $('#qv-variant-id').val(matchedVariant.id);
-                $('#qv-price').text('৳' + matchedVariant.price);
+                $('#qv-price').text(currencySymbol + matchedVariant.price);
 
                 if (matchedVariant.old_price) {
-                    $('#qv-old-price').text('৳' + matchedVariant.old_price).show();
+                    $('#qv-old-price').text(currencySymbol + matchedVariant.old_price).show();
                 } else {
                     $('#qv-old-price').hide();
                 }

@@ -37,3 +37,26 @@ if (!function_exists('get_setting')) {
         return $value;
     }
 }
+
+if (!function_exists('format_price')) {
+    /**
+     * Format the price with dynamic currency symbol and optional decimals.
+     *
+     * @param float|int $amount
+     * @param bool $showDecimals
+     * @return string
+     */
+    function format_price($amount, $showDecimals = true)
+    {
+        // Retrieve the currency symbol from settings, defaulting to '৳' if not set
+        $symbol = get_setting('currency_symbol', '৳');
+
+        // Determine the number of decimal places based on the $showDecimals parameter
+        $decimals = $showDecimals ? 2 : 0;
+
+        // Format the amount with the specified number of decimal places
+        $formattedAmount = number_format((float) $amount, $decimals);
+
+        return $symbol . $formattedAmount;
+    }
+}

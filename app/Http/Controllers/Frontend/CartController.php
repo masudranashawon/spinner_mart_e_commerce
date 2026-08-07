@@ -167,7 +167,7 @@ class CartController extends Controller
         if ($coupon->min_amount > 0 && $coupon->min_amount > $actualSubTotal) {
             return response()->json([
                 'status' => false,
-                'message' => 'Subtotal price does not meet the minimum amount (৳' . $coupon->min_amount . ') for this coupon.'
+                'message' => 'Subtotal price does not meet the minimum amount ('. get_setting('currency_symbol') . $coupon->min_amount . ' )'
             ], 400);
         }
 

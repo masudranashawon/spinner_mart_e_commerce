@@ -44,7 +44,7 @@
                         <span class="badge badge-light text-dark">{{ $order->items->sum('quantity') }} Qty</span>
                     </td>
                     <td class="fw-bold text-dark">
-                        ৳ {{ number_format($order->grand_total, 2) }}
+                        {{ format_price($order->grand_total) }}
                     </td>
 
                     {{-- Payment Status Badge --}}

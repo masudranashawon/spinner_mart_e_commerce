@@ -248,10 +248,10 @@
                                 <div class="price">
                                     @if($product->discount_price > 0)
                                     {{-- If discount price is greater than 0 --}}
-                                    <span class="present-price">৳{{ number_format($product->discount_price, 2) }}</span>
-                                    <del class="old-price">৳{{ number_format($product->selling_price, 2) }}</del>
+                                    <span class="present-price">{{ format_price($product->discount_price) }}</span>
+                                    <del class="old-price">{{ format_price($product->selling_price) }}</del>
                                     @else
-                                    <span class="present-price">৳{{ number_format($product->selling_price, 2) }}</span>
+                                    <span class="present-price">{{ format_price($product->selling_price) }}</span>
                                     @endif
                                 </div>
                                 <div class="shop-btn">

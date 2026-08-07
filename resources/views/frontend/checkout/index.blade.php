@@ -185,7 +185,7 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <span>৳{{ $item->total}}</span>
+                                    <span>{{ format_price($item->total)}}</span>
                                 </div>
                                 @endforeach
 
@@ -196,29 +196,29 @@
                                     </div>
                                     <ul>
                                         <li class="free">
-                                            <input id="Free" type="radio" name="deliveryCharge" value="60" checked>
-                                            <label for="Free">Inside City: <span>৳60.00</span></label>
+                                            <input id="Free" type="radio" name="deliveryCharge" value="{{get_setting('shipping_inside_dhaka')}}" checked>
+                                            <label for="Free">Inside City: <span>{{format_price(get_setting('shipping_inside_dhaka'))}}</span></label>
                                         </li>
                                         <li class="free">
-                                            <input id="Local" type="radio" name="deliveryCharge" value="120">
-                                            <label for="Local">Outside City: <span>৳120.00</span></label>
+                                            <input id="Local" type="radio" name="deliveryCharge" value="{{get_setting('shipping_outside_dhaka')}}">
+                                            <label for="Local">Outside City: <span>{{format_price(get_setting('shipping_outside_dhaka'))}}</span></label>
                                         </li>
                                     </ul>
                                 </div>
                                 <div class="title s2" style="border-top: 1px solid #e5e5e5; padding-top: 15px;">
                                     <h4 style="display:flex; justify-content:space-between; font-size: 16px;">
-                                        Subtotal: <span>৳{{ number_format($subtotal, 2) }}</span>
+                                        Subtotal: <span>{{ format_price($subtotal) }}</span>
                                     </h4>
 
                                     @if($coupon)
                                     <h4 style="display:flex; justify-content:space-between; font-size: 16px; color: #28a745;">
-                                        Discount ({{ $coupon->coupon_code }}): <span>- ৳{{ number_format($discountAmount, 2) }}</span>
+                                        Discount ({{ $coupon->coupon_code }}): <span>- {{ format_price($discountAmount) }}</span>
                                     </h4>
                                     @endif
                                 </div>
 
                                 <div class="title s2">
-                                    <h2>Total <span id="grandTotalDisplay">৳{{ number_format($subtotal - $discountAmount + 60, 2) }}</span></h2>
+                                    <h2>Total <span id="grandTotalDisplay">{{ format_price($subtotal - $discountAmount + 60) }}</span></h2>
                                 </div>
                             </div>
                         </div>
@@ -284,6 +284,7 @@
 @push('script')
 <script>
     $(document).ready(function() {
+        let currencySymbol = "{{ get_setting('currency_symbol') }}";
         // Initial grand total
         let baseTotal = {
             {
@@ -297,7 +298,7 @@
             let grandTotal = baseTotal + deliveryCharge;
 
             // Update grand total display
-            $('#grandTotalDisplay').text('৳' + grandTotal.toFixed(2));
+            $('#grandTotalDisplay').text(currencySymbol + grandTotal.toFixed(2));
         });
     });
 

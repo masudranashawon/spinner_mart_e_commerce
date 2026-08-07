@@ -6,11 +6,14 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use App\Models\{Setting, Category, SubCategory, Brand, Color, Size, Tag, Product, ProductDetails, ProductVariant};
 use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Cache;
 
 class EcommerceSeeder extends Seeder
 {
     public function run(): void
     {
+        Cache::forget('site_settings');
+
         $faker = Faker::create();
 
         // Site Settings (Key-Value Pair)
@@ -21,15 +24,17 @@ class EcommerceSeeder extends Seeder
             ['key' => 'site_logo', 'value' => 'frontend/assets/images/logo.svg', 'group' => 'branding'],
             ['key' => 'footer_logo', 'value' => 'frontend/assets/images/logo-2.svg', 'group' => 'branding'],
             ['key' => 'site_favicon', 'value' => 'frontend/assets/images/favicon.png', 'group' => 'branding'],
+            ['key' => 'footer_about_text', 'value' => 'Spinner Mart brings trendy fashion, premium quality, and affordable prices for every style. Shop clothing, footwear, watches, and accessories confidently.', 'group' => 'branding'],
             // Contact
             ['key' => 'phone', 'value' => '+880 1711-000000', 'group' => 'contact'],
+            ['key' => 'secondary_phone', 'value' => '+880 1911-000000', 'group' => 'contact'],
             ['key' => 'email', 'value' => 'support@spinnerfashion.com', 'group' => 'contact'],
             ['key' => 'address', 'value' => 'Dhanmondi, Dhaka, Bangladesh', 'group' => 'contact'],
             // Order & Delivery
-            ['key' => 'tax_percentage', 'value' => '5', 'group' => 'order'],
+            ['key' => 'vat_percentage', 'value' => '5', 'group' => 'order'],
             ['key' => 'shipping_inside_dhaka', 'value' => '60', 'group' => 'order'],
             ['key' => 'shipping_outside_dhaka', 'value' => '120', 'group' => 'order'],
-            ['key' => 'invoice_prefix', 'value' => 'ORD-', 'group' => 'order'],
+            ['key' => 'invoice_prefix', 'value' => 'SP-', 'group' => 'order'],
             // Currency
             ['key' => 'currency_symbol', 'value' => '৳', 'group' => 'currency'],
             ['key' => 'currency_code', 'value' => 'BDT', 'group' => 'currency'],
@@ -85,7 +90,7 @@ class EcommerceSeeder extends Seeder
                 'slug' => Str::slug($name) . '-' . rand(1000, 9999),
                 'sku_code' => 'SKU-' . strtoupper(Str::random(6)),
                 'selling_price' => $selling_price,
-                'discount_price' => $faker->boolean(50) ? $selling_price - 100 : 0,
+                'discount_price' => $faker->boolean(50) ? $selling_price - 100 : null,
                 'is_active' => true,
                 'rating' => $faker->numberBetween(3, 5),
                 'sold_count' => rand(5, 50),

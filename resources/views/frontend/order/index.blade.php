@@ -65,7 +65,7 @@
                                             {{ $order->display_address?->address ?? 'N/A' }}
                                         </td>
                                         <td>
-                                            ৳ {{ number_format($order->grand_total, 2) }}
+                                            {{ format_price($order->grand_total) }}
                                         </td>
 
                                         {{-- Order Status --}}

@@ -184,8 +184,8 @@ class ShopController extends Controller
                 'color_id'    => $v->color_id,
                 'size_id'     => $v->size_id,
                 'sku'         => $v->sku_code,
-                'price'       => number_format($v->selling_price, 2),
-                'discount'    => $v->discount_price ? number_format($v->discount_price, 2) : null,
+                'price'       => $v->selling_price,
+                'discount'    => $v->discount_price ? $v->discount_price : null,
                 'stock'       => $v->current_stock,
                 'in_stock'    => $v->current_stock > 0,
             ];

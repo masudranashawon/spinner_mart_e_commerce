@@ -130,10 +130,10 @@
 
                                                         <span class="mini-cart-item-price">
                                                             @if($item->product->discount_price)
-                                                            <del class="me-1">৳{{ number_format($item->product->selling_price,2) }}</del>
-                                                            ৳{{ number_format($item->product->discount_price,2) }}
+                                                            <del class="me-1">{{ format_price($item->product->selling_price) }}</del>
+                                                            {{ format_price($item->product->discount_price) }}
                                                             @else
-                                                            ৳{{ number_format($item->product->selling_price,2) }}
+                                                            {{ format_price($item->product->selling_price) }}
                                                             @endif
                                                         </span>
 
@@ -188,10 +188,10 @@
                                                     <span class="mini-cart-item-price">
 
                                                         @if($item->variant->discount_price)
-                                                        <del class="me-1">৳{{ number_format($item->variant->selling_price,2) }}</del>
-                                                        ৳{{ number_format($item->variant->discount_price,2) }}
+                                                        <del class="me-1">{{ format_price($item->variant->selling_price) }}</del>
+                                                        {{ format_price($item->variant->discount_price) }}
                                                         @else
-                                                        ৳{{ number_format($item->variant->selling_price,2) }}
+                                                        {{ format_price($item->variant->selling_price) }}
                                                         @endif
                                                         x {{ $item->quantity }}
                                                     </span>
@@ -211,7 +211,7 @@
                                         </div>
                                         <div class="mini-cart-action clearfix">
                                             <span class="mini-checkout-price">Subtotal:
-                                                <span>৳{{ number_format($cartItems?->sum('total'), 2) }}</span></span>
+                                                <span>{{ format_price($cartItems?->sum('total'),) }}</span></span>
                                             <div class="mini-btn">
                                                 <a href="{{ route('cart.index') }}" class="view-cart-btn">View Cart</a>
                                             </div>

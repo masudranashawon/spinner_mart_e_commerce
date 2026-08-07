@@ -76,15 +76,15 @@
               </tr>
               <tr>
                 <td class="text-muted">Buying Price</td>
-                <td>৳ {{ $product->buying_price }}</td>
+                <td>{{ format_price($product->buying_price) }}</td>
               </tr>
               <tr>
                 <td class="text-muted">Selling Price</td>
-                <td class="font-weight-bold">৳ {{ $product->selling_price }}</td>
+                <td class="font-weight-bold">{{ format_price($product->selling_price) }}</td>
               </tr>
               <tr>
                 <td class="text-muted">Discounted Price</td>
-                <td class="font-weight-bold">৳ {{ $product->discount_price }}</td>
+                <td class="font-weight-bold">{{ format_price($product->discount_price) }}</td>
               </tr>
               <tr>
                 <td class="text-muted">Sold Count</td>
@@ -222,8 +222,8 @@
                       {{ $variant?->color ? 'Colour: ' . $variant?->color?->name : '' }}
                     </strong>
                   </td>
-                  <td>৳ {{ $variant?->buying_price }}</td>
-                  <td>৳ {{ $variant?->selling_price }}</td>
+                  <td>{{ format_price($variant?->buying_price) }}</td>
+                  <td>{{ format_price($variant?->selling_price) }}</td>
                   <td>{{ $variant?->discount_price ? $variant?->discount_price : '-' }}</td>
                   <td>{{ $variant?->current_stock }}</td>
                   <td class="text-center">

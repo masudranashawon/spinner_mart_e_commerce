@@ -16,10 +16,10 @@
 
                 <div class="price">
                     @if($product->discount_price > 0)
-                    <strong style="font-size: 13px;" class="text-success">৳{{ $product->discount_price }}</strong>
-                    <del class="text-muted ms-1" style="font-size: 11px;">৳{{ $product->selling_price }}</del>
+                    <strong style="font-size: 13px;" class="text-success">{{ format_price($product->discount_price) }}</strong>
+                    <del class="text-muted ms-1" style="font-size: 11px;">{{ format_price($product->selling_price) }}</del>
                     @else
-                    <strong style="font-size: 13px;" class="text-success">৳{{ $product->selling_price }}</strong>
+                    <strong style="font-size: 13px;" class="text-success">{{ format_price($product->selling_price) }}</strong>
                     @endif
                 </div>
             </div>

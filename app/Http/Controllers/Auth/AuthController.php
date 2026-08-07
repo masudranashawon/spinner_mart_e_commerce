@@ -45,10 +45,15 @@ class AuthController extends Controller
 
             // Fallback for users with no valid role
             Auth::logout();
-            return back()->withErrors('Unauthorized access');
+
+            return back()->withErrors([
+                'email' => 'Unauthorized access'
+            ])->onlyInput('email');
         }
 
-        return back()->withErrors('Invalid credentials');
+        return back()->withErrors([
+            'email' => 'Invalid credentials. Please check your email or password.'
+        ])->onlyInput('email');
     }
 
     public function register()
@@ -60,13 +65,20 @@ class AuthController extends Controller
     {
         $user = AuthRepository::storeByRequest($request);
 
-        $user->assignRole(AuthEnums::USER->value);
-
         if ($user) {
-            return to_route("home")->withSuccess("Register Successful");
-        } else {
-            return to_route("register")->withError("Register Failed");
+            $user->assignRole(AuthEnums::USER->value);
+
+            // Log the user in after successful registration
+            Auth::login($user);
+
+            // Regenerate the session to prevent session fixation attacks
+            $request->session()->regenerate();
+
+            return to_route("home")->withSuccess("Registration successful!");
         }
+
+        // If user creation fails, redirect back with an error message
+        return to_route("register")->withError("Registration Failed. Please try again.");
     }
 
     public function logout(Request $request)

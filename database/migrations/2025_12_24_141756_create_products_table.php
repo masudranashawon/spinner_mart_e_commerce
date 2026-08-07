@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('sku_code');
             $table->decimal('selling_price', 10, 2);
             $table->decimal('buying_price', 10, 2)->default(0);
-            $table->decimal('discount', 10, 2)->default(0);
-            $table->decimal('discount_price', 10, 2)->default(0);
+            $table->decimal('discount', 10, 2)->nullable();
+            $table->decimal('discount_price', 10, 2)->nullable();
             $table->integer('reviews')->default(0);
             $table->integer('rating')->default(0);
             $table->foreignIdFor(Media::class)->nullable()->constrained()->cascadeOnDelete();

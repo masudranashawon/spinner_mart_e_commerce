@@ -20,9 +20,9 @@ return new class extends Migration
             $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Color::class)->nullable()->constrained()->nullOnDelete();
             $table->foreignIdFor(Size::class)->nullable()->constrained()->nullOnDelete();
-            $table->float('selling_price')->nullable();
-            $table->float('buying_price')->nullable();
-            $table->float('discount_price')->nullable();
+            $table->decimal('selling_price', 10, 2)->nullable();
+            $table->decimal('buying_price', 10, 2)->nullable();
+            $table->decimal('discount_price', 10, 2)->nullable();
             $table->integer('current_stock')->default(0);
             $table->timestamps();
         });

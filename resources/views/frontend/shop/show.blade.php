@@ -466,16 +466,17 @@
     }
 
     function updateUI(variant) {
+        let currencySymbol = "{{ get_setting('currency_symbol') }}";
         // Update price
         const priceEl = document.getElementById('price');
         const oldPriceEl = document.getElementById('oldPrice');
 
         if (variant.discount) {
-            priceEl.textContent = '৳' + variant.discount;
-            oldPriceEl.textContent = '৳' + variant.price;
+            priceEl.textContent = currencySymbol + variant.discount;
+            oldPriceEl.textContent = currencySymbol + variant.price;
             oldPriceEl.style.display = 'inline';
         } else {
-            priceEl.textContent = '৳' + variant.price;
+            priceEl.textContent = currencySymbol + variant.price;
             oldPriceEl.style.display = 'none';
         }
 

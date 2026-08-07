@@ -30,7 +30,7 @@ return new class extends Migration
             $table->decimal('grand_total', 10, 2);
             $table->string('order_status')->nullable();
             $table->decimal('shipping_charge', 10, 2)->default(0);
-            $table->decimal('tax_amount', 10, 2)->default(0);
+            $table->decimal('vat_amount', 10, 2)->default(0);
             $table->string('payment_method')->nullable();
             $table->boolean('has_payment')->default(false);
             $table->text('note')->nullable();

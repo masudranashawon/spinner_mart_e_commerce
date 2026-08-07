@@ -115,10 +115,10 @@
                                         </td>
                                         <td class="ptice">
                                             @if($cart->variant->discount_price)
-                                            <del class="me-1">৳{{ number_format($cart->variant->selling_price,2) }}</del>
-                                            ৳{{ number_format($cart->variant->discount_price,2) }}
+                                            <del class="me-1">{{ format_price($cart->variant->selling_price) }}</del>
+                                            {{ format_price($cart->variant->discount_price) }}
                                             @else
-                                            ৳{{ number_format($cart->variant->selling_price,2) }}
+                                            {{ format_price($cart->variant->selling_price) }}
                                             @endif
                                         </td>
 
@@ -130,13 +130,7 @@
                                             </div>
                                         </td>
 
-                                        {{-- <td class="ptice">
-                                            @php
-                                            $total = $cart->quantity * ($cart->variant->discount_price ?? $cart->variant->selling_price);
-                                            @endphp
-                                            ৳{{ number_format($total,2) }}
-                                        </td> --}}
-                                        <td class="ptice subtotal{{$cart->id}}">৳{{number_format($subTotal,2)}}</td>
+                                        <td class="ptice subtotal{{$cart->id}}">{{format_price($subTotal)}}</td>
                                         <td class="action">
                                             <ul>
                                                 <li class="w-btn">
@@ -165,15 +159,15 @@
                         <h3>Cart Totals</h3>
                         <div class="sub-total">
                             <h4>Subtotal</h4>
-                            <span>৳<span id="subTotalPrice">{{ $cartItems->sum('total') ?? 0 }}</span></span>
+                            <span><span id="subTotalPrice">{{ format_price($cartItems->sum('total') ?? 0) }}</span></span>
                         </div>
                         <div class="sub-total my-3">
                             <h4>Discount</h4>
-                            <span id="couponDiscount">৳00.00</span>
+                            <span id="couponDiscount">{{format_price('00')}}</span>
                         </div>
                         <div class="total mb-3">
                             <h4>Total</h4>
-                            <span id="totalPrice">৳{{ $cartItems->sum('total') ?? 0 }}</span>
+                            <span id="totalPrice">{{ format_price($cartItems->sum('total') ?? 0) }}</span>
                         </div>
 
                         {{-- Proceed to Checkout --}}
@@ -220,6 +214,7 @@
 @push('script')
 <script>
     let activeCoupon = null;
+    let currencySymbol = "{{ get_setting('currency_symbol') }}";
 
     // Unified function to calculate and update the DOM
     function calculateCartTotals() {
@@ -250,18 +245,18 @@
                 // If user reduces quantity and subtotal drops below coupon minimum
                 Toast.fire({
                     icon: 'warning', 
-                    title: `Subtotal dropped below ৳${activeCoupon.min_amount}. Coupon removed.`
+                    title: `Subtotal dropped below ${currencySymbol}${activeCoupon.min_amount}. Coupon removed.`
                 });
                 activeCoupon = null;
                 $("#couponCodeInput").val("");
             }
         }
 
-        $("#couponDiscount").text("৳" + discountAmount.toFixed(2));
+        $("#couponDiscount").text(currencySymbol + discountAmount.toFixed(2));
 
         // Calculate Final Total
         let finalTotal = currentSubtotal - discountAmount;
-        $("#totalPrice").text("৳" + finalTotal.toFixed(2));
+        $("#totalPrice").text(currencySymbol + finalTotal.toFixed(2));
     }
 
     $(document).ready(function() {
@@ -291,7 +286,7 @@
 
                 // Update the specific row's subtotal instantly
                 const itemSubtotal = quantity * productPrice;
-                $('.subtotal' + cartId).text('৳ ' + itemSubtotal.toFixed(2));
+                $('.subtotal' + cartId).text(currencySymbol + itemSubtotal.toFixed(2));
 
                 // Recalculate full cart totals instantly
                 calculateCartTotals();
