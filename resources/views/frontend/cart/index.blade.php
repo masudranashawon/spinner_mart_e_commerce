@@ -230,7 +230,9 @@
             }
         });
 
-        $("#subTotalPrice").text(currentSubtotal.toFixed(2));
+        // Round subtotal first, then apply .00 formatting
+        let roundedSubtotal = Math.round(currentSubtotal);
+        $("#subTotalPrice").text(roundedSubtotal.toFixed(2));
 
         // Calculate Discount if a coupon is active
         let discountAmount = 0;
@@ -252,10 +254,12 @@
             }
         }
 
-        $("#couponDiscount").text(currencySymbol + discountAmount.toFixed(2));
+        // Round discount first, then apply .00 formatting
+        let roundedDiscount = Math.round(discountAmount);
+        $("#couponDiscount").text(currencySymbol + roundedDiscount.toFixed(2));
 
-        // Calculate Final Total
-        let finalTotal = currentSubtotal - discountAmount;
+        // Calculate Final Total based on rounded values
+        let finalTotal = roundedSubtotal - roundedDiscount;
         $("#totalPrice").text(currencySymbol + finalTotal.toFixed(2));
     }
 
@@ -284,8 +288,8 @@
                     $input.val(1);
                 }
 
-                // Update the specific row's subtotal instantly
-                const itemSubtotal = quantity * productPrice;
+                // Update the specific row's subtotal instantly with rounding & .00 formatting
+                const itemSubtotal = Math.round(quantity * productPrice);
                 $('.subtotal' + cartId).text(currencySymbol + itemSubtotal.toFixed(2));
 
                 // Recalculate full cart totals instantly
@@ -319,7 +323,6 @@
             }, 50); // 50ms is instant to the human eye, but gives the DOM enough time
         });
 
-
         // Coupon Code Apply
         $("#couponApplyBtn").on("click", function(e) {
             e.preventDefault();
@@ -334,8 +337,8 @@
                 data: {
                     couponCode: couponCode,
                     _token: '{{ csrf_token() }}',
-                    },
-                    success: function(response) {
+                },
+                success: function(response) {
                     Toast.fire({
                         icon: "success",
                         title: response.message
@@ -366,50 +369,6 @@
             });
         });
 
-    });
-
-</script>
-
-<script>
-    $(document).ready(function() {
-        $('.delete-cart').click(function() {
-            let id = $(this).data('id');
-            let url = "{{ route('cart.destroy', ':id') }}".replace(':id', id);
-
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: {
-                    _method: 'DELETE',
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function() {
-                    Swal.fire({
-                        toast: true,
-                        position: 'top-end',
-                        icon: 'success',
-                        title: 'Cart item removed successfully!',
-                        showConfirmButton: false,
-                        timer: 1800,
-                        timerProgressBar: true
-                    });
-
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1000);
-                },
-                error: function(xhr) {
-                    Swal.fire({
-                        toast: true,
-                        position: 'top-end',
-                        icon: 'error',
-                        title: 'Failed to remove item!',
-                        showConfirmButton: false,
-                        timer: 2200
-                    });
-                }
-            });
-        });
     });
 
 </script>

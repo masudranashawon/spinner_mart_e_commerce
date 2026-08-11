@@ -47,7 +47,8 @@ class Order extends Model
         static::creating(function ($order) {
 
             $yearMonth = Carbon::now()->format('ym');
-            $prefix = 'SP-' . $yearMonth . '-'; // OUTPUT: #SP-2026-
+            $settingPrefix = get_setting('invoice_prefix');
+            $prefix = $settingPrefix . $yearMonth . '-'; // OUTPUT: #ORD-2026-
 
             // find last order
             $lastOrder = self::where('order_number', 'LIKE', $prefix . '%')

@@ -205,10 +205,27 @@
                                         </li>
                                     </ul>
                                 </div>
+
+                                @php
+                                    // Calculate VAT and default shipping
+                                    $vatPercentage = (float) get_setting('vat_percentage', 0);
+                                    $vatAmount = round(($subtotal * $vatPercentage) / 100);
+                                    $discountAmount = round($discountAmount);
+                                    
+                                    $defaultShipping = (float) get_setting('shipping_inside_dhaka', 0);
+                                    $initialGrandTotal = $subtotal - $discountAmount + $vatAmount + $defaultShipping;
+                                @endphp
+
                                 <div class="title s2" style="border-top: 1px solid #e5e5e5; padding-top: 15px;">
                                     <h4 style="display:flex; justify-content:space-between; font-size: 16px;">
                                         Subtotal: <span>{{ format_price($subtotal) }}</span>
                                     </h4>
+
+                                    @if(get_setting('vat_percentage'))
+                                    <h4 style="display:flex; justify-content:space-between; font-size: 16px;">
+                                       Vat ({{ $vatPercentage }}%): <span>+ {{ format_price($vatAmount) }}</span>
+                                    </h4>
+                                    @endif
 
                                     @if($coupon)
                                     <h4 style="display:flex; justify-content:space-between; font-size: 16px; color: #28a745;">
@@ -218,7 +235,7 @@
                                 </div>
 
                                 <div class="title s2">
-                                    <h2>Total <span id="grandTotalDisplay">{{ format_price($subtotal - $discountAmount + 60) }}</span></h2>
+                                    <h2>Total <span id="grandTotalDisplay">{{ format_price($initialGrandTotal) }}</span></h2>
                                 </div>
                             </div>
                         </div>
@@ -230,17 +247,17 @@
                                             <h3>Payment</h3>
                                             <div class="payment-select">
                                                 <ul>
-                                                    <li class="">
+                                                    <li>
                                                         <input id="remove" type="radio" name="payment_method" checked="checked" value="cod">
-                                                        <label for="remove">Cash on Delivery</label>
+                                                        <label for="remove" class="text-dark">Cash on Delivery</label>
                                                     </li>
-                                                    <li class="">
-                                                        <input id="add" type="radio" name="payment_method" value="sslcommerz">
-                                                        <label for="add">Pay With SSLCOMMERZ</label>
+                                                    <li>
+                                                        <input id="add" type="radio" name="payment_method" value="sslcommerz" disabled >
+                                                        <label for="add" style="cursor: not-allowed;">Pay With SSLCOMMERZ</label>
                                                     </li>
-                                                    <li class="">
-                                                        <input id="getway" type="radio" name="payment_method" value="stripe">
-                                                        <label for="getway">Pay With STRIPE</label>
+                                                    <li >
+                                                        <input id="getway" type="radio" name="payment_method" value="stripe" disabled>
+                                                        <label for="getway" style="cursor: not-allowed;">Pay With STRIPE</label>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -286,11 +303,7 @@
     $(document).ready(function() {
         let currencySymbol = "{{ get_setting('currency_symbol') }}";
         // Initial grand total
-        let baseTotal = {
-            {
-                $subtotal - $discountAmount
-            }
-        };
+        let baseTotal = {{ $subtotal - $discountAmount + $vatAmount }};
 
         // Update grand total on delivery charge change
         $('input[name="deliveryCharge"]').on('change', function() {

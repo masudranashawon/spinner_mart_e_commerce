@@ -33,6 +33,7 @@ class EcommerceSeeder extends Seeder
             // Order & Delivery
             ['key' => 'vat_percentage', 'value' => '5', 'group' => 'order'],
             ['key' => 'shipping_inside_dhaka', 'value' => '60', 'group' => 'order'],
+            ['key' => 'return_policy_days', 'value' => '7', 'group' => 'order'],
             ['key' => 'shipping_outside_dhaka', 'value' => '120', 'group' => 'order'],
             ['key' => 'invoice_prefix', 'value' => 'SP-', 'group' => 'order'],
             // Currency

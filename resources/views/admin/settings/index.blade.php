@@ -131,11 +131,22 @@
                                     <input type="hidden" name="group[invoice_prefix]" value="order">
                                     <input type="text" name="invoice_prefix" class="form-control" value="{{ get_setting('invoice_prefix') }}" placeholder="e.g. ORD-">
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Vat Percentage (%)</label>
-                                    <input type="hidden" name="group[vat_percentage]" value="order">
-                                    <input type="number" step="0.01" name="vat_percentage" class="form-control" value="{{ get_setting('vat_percentage') }}">
+                                <div
+                                    class="row"
+                                >
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Vat Percentage (%)</label>
+                                        <input type="hidden" name="group[vat_percentage]" value="order">
+                                        <input type="number" step="0.01" name="vat_percentage" class="form-control" value="{{ get_setting('vat_percentage') }}">
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Return Policy Days</label>
+                                        <input type="hidden" name="group[return_policy_days]" value="order">
+                                        <input type="number" name="return_policy_days" class="form-control" value="{{ get_setting('return_policy_days') }}">
+                                    </div>
                                 </div>
+                                
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Shipping Inside Dhaka</label>

@@ -96,10 +96,10 @@
                                             <td class="text-end fw-bold">{{ format_price($order->subtotal) }}</td>
                                         </tr>
 
-                                        @if($order->coupon_code)
+                                        @if($order->vat_amount > 0)
                                         <tr>
-                                            <td class="text-muted">Coupon Discount:</td>
-                                            <td class="text-end text-danger fw-bold">- {{ format_price($order->discount_amount) }}</td>
+                                            <td class="text-muted">Vat:</td>
+                                            <td class="text-success text-end fw-bold">+ {{ format_price($order->vat_amount) }}</td>
                                         </tr>
                                         @endif
 
@@ -107,6 +107,13 @@
                                             <td class="text-muted">Shipping Charge:</td>
                                             <td class="text-success text-end fw-bold">+ {{ format_price($order->shipping_charge) }}</td>
                                         </tr>
+
+                                        @if($order->coupon_code)
+                                        <tr>
+                                            <td class="text-muted">Coupon Discount:</td>
+                                            <td class="text-end text-danger fw-bold">- {{ format_price($order->discount_amount) }}</td>
+                                        </tr>
+                                        @endif
 
                                         <tr class="border-top">
                                             <td class="fs-5 fw-bold text-dark pt-3">Grand Total:</td>
@@ -192,6 +199,16 @@
                             </span>
                         </div>
 
+                        <!-- Tracking Note -->
+                        @if($order->tracking_note)
+                        <div class="mb-3 mt-3">
+                            <span class="text-muted d-block">Tracking Information</span>
+                            <div class="alert alert-info py-2 px-3 mt-1 mb-0 small border-0 shadow-sm">
+                                <i class="fa fa-truck me-1"></i> {{ $order->tracking_note }}
+                            </div>
+                        </div>
+                        @endif
+
                         <!-- Conditional Action Buttons -->
                         <div class="mt-4 border-top pt-3">
                             @if($order->order_status === 'pending')
@@ -201,24 +218,30 @@
                             <small class="text-muted d-block text-center mt-2">You can cancel the order before it is confirmed.</small>
 
                             @elseif($order->order_status === 'delivered')
+                            @if($isEligibleForReturn)
                             <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#returnOrderModal">
-                                <i class="fa fa-undo" aria-hidden="true"></i> Request Return / Refund
+                                <i class="fa fa-undo" aria-hidden="true"></i> Request Return
                             </button>
-                            <small class="text-muted d-block text-center mt-2">You can request a return for this delivered order.</small>
+                            <small class="text-muted d-block text-center mt-2">Return window is open for {{ $returnDays }} days after delivery.</small>
+                            @else
+                            <div class="alert alert-secondary text-center mb-0 small border-0">
+                                Return window ({{ $returnDays }} days) has expired.
+                            </div>
+                            @endif
 
-                            @elseif($order->order_status === 'return_requested')
-                            <div class="alert alert-warning text-center mb-0">
-                                Your return request is currently under review by our team.
+                            @elseif($order->order_status === 'return_requested' || $order->order_status === 'returned')
+                            <div class="alert {{ $order->order_status === 'returned' ? 'alert-danger' : 'alert-warning' }} text-center mb-0 border-0">
+                                <strong>{{ $order->order_status === 'returned' ? 'Order Returned' : 'Return Under Review' }}</strong><br>
+                                <small>Reason: {{ $order->return_reason ?? 'No reason provided.' }}</small>
                             </div>
 
                             @elseif($order->order_status === 'cancelled')
-                            <div class="alert alert-danger text-center mb-0">
-                                <strong>Cancel Reason:</strong><br>
-                                {{ $order->cancel_reason ?? 'No reason provided.' }}
+                            <div class="alert alert-danger text-center mb-0 border-0">
+                                <strong>Order Cancelled</strong><br>
+                                <small>Reason: {{ $order->cancel_reason ?? 'No reason provided.' }}</small>
                             </div>
                             @endif
                         </div>
-
                     </div>
                 </div>
 
@@ -343,6 +366,7 @@
         border-radius: 0.25rem !important;
         line-height: 0px !important;
     }
+
 </style>
 
 @endsection

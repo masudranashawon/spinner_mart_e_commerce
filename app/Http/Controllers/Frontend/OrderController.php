@@ -7,6 +7,7 @@ use App\Http\Requests\OrderRequest;
 use App\Models\Order;
 use App\Repositories\OrderAddressRepository;
 use App\Repositories\OrderRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -42,8 +43,18 @@ class OrderController extends Controller
         // get billing and shipping address
         $billingAddress = $order->addresses->where('address_type', 'billing')->first();
         $shippingAddress = $order->addresses->where('address_type', 'shipping')->first();
+        $returnDays = (int) get_setting('return_policy_days', 7);
+        $isEligibleForReturn = false;
 
-        return view('frontend.order.show', compact('order', 'billingAddress', 'shippingAddress'));
+        if ($order->order_status === 'delivered' && $order->delivery_date) {
+            $deliveryDate = Carbon::parse($order->delivery_date);
+            $lastReturnDate = $deliveryDate->copy()->addDays($returnDays);
+            
+            // Check if the order is eligible for return
+            $isEligibleForReturn = now()->lessThanOrEqualTo($lastReturnDate);
+        }
+
+        return view('frontend.order.show', compact('order', 'billingAddress', 'shippingAddress','isEligibleForReturn', 'returnDays'));
     }
 
     public function invoice(string $orderNumber)

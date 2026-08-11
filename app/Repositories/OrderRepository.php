@@ -32,14 +32,23 @@ class OrderRepository extends Repository
         $user = auth('web')->user();
 
         $cartItems = $user->cartItems;
-        $shippingCharge = $request->deliveryCharge;
-        $subTotal = $cartItems->sum('total');
+
+        // Subtotal 
+        $subTotal = round($cartItems->sum('total'));
+
+        // VAT Calculation (VAT Percentage from settings, default 0 if not set)
+        $vatPercentage = (float) get_setting('vat_percentage', 0);
+        $vatAmount = round(($subTotal * $vatPercentage) / 100);
+
+        // Shipping Charge
+        $shippingCharge = round($request->deliveryCharge ?? 0);
+
         $couponId = session('coupon_id');
         $discount = 0;
         $coupon = null;
         $couponCode = null;
 
-        // Check if coupon is active
+        // Discount calculation based on coupon
         if ($couponId) {
             $coupon = Coupon::find($couponId);
 
@@ -52,21 +61,24 @@ class OrderRepository extends Repository
                     ? ($subTotal * $coupon->discount) / 100
                     : $coupon->discount;
 
+                $discount = round($discount);
                 $couponCode = $coupon->coupon_code;
             } else {
                 $coupon = null; // invalid coupon
             }
         }
 
-        $grandTotal = $subTotal - $discount + $shippingCharge;
+        // Grand Total (Subtotal - Discount + VAT + Shipping)
+        $grandTotal = $subTotal - $discount + $vatAmount + $shippingCharge;
 
-        // Create order
+        // Create order (order_number is generated in the Order model's creating event)
         $order = self::create([
             'user_id' => $user->id,
             'coupon_id' => $coupon?->id ?? null,
             'coupon_code' => $couponCode,
             'discount_amount' => $discount,
             'subtotal' => $subTotal,
+            'vat_amount' => $vatAmount,
             'shipping_charge' => $shippingCharge,
             'grand_total' => $grandTotal,
             'order_status' => OrderStatusEnums::PENDING->value,
