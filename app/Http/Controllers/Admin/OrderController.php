@@ -30,6 +30,8 @@ class OrderController extends Controller
         $request->validate([
             'order_status' => 'required|string',
             'cancel_reason' => 'nullable|string|max:1000',
+            'tracking_note' => 'nullable|string|max:255',
+            'admin_note' => 'nullable|string|max:1000',
         ]);
 
         OrderRepository::adminUpdateStatus($order, $request);

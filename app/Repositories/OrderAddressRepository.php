@@ -32,7 +32,6 @@ class OrderAddressRepository extends Repository
             'email' => $request->email ?? null,
             'phone' => $request->phone,
             'address' => $request->address,
-            'message' => $request->note,
             'address_type' => AddressTypeEnums::BILLING->value,
         ]);
 

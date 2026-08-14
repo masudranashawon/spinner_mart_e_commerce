@@ -47,10 +47,6 @@
                                 {{-- Loop through orders --}}
                                 <tbody>
                                     @forelse ($orders as $order)
-                                    @php
-                                    // Safely handle Enum casts
-                                    $statusValue = $order->order_status instanceof \BackedEnum ? $order->order_status->value : $order->order_status;
-                                    @endphp
                                     <tr>
                                         <td class="images">
                                             #{{ $order->order_number }}
@@ -70,7 +66,7 @@
 
                                         {{-- Order Status --}}
                                         <td class="
-                                        @switch($statusValue)
+                                        @switch($order->order_status)
                                         @case('pending') stock @break
                                         @case('confirmed') stock @break
                                         @case('processing') pro @break
@@ -82,7 +78,7 @@
                                         @default stock
                                         @endswitch">
                                             <span class="text-capitalize" style="width: 140px;">
-                                               {{ ucwords(str_replace('_', ' ', $statusValue)) }}
+                                               {{ ucwords(str_replace('_', ' ', $order->order_status)) }}
                                             </span>
                                         </td>
 

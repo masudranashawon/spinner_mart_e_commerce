@@ -163,13 +163,16 @@
 
         <!-- Header Section -->
         <div class="row align-items-center mb-5">
-            <!-- Company Info (Static for now) -->
+            <!-- Company Info -->
             <div class="col-sm-7">
-                <img class="company-logo" src="{{asset('frontend/assets/images/logo.svg')}}" alt="">
-                <p class="mb-0 text-muted">Shop No 214, 1st Floor, Khulshi Town Center,</p>
-                <p class="mb-0 text-muted">South Khulshi, Chittagong, Bangladesh, 4202.</p>
-                <p class="mb-0 text-muted">Phone: +880 01805-996980</p>
-                <p class="mb-0 text-muted">Email: spinnerfashionbd@gmail.com</p>
+                <img class="company-logo" src="{{ get_setting('site_logo') }}" alt="{{ get_setting('store_name') }}">
+                <p class="mb-0 text-muted">{{ get_setting('address') }}</p>
+                @if(get_setting('phone'))
+                <p class="mb-0 text-muted">Phone: {{ get_setting('phone') }}</p>
+                @endif
+                @if(get_setting('email'))
+                <p class="mb-0 text-muted">Email: {{ get_setting('email') }}</p>
+                @endif
             </div>
 
             <!-- Invoice Details -->
@@ -283,16 +286,27 @@
                             <td class="text-end text-muted"><strong>Subtotal:</strong></td>
                             <td class="text-end amount-text" width="35%">{{ format_price($order?->subtotal) }}</td>
                         </tr>
+
+                        <!-- VAT Row Added Here -->
+                        @if($order?->vat_amount > 0)
+                        <tr>
+                            <td class="text-end text-muted"><strong>Vat:</strong></td>
+                            <td class="text-end amount-text">+ {{ format_price($order?->vat_amount) }}</td>
+                        </tr>
+                        @endif
+
+                        <tr>
+                            <td class="text-end text-muted"><strong>Shipping Charge:</strong></td>
+                            <td class="text-end amount-text">+ {{ format_price($order?->shipping_charge) }}</td>
+                        </tr>
+
                         @if($order?->coupon_code)
                         <tr>
                             <td class="text-end text-muted"><strong>Coupon Discount ({{ $order->coupon_code }}):</strong></td>
                             <td class="text-end amount-text text-danger">- {{ format_price($order?->discount_amount) }}</td>
                         </tr>
                         @endif
-                        <tr>
-                            <td class="text-end text-muted"><strong>Shipping Charge:</strong></td>
-                            <td class="text-end amount-text">+ {{ format_price($order?->shipping_charge) }}</td>
-                        </tr>
+                        
                         <tr class="grand-total-row">
                             <td class="text-end">Grand Total:</td>
                             <td class="text-end amount-text">{{ format_price($order?->grand_total) }}</td>

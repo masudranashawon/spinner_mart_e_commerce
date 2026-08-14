@@ -188,6 +188,7 @@ use App\Enums\PaymentStatusEnums;
                         </button>
                     </div>
 
+                    <!-- Order Note -->
                     @if($order->note)
                     <div class="order-note mt-4">
                         <h6 class="fw-bold mb-2">
@@ -197,6 +198,26 @@ use App\Enums\PaymentStatusEnums;
                         <p class="mb-0">
                             {{ $order->note }}
                         </p>
+                    </div>
+                    @endif
+
+                    <!-- Tracking Note -->
+                    @if($order->tracking_note)
+                    <div class="order-note mt-3" style="border-left-color: #17a2b8;">
+                        <h6 class="fw-bold mb-2">
+                            <i data-feather="truck" class="icon-xs mr-1"></i> Tracking Information
+                        </h6>
+                        <p class="mb-0">{{ $order->tracking_note }}</p>
+                    </div>
+                    @endif
+
+                    <!-- Admin Note (Private) -->
+                    @if($order->admin_note)
+                    <div class="order-note mt-3" style="border-left-color: #dc3545; background: #fff5f5;">
+                        <h6 class="fw-bold mb-2 text-danger">
+                            <i data-feather="lock" class="icon-xs mr-1"></i> Admin Note (Private)
+                        </h6>
+                        <p class="mb-0 text-danger">{{ $order->admin_note }}</p>
                     </div>
                     @endif
 
@@ -276,10 +297,10 @@ use App\Enums\PaymentStatusEnums;
                                     <div class="ml-3">
                                         <h6 class="mb-1 text-dark">{{ $item->product_name }}</h6>
                                         @if($item->sku_code)
-                                        <small class="text-muted d-block">SKU: {{ $item->sku_code }}</small>
+                                        <p class="text-muted d-block">SKU: {{ $item->sku_code }}</p>
                                         @endif
                                         @if($item->variant_name && $item->variant_name !== 'Default Variant')
-                                        <small class="text-muted d-block">{{ $item->variant_name }}</small>
+                                        <p class="text-muted d-block">{{ $item->variant_name }}</p>
                                         @endif
                                     </div>
                                 </div>
@@ -303,6 +324,13 @@ use App\Enums\PaymentStatusEnums;
                                 <td class="text-muted fw-bold">Subtotal:</td>
                                 <td class="text-right text-dark">{{ format_price($order->subtotal) }}</td>
                             </tr>
+
+                            @if($order->vat_amount > 0)
+                            <tr>
+                                <td class="text-muted fw-bold">Vat:</td>
+                                <td class="text-right text-dark">+ {{ format_price($order->vat_amount) }}</td>
+                            </tr>
+                            @endif
 
                             @if($order->coupon_code)
                             <tr>
@@ -359,6 +387,16 @@ use App\Enums\PaymentStatusEnums;
                         <textarea class="form-control" name="cancel_reason" id="cancel_reason" rows="3" placeholder="Please write a valid reason..."></textarea>
                     </div>
                     @endif
+
+                    <div class="mb-3" id="tracking_note_box" style="display:none;">
+                        <label for="tracking_note" class="form-label text-muted">Tracking Note / Courier Info</label>
+                        <input type="text" class="form-control" name="tracking_note" id="tracking_note" value="{{ $order->tracking_note }}" placeholder="e.g. Pathao ID: 123456">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="admin_note" class="form-label text-muted">Admin Note (Private)</label>
+                        <textarea class="form-control" name="admin_note" id="admin_note" rows="2" placeholder="Private note for internal use only...">{{ $order->admin_note }}</textarea>
+                    </div>
 
                     <p class="small text-muted mb-0"><i data-feather="info" class="icon-sm mr-1"></i> Note: Cancelling or Returning an order will automatically restore product inventory stock.</p>
                 </div>
@@ -417,9 +455,16 @@ use App\Enums\PaymentStatusEnums;
             let status = $('#order_status').val();
 
             $('#cancel_reason_box').hide();
+            $('#tracking_note_box').hide();
 
+            // Show cancel reason box for cancelled orders
             if (status === 'cancelled') {
                 $('#cancel_reason_box').show();
+            }
+
+            // Show tracking note box for shipped and delivered orders
+            if (status === 'shipped' || status === 'delivered') {
+                $('#tracking_note_box').show();
             }
         }
 

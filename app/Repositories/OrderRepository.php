@@ -53,11 +53,7 @@ class OrderRepository extends Repository
             $coupon = Coupon::find($couponId);
 
             if ($coupon && $coupon->status == 1 && ($coupon->limit == 0 || $coupon->limit > $coupon->total_applied)) {
-
-                $type = $coupon->coupon_type instanceof \BackedEnum ? $coupon->coupon_type->value : $coupon->coupon_type;
-                $type = strtolower($type);
-
-                $discount = $type === 'percentage'
+                $discount = $coupon->coupon_type === 'percentage'
                     ? ($subTotal * $coupon->discount) / 100
                     : $coupon->discount;
 
@@ -179,9 +175,26 @@ class OrderRepository extends Repository
                 'order_status' => $newStatus,
             ];
 
+            if ($request->filled('tracking_note')) {
+                $updateData['tracking_note'] = $request->tracking_note;
+            }
+
+            if ($request->filled('admin_note')) {
+                $updateData['admin_note'] = $request->admin_note;
+            }
+
             // if admin cancel order & give cancel reason
             if ($newStatus === OrderStatusEnums::CANCELLED->value && $request->filled('cancel_reason')) {
                 $updateData['cancel_reason'] = $request->cancel_reason;
+            }
+
+            // Auto-set delivery date when marked as delivered
+            if ($newStatus === OrderStatusEnums::DELIVERED->value) {
+                // Set delivery date when order is marked as delivered
+                $updateData['delivery_date'] = now();
+            } elseif ($oldStatus === OrderStatusEnums::DELIVERED->value && $newStatus !== OrderStatusEnums::DELIVERED->value) {
+                // Reset delivery date when order is marked as not delivered
+                $updateData['delivery_date'] = null;
             }
 
             // Update Order

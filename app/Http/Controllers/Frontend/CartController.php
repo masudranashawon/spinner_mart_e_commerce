@@ -171,20 +171,15 @@ class CartController extends Controller
             ], 400);
         }
 
-        $type = $coupon->coupon_type instanceof \BackedEnum ? $coupon->coupon_type->value : $coupon->coupon_type;
-        $type = strtolower($type);
-
-
         // Calculate initial discount to send back to UI
         $discountAmount = 0;
-        if ($type === 'percentage') {
+        if ($coupon->coupon_type === 'percentage') {
             $discountAmount = ($actualSubTotal * $coupon->discount) / 100;
         } else {
             $discountAmount = $coupon->discount;
         }
 
         $finalTotal = $actualSubTotal - $discountAmount;
-
 
         // Coupon apply success
         if ($coupon) {
@@ -197,7 +192,7 @@ class CartController extends Controller
         return response()->json([
             'message' => 'Coupon applied successfully.',
             'coupon_id' => $coupon->id,
-            'coupon_type' => $type,
+            'coupon_type' => $coupon->coupon_type,
             'discount_value' => $coupon->discount,
             'min_amount' => $coupon->min_amount ?? 0,
             'calculated_discount' => round($discountAmount, 2),
