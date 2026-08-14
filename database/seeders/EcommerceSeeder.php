@@ -19,10 +19,10 @@ class EcommerceSeeder extends Seeder
         // Site Settings (Key-Value Pair)
         $settings = [
             // Branding
-            ['key' => 'store_name', 'value' => 'Spinner Fashion', 'group' => 'branding'],
+            ['key' => 'store_name', 'value' => 'Spinner Mart', 'group' => 'branding'],
             ['key' => 'store_tagline', 'value' => 'Premium Modern Clothing', 'group' => 'branding'],
-            ['key' => 'site_logo', 'value' => 'frontend/assets/images/logo.svg', 'group' => 'branding'],
-            ['key' => 'footer_logo', 'value' => 'frontend/assets/images/logo-2.svg', 'group' => 'branding'],
+            ['key' => 'site_logo', 'value' => 'frontend/assets/images/logo.png', 'group' => 'branding'],
+            ['key' => 'footer_logo', 'value' => 'frontend/assets/images/logo-2.png', 'group' => 'branding'],
             ['key' => 'site_favicon', 'value' => 'frontend/assets/images/favicon.png', 'group' => 'branding'],
             ['key' => 'footer_about_text', 'value' => 'Spinner Mart brings trendy fashion, premium quality, and affordable prices for every style. Shop clothing, footwear, watches, and accessories confidently.', 'group' => 'branding'],
             // Contact
@@ -39,6 +39,10 @@ class EcommerceSeeder extends Seeder
             // Currency
             ['key' => 'currency_symbol', 'value' => '৳', 'group' => 'currency'],
             ['key' => 'currency_code', 'value' => 'BDT', 'group' => 'currency'],
+            // Announcement
+            ['key' => 'enable_announcement_bar', 'value' => '1', 'group' => 'enable_announcement_bar'],
+            ['key' => 'announcement_text', 'value' => 'Exclusive Deals Available for a Limited Time.', 'group' => 'enable_announcement_bar'],
+            ['key' => 'announcement_link', 'value' => '/products', 'group' => 'enable_announcement_bar'],
         ];
 
         foreach ($settings as $setting) {

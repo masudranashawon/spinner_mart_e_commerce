@@ -46,7 +46,7 @@ class OrderController extends Controller
         $returnDays = (int) get_setting('return_policy_days', 7);
         $isEligibleForReturn = false;
 
-        if ($order->order_status === 'delivered' && $order->delivery_date) {
+        if ($order->order_status === 'delivered' && $order->delivery_date !== null) {
             $deliveryDate = Carbon::parse($order->delivery_date);
             $lastReturnDate = $deliveryDate->copy()->addDays($returnDays);
             

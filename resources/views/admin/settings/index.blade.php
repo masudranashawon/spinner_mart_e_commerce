@@ -100,8 +100,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Secondary Phone Number</label>
-                                    <input type="hidden" name="group[phone_secondary]" value="contact">
-                                    <input type="text" name="phone_secondary" class="form-control" value="{{ get_setting('phone_secondary') }}">
+                                    <input type="hidden" name="group[secondary_phone]" value="contact">
+                                    <input type="text" name="secondary_phone" class="form-control" value="{{ get_setting('secondary_phone') }}">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Email Address</label>

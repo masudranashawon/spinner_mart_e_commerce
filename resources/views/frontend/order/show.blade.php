@@ -216,7 +216,6 @@
                                 <i class="fa fa-ban" aria-hidden="true"></i> Cancel Order
                             </button>
                             <small class="text-muted d-block text-center mt-2">You can cancel the order before it is confirmed.</small>
-
                             @elseif($order->order_status === 'delivered')
                             @if($isEligibleForReturn)
                             <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#returnOrderModal">
