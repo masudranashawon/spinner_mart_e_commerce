@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InventoryStockController;
+use App\Http\Controllers\Admin\NewsletterController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
@@ -135,6 +136,14 @@ Route::prefix("admin")->middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/order/{order}/destroy', 'destroy')->name('admin.order.destroy');
   });
 
+  // Newsletter Subscribers
+    Route::controller(NewsletterController::class)->group(function () {
+        Route::get('/subscribers', 'index')->name('admin.subscribers.index');
+        Route::post('/subscribers/{subscriber}/status', 'toggleStatus')->name('admin.subscribers.status');
+        Route::delete('/subscribers/{subscriber}/destroy', 'destroy')->name('admin.subscribers.destroy');
+    });
+
+  // settings routes
   Route::controller(SettingController::class)->group(function () {
     Route::get('/settings', 'index')->name('admin.settings.index');
     Route::post('/settings/update', 'update')->name('admin.settings.update');

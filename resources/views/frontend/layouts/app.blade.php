@@ -68,10 +68,10 @@
                     <div class="details">
                         <h4>Get 30% discount shipped to your inbox</h4>
                         <p>Subscribe to the Themart eCommerce newsletter to receive timely updates to your favorite products</p>
-                        <form>
+                        <form id="popup-newsletter-form">
                             <div>
-                                <input type="email" placeholder="Enter your email">
-                                <button type="submit">Subscribe</button>
+                                <input type="email" id="popup-newsletter-email" placeholder="Enter your email" required>
+                                <button type="submit" id="popup-newsletter-btn">Subscribe</button>
                             </div>
                             <div>
                                 <label class="checkbox-holder"> Don't show this popup again!
@@ -421,7 +421,65 @@
 
     </script>
 
+    <script>
+        $(document).ready(function() {
+            // Popup Newsletter AJAX
+            $('#popup-newsletter-form').on('submit', function(e) {
+                e.preventDefault(); 
+                
+                let email = $('#popup-newsletter-email').val();
+                let btn = $('#popup-newsletter-btn');
+                let originalText = btn.text();
+                
+                btn.text('Wait...').prop('disabled', true);
 
+                $.ajax({
+                    url: "{{ route('newsletter.store') }}",
+                    method: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        email: email
+                    },
+
+                    // Handle success and error responses
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            Toast.fire({
+                                icon: "success",
+                                title: response.message
+                            });
+
+                            $('#popup-newsletter-form')[0].reset(); 
+                            
+                            $('.newsletter-close-btn').trigger('click');
+                        } else {
+                            Toast.fire({
+                                icon: "info",
+                                title: response.message
+                            });
+                        }
+                    },
+                    
+                    // Handle error
+                    error: function(xhr) {
+                        let errorMessage = 'Something went wrong!';
+                        if (xhr.responseJSON && xhr.responseJSON.errors) {
+                            errorMessage = xhr.responseJSON.errors.email[0];
+                        }
+                        Toast.fire({
+                            icon: "error",
+                            title: errorMessage
+                        });
+                    },
+
+                    // Reset button text and enable button
+                    complete: function() {
+                        btn.text(originalText).prop('disabled', false);
+                    }
+                });
+            });
+        });
+    </script>
 
     @stack('script')
 </body>

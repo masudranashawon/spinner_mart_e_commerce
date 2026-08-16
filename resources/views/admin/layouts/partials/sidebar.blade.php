@@ -475,6 +475,14 @@ Noble<span>UI</span>
                 </div>
             </li>
 
+            @php $isCouponActive = request()->routeIs('admin.subscribers.*'); @endphp
+            <li class="nav-item {{ $isCouponActive ? 'active' : '' }}">
+                <a href="{{ route('admin.subscribers.index') }}" class="nav-link">
+                    <i class="link-icon" data-feather="mail"></i>
+                    <span class="link-title">Subscribers</span>
+                </a>
+            </li>
+
             {{-- ========================================== --}}
             {{-- CONFIG --}}
             {{-- ========================================== --}}

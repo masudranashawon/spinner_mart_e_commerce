@@ -438,16 +438,15 @@
                     <div class="cta-content">
                         <h2>Subscribe Our Newsletter & <br>
                             Get 30% Discounts For Next Order</h2>
-                        <form>
+                        <form id="newsletter-form">
                             <div class="input-1">
-                                <input type="email" class="form-control" placeholder="Your Email..." required="">
+                                <input type="email" name="email" id="newsletter-email" placeholder="Enter your email address" class="form-control" required>
                                 <div class="submit clearfix">
-                                    <button class="theme-btn-s2" type="submit">Subscribe</button>
+                                    <button class="theme-btn-s2" type="submit" id="newsletter-btn">Subscribe</button>
                                 </div>
                             </div>
                         </form>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -455,3 +454,63 @@
 </section>
 <!-- end of themart-cta-section -->
 @endsection
+
+@push('script') 
+<script>
+    $(document).ready(function() {
+        $('#newsletter-form').on('submit', function(e) {
+            e.preventDefault();
+            
+            let email = $('#newsletter-email').val();
+            let btn = $('#newsletter-btn');
+            let originalText = btn.text();
+            
+            btn.text('Wait...').prop('disabled', true);
+
+            // Send AJAX request to server
+            $.ajax({
+                url: "{{ route('newsletter.store') }}",
+                method: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    email: email
+                },
+
+                success: function(response) {
+                    if (response.status === 'success') {
+                        
+                        Toast.fire({
+                            icon: "success",
+                            title: response.message
+                        });
+                        $('#newsletter-form')[0].reset();
+                    } else {
+                        
+                        Toast.fire({
+                            icon: "info",
+                            title: response.message
+                        });
+                    }
+                },
+
+                error: function(xhr) {
+                    // Handle error
+                    let errorMessage = 'Something went wrong!';
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        errorMessage = xhr.responseJSON.errors.email[0];
+                    }
+                    Toast.fire({
+                        icon: "error",
+                        title: errorMessage
+                    });
+                },
+                
+                complete: function() {
+                    // Reset button text and enable button
+                    btn.text(originalText).prop('disabled', false);
+                }
+            });
+        });
+    });
+</script>
+@endpush
