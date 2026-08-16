@@ -68,17 +68,17 @@
                             </del>
                         </div>
 
-                        <div class="price">
+                         <div class="rating-product">
+                            @for($i = 1; $i <= 5; $i++)
+                                @if($i <= $product->rating)
+                                    <i class="fi flaticon-star"></i> 
+                                @else
+                                    <i class="fi flaticon-star empty-star"></i>
+                                @endif
+                            @endfor
+                            <span class="text-muted ms-1">({{ $product->reviews }})</span> 
+                        </div>
 
-                        </div>
-                        <div class="rating-product">
-                            <i class="fi flaticon-star"></i>
-                            <i class="fi flaticon-star"></i>
-                            <i class="fi flaticon-star"></i>
-                            <i class="fi flaticon-star"></i>
-                            <i class="fi flaticon-star"></i>
-                            <span>120</span>
-                        </div>
                         <p>{{$product?->details?->short_description}}</p>
 
                         {{-- Color Selection --}}
@@ -333,12 +333,12 @@
 </div>
 <!-- product-single-section  end-->
 
-<style>
+{{-- <style>
     .product-single-section .product-tab-area .rating-section .comments-area .comments-meta .rating-product i.empty-star {
         background: #d3d3d3 !important; 
         background-clip: text !important;
     }
-</style>
+</style> --}}
 @endsection
 
 @push('script')

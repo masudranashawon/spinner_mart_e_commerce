@@ -97,7 +97,6 @@ class EcommerceSeeder extends Seeder
                 'selling_price' => $selling_price,
                 'discount_price' => $faker->boolean(50) ? $selling_price - 100 : null,
                 'is_active' => true,
-                'rating' => $faker->numberBetween(3, 5),
                 'sold_count' => rand(5, 50),
             ]);
 

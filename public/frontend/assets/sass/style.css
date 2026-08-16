@@ -10109,6 +10109,11 @@ ul li {
   background-clip: text;
 }
 
+.rating-product i.empty-star {
+    background: #d3d3d3 !important; 
+    background-clip: text !important;
+}
+
 .product-single-section .product-tab-area .rating-section .comments-area .comments-meta .rating-product span {
   font-family: "Muli";
   font-weight: 600;
