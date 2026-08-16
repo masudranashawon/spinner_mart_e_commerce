@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>NobleUI Responsive Bootstrap 4 Dashboard Template</title>
+  <title>{{ get_setting('store_name', config('app.name')) }} | Dashboard</title>
   <!-- core:css -->
   <link rel="stylesheet" href="{{ asset('admin/assets/vendors/core/core.css') }}">
   <!-- endinject -->
@@ -22,7 +22,7 @@
   <!-- Layout styles -->
   <link rel="stylesheet" href="{{ asset('admin/assets/css/demo_1/style.css') }}">
   <!-- End layout styles -->
-  <link rel="shortcut icon" href="{{ asset('admin/assets/images/favicon.png') }}" />
+  <link rel="shortcut icon" type="image/png" href="{{ get_setting('site_favicon') }}">
 
   @stack('style')
 </head>

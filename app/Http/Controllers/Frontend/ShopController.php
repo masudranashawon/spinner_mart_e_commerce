@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Enums\OrderStatusEnums;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\Order;
 use App\Models\Product;
+use App\Models\ProductReview;
 use App\Models\RecentView;
 use App\Models\Size;
 use App\Models\SubCategory;
@@ -141,7 +144,11 @@ class ShopController extends Controller
             'variants.size:id,name',
             'galleries',
             'details.category',
-            'tags'
+            'tags',
+            'productReviews' => function ($q) {
+                $q->where('is_approved', true)->latest();
+            },
+            'productReviews.user'
         ])->where('slug', $slug)
             ->firstOrFail();
 
@@ -171,6 +178,32 @@ class ShopController extends Controller
         }
         // ================= END RECENTLY VIEWED LOGIC =================
 
+        // ================= REVIEW ELIGIBILITY LOGIC =================
+        $canReview = false;
+
+        if (auth('web')->check()) {
+            $userId = auth('web')->id();
+
+            // Check if user has purchased the product
+            $hasPurchased = Order::where('user_id', $userId)
+                ->whereIn('order_status', [
+                    OrderStatusEnums::DELIVERED->value,
+                    OrderStatusEnums::RETURN_REQUESTED->value,
+                    OrderStatusEnums::RETURNED->value
+                ])
+                ->whereHas('items', function ($query) use ($product) {
+                    $query->where('product_id', $product->id);
+                })->exists();
+
+            // Check if user has already reviewed the product
+            $alreadyReviewed = ProductReview::where('user_id', $userId)
+                ->where('product_id', $product->id)
+                ->exists();
+
+            $canReview = $hasPurchased && !$alreadyReviewed;
+        }
+        // ================= END REVIEW ELIGIBILITY LOGIC =================
+
 
         // Default variant
         $defaultVariant = $product->variants
@@ -194,7 +227,8 @@ class ShopController extends Controller
         return view('frontend.shop.show', compact(
             'product',
             'defaultVariant',
-            'variantsData'
+            'variantsData',
+            'canReview'
         ));
     }
 

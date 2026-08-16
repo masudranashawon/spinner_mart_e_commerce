@@ -5,6 +5,7 @@ use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\OrderController;
+use App\Http\Controllers\Frontend\ProductReviewController;
 use App\Http\Controllers\Frontend\ProfileController;
 use App\Http\Controllers\Frontend\RecentViewController;
 use App\Http\Controllers\Frontend\ShopController;
@@ -60,6 +61,10 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(RecentViewController::class)->group(function () {
         Route::get('/recent-view', 'index')->name('recent-view.index');
+    });
+
+    Route::controller(ProductReviewController::class)->group(function () {
+        Route::post('/product/{product}/review', 'store')->name('review.store');
     });
 });
 
