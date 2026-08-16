@@ -40,6 +40,26 @@
                             </div>
                         </div>
 
+                        <!-- Brands -->
+                        <div class="filter-item">
+                            <div class="shop-filter-item">
+                                <h2>Brands</h2>
+                                <ul style="max-height: 300px; overflow-y: auto;">
+                                    @foreach($brands as $brand)
+                                    <div class="form-check position-relative mt-3">
+                                        {{-- Checkbox --}}
+                                        <input class="form-check-input filter-checkbox m-0 p-0" type="checkbox" name="brands[]" value="{{ $brand->id }}" id="brand_{{ $brand->id }}" {{ in_array($brand->id, (array) request()->input('brands', [])) ? 'checked' : '' }} style="width: 18px; height: 18px; cursor: pointer;">
+
+                                        {{-- Label --}}
+                                        <label class="form-check-label m-0 ms-2 p-0" for="brand_{{ $brand->id }}" style="cursor: pointer; user-select: none; font-size: 16px;">
+                                            {{ $brand->name }}
+                                        </label>
+                                    </div>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+
                         <!-- Categories -->
                         <div class="filter-item">
                             <div class="shop-filter-item category-widget">

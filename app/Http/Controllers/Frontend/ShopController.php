@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Enums\OrderStatusEnums;
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Order;
@@ -24,6 +25,7 @@ class ShopController extends Controller
         $tags = Tag::all();
         $sizes = Size::all();
         $colors = Color::all();
+        $brands = Brand::all();
 
         // Base Query 
         $query = Product::with(['tags'])->where('is_active', 1);
@@ -75,6 +77,12 @@ class ShopController extends Controller
         if ($request->filled('subcategories')) {
             $query->whereHas('details', function ($q) use ($request) {
                 $q->whereIn('sub_category_id', $request->subcategories);
+            });
+        }
+
+        if ($request->filled('brands')) {
+            $query->whereHas('details', function ($q) use ($request) {
+                $q->whereIn('brand_id', $request->brands);
             });
         }
 
@@ -134,7 +142,7 @@ class ShopController extends Controller
             ]);
         }
 
-        return view('frontend.shop.index', compact('categories', 'products', 'recentlyAdded', 'tags', 'sizes', 'colors'));
+        return view('frontend.shop.index', compact('categories', 'products', 'recentlyAdded', 'tags', 'sizes', 'colors', 'brands'));
     }
 
     public function show(string $slug)
