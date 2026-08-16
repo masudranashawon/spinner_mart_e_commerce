@@ -23,6 +23,13 @@ class SettingController extends Controller
 
         foreach ($data as $key => $value) {
 
+            // Security Check for Google Map Iframe
+            if ($key === 'address_map' && !empty($value)) {
+                // Allow only <iframe> tags and strip all other HTML tags
+                $value = strip_tags($value, '<iframe>');
+            }
+
+
             // Handle file uploads directly
             if ($request->hasFile($key)) {
                 $file = $request->file($key);

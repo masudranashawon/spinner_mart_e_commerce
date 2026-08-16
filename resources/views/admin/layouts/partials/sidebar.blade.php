@@ -453,6 +453,21 @@ Noble<span>UI</span>
                 </a>
             </li>
 
+            @php
+            $isCouponActive = request()->routeIs('admin.contact.*');
+            $unreadContactCount = \App\Models\ContactMessage::where('is_read', false)->count();
+            @endphp
+            <li class="nav-item d-flex align-items-center justify-content-between {{ $isCouponActive ? 'active' : '' }}">
+                <a href="{{ route('admin.contact.index') }}" class="nav-link">
+                        <i class="link-icon" data-feather="message-square"></i>
+                        <span class="link-title">Inbox (Contact)</span>
+                </a>
+
+                @if($unreadContactCount > 0)
+                <span class="badge badge-danger">{{ $unreadContactCount }}</span>
+                @endif
+            </li>
+
             {{-- ========================================== --}}
             {{-- ACCOUNTS --}}
             {{-- ========================================== --}}

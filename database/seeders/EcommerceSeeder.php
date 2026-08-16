@@ -30,6 +30,7 @@ class EcommerceSeeder extends Seeder
             ['key' => 'secondary_phone', 'value' => '+880 1911-000000', 'group' => 'contact'],
             ['key' => 'email', 'value' => 'support@spinnerfashion.com', 'group' => 'contact'],
             ['key' => 'address', 'value' => 'Dhanmondi, Dhaka, Bangladesh', 'group' => 'contact'],
+            ['key' => 'address_map', 'value' => '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3689.791320041214!2d91.80976827586767!3d22.361507040672958!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30acd93610428915%3A0xad43a0cf6701a547!2sSpinner%20Fashion!5e0!3m2!1sen!2sbd!4v1786905989125!5m2!1sen!2sbd" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>', 'group' => 'contact'],
             // Order & Delivery
             ['key' => 'vat_percentage', 'value' => '5', 'group' => 'order'],
             ['key' => 'shipping_inside_dhaka', 'value' => '60', 'group' => 'order'],

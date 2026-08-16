@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
+use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\NewsletterController;
 use App\Http\Controllers\Frontend\OrderController;
@@ -18,6 +19,11 @@ Route::get('/products', [ShopController::class, 'index'])->name('shop');
 Route::get('/products/{slug}', [ShopController::class, 'show'])->name('productDetails');
 Route::get('/ajax-search', [ShopController::class, 'ajaxSearch'])->name('ajax.search');
 Route::post('/subscribe', [NewsletterController::class, 'store'])->name('newsletter.store');
+
+Route::controller(ContactController::class)->group(function () {
+    Route::get('/contact', 'index')->name('contact.index');
+    Route::post('/contact', 'store')->name('contact.store');
+});
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('register', 'register')->name('register');

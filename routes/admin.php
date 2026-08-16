@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InventoryStockController;
@@ -94,11 +95,11 @@ Route::prefix("admin")->middleware(['auth', 'role:admin'])->group(function () {
   });
 
   // Product Reviews
-    Route::controller(ProductReviewController::class)->group(function () {
-        Route::get('/reviews', 'index')->name('admin.reviews.index');
-        Route::post('/reviews/{review}/status', 'toggleStatus')->name('admin.reviews.status');
-        Route::delete('/reviews/{review}/destroy', 'destroy')->name('admin.reviews.destroy');
-    });
+  Route::controller(ProductReviewController::class)->group(function () {
+    Route::get('/reviews', 'index')->name('admin.reviews.index');
+    Route::post('/reviews/{review}/status', 'toggleStatus')->name('admin.reviews.status');
+    Route::delete('/reviews/{review}/destroy', 'destroy')->name('admin.reviews.destroy');
+  });
 
   // inventory stock routes
   Route::controller(InventoryStockController::class)->group(function () {
@@ -137,11 +138,18 @@ Route::prefix("admin")->middleware(['auth', 'role:admin'])->group(function () {
   });
 
   // Newsletter Subscribers
-    Route::controller(NewsletterController::class)->group(function () {
-        Route::get('/subscribers', 'index')->name('admin.subscribers.index');
-        Route::post('/subscribers/{subscriber}/status', 'toggleStatus')->name('admin.subscribers.status');
-        Route::delete('/subscribers/{subscriber}/destroy', 'destroy')->name('admin.subscribers.destroy');
-    });
+  Route::controller(NewsletterController::class)->group(function () {
+    Route::get('/subscribers', 'index')->name('admin.subscribers.index');
+    Route::post('/subscribers/{subscriber}/status', 'toggleStatus')->name('admin.subscribers.status');
+    Route::delete('/subscribers/{subscriber}/destroy', 'destroy')->name('admin.subscribers.destroy');
+  });
+
+  // Contact Messages
+  Route::controller(ContactMessageController::class)->group(function () {
+    Route::get('/contact-messages', 'index')->name('admin.contact.index');
+    Route::post('/contact-messages/{message}/status', 'toggleStatus')->name('admin.contact.status');
+    Route::delete('/contact-messages/{message}/destroy', 'destroy')->name('admin.contact.destroy');
+  });
 
   // settings routes
   Route::controller(SettingController::class)->group(function () {

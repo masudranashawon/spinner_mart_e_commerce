@@ -285,7 +285,7 @@
                                 <li class="menu-item-has-children">
                                     <a href="#">FAQ</a>
                                 </li>
-                                <li><a href="contact.html">Contact</a></li>
+                                <li><a href="{{ route('contact.index') }}">Contact</a></li>
                             </ul>
 
                         </div><!-- end of nav-collapse -->
