@@ -445,6 +445,14 @@ Noble<span>UI</span>
                 </a>
             </li>
 
+            @php $isCouponActive = request()->routeIs('admin.reviews.*'); @endphp
+            <li class="nav-item {{ $isCouponActive ? 'active' : '' }}">
+                <a href="{{ route('admin.reviews.index') }}" class="nav-link">
+                    <i class="link-icon" data-feather="star"></i>
+                    <span class="link-title">Reviews</span>
+                </a>
+            </li>
+
             {{-- ========================================== --}}
             {{-- ACCOUNTS --}}
             {{-- ========================================== --}}

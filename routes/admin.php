@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ProductReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix("admin")->middleware(['auth', 'role:admin'])->group(function () {
@@ -90,6 +91,13 @@ Route::prefix("admin")->middleware(['auth', 'role:admin'])->group(function () {
     Route::delete("/product/{product}/variants/{variant}/destroy", "destroy")->name("product.variants.destroy");
     Route::put("/product/{product}/variants/{variant}/update", "update")->name("product.variants.update");
   });
+
+  // Product Reviews
+    Route::controller(ProductReviewController::class)->group(function () {
+        Route::get('/reviews', 'index')->name('admin.reviews.index');
+        Route::post('/reviews/{review}/status', 'toggleStatus')->name('admin.reviews.status');
+        Route::delete('/reviews/{review}/destroy', 'destroy')->name('admin.reviews.destroy');
+    });
 
   // inventory stock routes
   Route::controller(InventoryStockController::class)->group(function () {
