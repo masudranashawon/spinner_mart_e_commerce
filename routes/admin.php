@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ProductReviewController;
+use App\Http\Controllers\Admin\SliderController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix("admin")->middleware(['auth', 'role:admin'])->group(function () {
@@ -149,6 +150,16 @@ Route::prefix("admin")->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/contact-messages', 'index')->name('admin.contact.index');
     Route::post('/contact-messages/{message}/status', 'toggleStatus')->name('admin.contact.status');
     Route::delete('/contact-messages/{message}/destroy', 'destroy')->name('admin.contact.destroy');
+  });
+
+  // Hero Sliders
+  Route::controller(SliderController::class)->group(function () {
+    Route::get('/sliders', 'index')->name('admin.sliders.index');
+    Route::post('/sliders', 'store')->name('admin.sliders.store');
+    Route::get('/sliders/{slider}/edit', 'edit')->name('admin.sliders.edit');
+    Route::put('/sliders/{slider}', 'update')->name('admin.sliders.update');
+    Route::delete('/sliders/{slider}', 'destroy')->name('admin.sliders.destroy');
+    Route::post('/sliders/{slider}/status', 'toggleStatus')->name('admin.sliders.status');
   });
 
   // settings routes

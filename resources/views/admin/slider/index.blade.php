@@ -1,0 +1,138 @@
+@extends('admin.layouts.app')
+
+@section('content')
+<div class="row">
+    {{-- All Sliders --}}
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header">
+                <h5>All Hero Sliders</h5>
+            </div>
+            <div class="card-footer">
+                <div class="table-responsive">
+                    <table class="data-table table-hover table">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Image</th>
+                                <th>Button Info</th>
+                                <th>Status</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @forelse($sliders ?? [] as $key => $slider)
+                            <tr>
+                                <td class="align-middle">{{ $key + 1 }}</td>
+                                <td class="align-middle">
+                                    <img src="{{ $slider->thumbnail }}" alt="Slider" class="object-fit-cover" style="height: 50px; width: 100px; border-radius: 4px;">
+                                </td>
+                                <td class="align-middle">
+                                    <strong>{{ $slider->btn_text ?? 'N/A' }}</strong> <br>
+                                    <a href="{{ $slider->btn_link }}" target="_blank" class="small text-muted">{{ Str::limit($slider->btn_link, 20) }}</a>
+                                </td>
+                                <td class="align-middle">
+                                    <form action="{{ route('admin.sliders.status', $slider->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="badge {{ $slider->is_active ? 'bg-success' : 'bg-danger' }} border-0 px-2 py-1 text-white">
+                                            {{ $slider->is_active ? 'Active' : 'Inactive' }}
+                                        </button>
+                                    </form>
+                                </td>
+
+                                <td class="text-center align-middle">
+                                    <a href="{{ route('admin.sliders.edit', $slider->id) }}" class="btn btn-primary btn-icon btn-sm">
+                                        <i data-feather="edit" style="width: 16px; height:16px;"></i>
+                                    </a>
+
+                                    <form action="{{ route('admin.sliders.destroy', $slider->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this slider?');">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-icon btn-sm">
+                                            <i data-feather="trash-2" style="width: 16px; height:16px;"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr class="text-center">
+                                <td colspan="5">No Slider Found</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Add new Slider --}}
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Add New Slider</h5>
+            </div>
+            <div class="card-footer">
+                <form action="{{ route('admin.sliders.store') }}" method="post" enctype="multipart/form-data">
+                    @csrf
+
+                    <div class="mb-4">
+                        <label for="btn-text" class="form-label">Button Text</label>
+                        <input type="text" name="btn_text" value="{{ old('btn_text') }}" id="btn-text" class="form-control" placeholder="e.g. Shop Now">
+                        @error('btn_text')
+                        <span class="text-danger small">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="btn-link" class="form-label">Button Link</label>
+                        <input type="url" name="btn_link" value="{{ old('btn_link') }}" id="btn-link" class="form-control" placeholder="https://...">
+                        @error('btn_link')
+                        <span class="text-danger small">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <label for="slider-image" class="form-label">Image <span class="text-danger">*</span></label>
+                                <input type="file" name="image" id="slider-image" class="form-control">
+                                @error('image')
+                                <span class="text-danger small">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-xl-6 mt-xl-0 mt-3">
+                                <div class="w-100 h-100 d-flex align-items-center overflow-hidden">
+                                    <img id="preview" src="" class="object-fit-scale" style="max-height: 80px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end"><button type="submit" class="btn btn-primary">Submit</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@push('script')
+<script>
+    $(document).ready(function() {
+        $('#slider-image').on('change', function(e) {
+            let file = e.target.files[0];
+            if (file) {
+                $('#preview').attr('src', URL.createObjectURL(file))
+                    .addClass("border rounded")
+                    .css({
+                        width: "100%",
+                        height: "6rem",
+                        objectFit: "contain"
+                    });
+            }
+        });
+    });
+
+</script>
+@endpush

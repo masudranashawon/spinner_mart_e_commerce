@@ -459,8 +459,8 @@ Noble<span>UI</span>
             @endphp
             <li class="nav-item d-flex align-items-center justify-content-between {{ $isCouponActive ? 'active' : '' }}">
                 <a href="{{ route('admin.contact.index') }}" class="nav-link">
-                        <i class="link-icon" data-feather="message-square"></i>
-                        <span class="link-title">Inbox (Contact)</span>
+                    <i class="link-icon" data-feather="message-square"></i>
+                    <span class="link-title">Inbox (Contact)</span>
                 </a>
 
                 @if($unreadContactCount > 0)
@@ -504,10 +504,18 @@ Noble<span>UI</span>
             <li class="nav-item nav-category">Config</li>
 
             <!-- Settings -->
-            <li class="nav-item {{ request()->routeIs('settings.') ? 'active' : '' }}">
+            <li class="nav-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
                 <a href="{{ route('admin.settings.index') }}" class="nav-link">
                     <i class="link-icon" data-feather="settings"></i>
                     <span class="link-title">Settings</span>
+                </a>
+            </li>
+
+            <!-- Sliders -->
+            <li class="nav-item {{ request()->routeIs('admin.sliders.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.sliders.index') }}" class="nav-link">
+                    <i class="link-icon" data-feather="image"></i>
+                    <span class="link-title">Hero Sliders</span>
                 </a>
             </li>
         </ul>
