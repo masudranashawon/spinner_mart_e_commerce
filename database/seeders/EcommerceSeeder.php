@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-use App\Models\{Setting, Category, SubCategory, Brand, Color, Size, Tag, Product, ProductDetails, ProductVariant};
+use App\Models\{Setting, Category, SubCategory, Brand, Color, Media, Size, Tag, Product, ProductDetails, ProductVariant, Slider};
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Cache;
 
@@ -48,6 +48,26 @@ class EcommerceSeeder extends Seeder
 
         foreach ($settings as $setting) {
             Setting::updateOrCreate(['key' => $setting['key']], $setting);
+        }
+
+        // Hero Sliders Seeder
+        for ($i = 1; $i <= 3; $i++) {
+            // Media Creation
+            $media = Media::create([
+                'type' => 'image',
+                'src' => "frontend/assets/images/slider/slide-$i.jpg",
+                'name' => "Slide $i",
+                'extension' => 'jpg',
+            ]);
+
+            // Slider Creation
+            Slider::create([
+                'title' => 'Mega Sale - Up to'.$i.'0% Off',
+                'media_id' => $media->id,
+                'btn_text' => 'Shop Now',
+                'btn_link' => '/shop',
+                'is_active' => true,
+            ]);
         }
 
         // Colors, Sizes, Tags & Brands

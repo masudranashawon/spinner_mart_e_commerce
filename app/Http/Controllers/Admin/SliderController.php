@@ -18,18 +18,22 @@ class SliderController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'title' => 'required|string|max:255',
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'btn_text' => 'nullable|string|max:50',
-            'btn_link' => 'nullable|string|max:255',
+            'btn_text' => 'required|string|max:50',
+            'btn_link' => 'required|string|max:255',
+            'serial' => 'nullable|integer',
         ]);
 
         $media = MediaRepository::storeByRequest($request->file('image'), 'sliders');
 
         Slider::create([
             'media_id' => $media->id,
+            'title' => $request->title,
             'btn_text' => $request->btn_text,
             'btn_link' => $request->btn_link,
             'is_active' => true,
+            'serial' => $request->serial ?? 0,
         ]);
 
         return back()->with('success', 'Slider created successfully.');
@@ -43,14 +47,18 @@ class SliderController extends Controller
     public function update(Request $request, Slider $slider)
     {
         $request->validate([
+            'title' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'btn_text' => 'nullable|string|max:50',
-            'btn_link' => 'nullable|string|max:255',
+            'btn_text' => 'required|string|max:50',
+            'btn_link' => 'required|string|max:255',
+            'serial' => 'nullable|integer',
         ]);
 
         $data = [
+            'title' => $request->title,
             'btn_text' => $request->btn_text,
             'btn_link' => $request->btn_link,
+            'serial' => $request->serial ?? 0,
         ];
 
         if ($request->hasFile('image')) {

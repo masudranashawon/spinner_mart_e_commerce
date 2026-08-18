@@ -7,57 +7,41 @@
 <div class="wpo-hero-slider">
     <div class="container-fluid-sm container">
         <div class="hero-slider">
+            
+            @forelse($sliders as $slider)
             <div class="hero-slider-item">
                 <div class="slider-bg">
-                    <img src="{{ asset('frontend/assets/images/slider/slide-1.jpg') }}" alt="">
+                    <img src="{{ $slider->thumbnail }}" alt="Hero Slider">
                 </div>
+                
+                @if($slider->btn_text)
                 <div class="slider-content">
                     <div class="slide-title">
-                        <h2>Trendy & Unique
-                            Collection</h2>
+                        <h2>{{$slider->title}}</h2>
                     </div>
+                    <a class="theme-btn" href="{{ $slider->btn_link ?? route('shop') }}">{{ $slider->btn_text }}</a>
+                </div>
+                @endif
+            </div>
+            @empty
+            <div class="hero-slider-item">
+                <div class="slider-bg">
+                    <img src="{{ asset('frontend/assets/images/slider/slide-1.jpg') }}" alt="Default Slider">
+                </div>
+                <div class="slider-content">
                     <a class="theme-btn" href="{{ route('shop') }}">Shop Now</a>
                 </div>
             </div>
-            <div class="hero-slider-item">
-                <div class="slider-bg">
-                    <img src="{{ asset('frontend/assets/images/slider/slide-2.jpg') }}" alt="">
-                </div>
-                <div class="slider-content">
-                    <div class="slide-title">
-                        <h2>Trendy & Unique
-                            Collection</h2>
-                    </div>
-                    <a class="theme-btn" href="{{ route('shop') }}">Shop Now</a>
-                </div>
-            </div>
-            <div class="hero-slider-item">
-                <div class="slider-bg">
-                    <img src="{{ asset('frontend/assets/images/slider/slide-3.jpg') }}" alt="">
-                </div>
-                <div class="slider-content">
-                    <div class="slide-title">
-                        <h2>Trendy & Unique
-                            Collection</h2>
-                    </div>
-                    <a class="theme-btn" href="{{ route('shop') }}">Shop Now</a>
-                </div>
-            </div>
+            @endforelse
+
         </div>
     </div>
+    
     <ul class="hero-social">
-        <li>
-            <a href="#"><i class="ti-facebook"></i></a>
-        </li>
-        <li>
-            <a href="#"><i class="ti-instagram"></i></a>
-        </li>
-        <li>
-            <a href="#"><i class="ti-linkedin"></i></a>
-        </li>
-        <li>
-            <a href="#"><i class="ti-twitter-alt"></i></a>
-        </li>
+        <li><a href="#"><i class="ti-facebook"></i></a></li>
+        <li><a href="#"><i class="ti-instagram"></i></a></li>
+        <li><a href="#"><i class="ti-linkedin"></i></a></li>
+        <li><a href="#"><i class="ti-twitter-alt"></i></a></li>
     </ul>
 </div>
 <!-- end of wpo-hero-section -->

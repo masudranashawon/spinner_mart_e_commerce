@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Slider;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -12,6 +13,7 @@ class HomeController extends Controller
     public function index()
     {
         $categories = Category::latest('id')->get();
+        $sliders = Slider::with('media')->where('is_active', 1)->orderBy('serial', 'asc')->get();
 
         $interestedProducts = Product::where('is_active', 1)
             ->inRandomOrder()
@@ -38,6 +40,7 @@ class HomeController extends Controller
             ->get();
 
         return view('frontend.index', compact(
+            'sliders',
             'categories',
             'interestedProducts',
             'dealsOfTheDay',

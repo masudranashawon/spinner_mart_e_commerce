@@ -17,21 +17,13 @@
                     @csrf
                     @method('PUT')
 
-                    <div class="mb-4">
-                        <label for="btn-text" class="form-label">Button Text</label>
-                        <input type="text" name="btn_text" id="btn-text" class="form-control" placeholder="e.g. Shop Now" value="{{ $slider->btn_text }}">
-                        @error('btn_text')
-                        <span class="text-danger small">{{ $message }}</span>
-                        @enderror
-                    </div>
+                    <x-input name="title" label="Title" id="title" placeholder="Trendy & uniqe collection" value="{{ $slider->title }}" />
 
-                    <div class="mb-4">
-                        <label for="btn-link" class="form-label">Button Link</label>
-                        <input type="url" name="btn_link" id="btn-link" class="form-control" placeholder="https://..." value="{{ $slider->btn_link }}">
-                        @error('btn_link')
-                        <span class="text-danger small">{{ $message }}</span>
-                        @enderror
-                    </div>
+                    <x-input name="btn_text" label="Button Text" id="btn-text" placeholder="e.g. Shop Now" value="{{ $slider->btn_text }}" />
+
+                    <x-input name="serial" label="Serial" id="serial" placeholder="e.g. 1, 2, 3" value="{{ $slider->serial }}" />
+
+                    <x-input name="btn_link" label="Button Link" id="btn-link" placeholder="/products" value="{{ $slider->btn_link }}" />
 
                     <div class="mb-4">
                         <div class="row">

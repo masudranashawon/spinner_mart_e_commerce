@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('btn_text')->nullable();
             $table->string('btn_link')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->integer('serial')->default(0);
             $table->timestamps();
         });
     }
