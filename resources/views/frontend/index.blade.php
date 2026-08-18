@@ -87,27 +87,33 @@
             </div>
         </div>
         <div class="row">
+            <!-- Banner 1 (Timer Banner) -->
             <div class="col-lg-6 col-md-12">
-                <div class="offer-wrap">
+                <div class="offer-wrap" @if(get_setting('promo_1_image')) style="background: url('{{ get_setting('promo_1_image') }}') no-repeat center center/cover;" @endif>
                     <div class="content">
-                        <h2>Stylish Coat</h2>
-                        <span class="offer-price">$80</span>
-                        <del>$150</del>
+                        <h2>{{ get_setting('promo_1_title', 'Stylish Coat') }}</h2>
+                        <span class="offer-price">{{ get_setting('promo_1_price', '$80') }}</span>
+                        <del>{{ get_setting('promo_1_old_price', '$150') }}</del>
 
                         <div class="count-up">
-                            <div id="clock"></div>
+                            @php
+                                $timerDate = get_setting('promo_1_timer') ? \Carbon\Carbon::parse(get_setting('promo_1_timer'))->format('Y/m/d H:i:s') : '2026/12/31 23:59:59';
+                            @endphp
+                            
+                            <div id="clock" data-date="{{ $timerDate }}"></div>
                         </div>
-                        <a class="theme-btn-s2" href="product.html">Shop Now</a>
+                        <a class="theme-btn-s2" href="{{ get_setting('promo_1_link') }}">Shop Now</a>
                     </div>
-
                 </div>
             </div>
+
+            {{-- Banner 2 --}}
             <div class="col-lg-6 col-md-12">
-                <div class="banner-two-wrap">
+                <div class="banner-two-wrap" @if(get_setting('promo_2_image')) style="background: url('{{ get_setting('promo_2_image') }}') no-repeat center center/cover;" @endif>
                     <div class="text">
-                        <h2>New Year Sale</h2>
-                        <h4>Up To 70% Off</h4>
-                        <a class="theme-btn-s2" href="product.html">Shop Now</a>
+                        <h2>{{ get_setting('promo_2_title', 'New Year Sale') }}</h2>
+                        <h4>{{ get_setting('promo_2_offer_text', 'Up To 70% Off') }}</h4>
+                        <a class="theme-btn-s2" href="{{ get_setting('promo_2_link') }}">Shop Now</a>
                     </div>
                 </div>
             </div>
@@ -145,6 +151,7 @@
 <!-- end of themart-interestproduct-section -->
 
 <!-- start of themart-upcoming-offer-section -->
+@if(get_setting('show_mega_new_year_sale', '1') == '1')
 <section class="themart-upcoming-offer-section section-padding">
     <div class="container">
         <div class="upcoming-offer">
@@ -197,6 +204,7 @@
         </div>
     </div>
 </section>
+@endif
 <!-- end of themart-upcoming-offer-section -->
 
 <!-- start of themart-special-product-section -->
@@ -276,7 +284,7 @@
 <!-- end of themart-trendingproduct-section -->
 
 <!-- start of themart-highlight-product-section -->
-<section class="themart-highlight-product-section">
+<section class="themart-highlight-product-section mt-5">
     <div class="container">
         <div class="row">
             <div class="col-lg-4 col-md-6 col-12">

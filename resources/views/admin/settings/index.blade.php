@@ -15,6 +15,7 @@
                         <a class="nav-link fw-bold rounded-0" id="v-pills-order-tab" data-toggle="pill" href="#v-pills-order" role="tab">Order & Delivery</a>
                         <a class="nav-link fw-bold rounded-0" id="v-pills-currency-tab" data-toggle="pill" href="#v-pills-currency" role="tab">Currency</a>
                         <a class="nav-link fw-bold rounded-0" id="v-pills-announcement-tab" data-toggle="pill" href="#v-pills-announcement" role="tab">Announcement</a>
+                        <a class="nav-link fw-bold rounded-0" id="v-pills-offers-tab" data-toggle="pill" href="#v-pills-offers" role="tab">Exciting Offers</a>
                     </div>
                 </div>
             </div>
@@ -131,22 +132,20 @@
                                     <input type="hidden" name="group[invoice_prefix]" value="order">
                                     <input type="text" name="invoice_prefix" class="form-control" value="{{ get_setting('invoice_prefix') }}" placeholder="e.g. ORD-">
                                 </div>
-                                <div
-                                    class="row"
-                                >
+                                <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Vat Percentage (%)</label>
                                         <input type="hidden" name="group[vat_percentage]" value="order">
                                         <input type="number" step="0.01" name="vat_percentage" class="form-control" value="{{ get_setting('vat_percentage') }}">
                                     </div>
-                                    
+
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Return Policy Days</label>
                                         <input type="hidden" name="group[return_policy_days]" value="order">
                                         <input type="number" name="return_policy_days" class="form-control" value="{{ get_setting('return_policy_days') }}">
                                     </div>
                                 </div>
-                                
+
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Shipping Inside Dhaka</label>
@@ -199,6 +198,102 @@
                                     <label class="form-label">Announcement Link</label>
                                     <input type="hidden" name="group[announcement_link]" value="announcement">
                                     <input type="text" name="announcement_link" class="form-control" value="{{ get_setting('announcement_link') }}" placeholder="https://example.com/offers">
+                                </div>
+                            </div>
+
+                            <!-- Exciting Offers Tab -->
+                            <div class="tab-pane fade" id="v-pills-offers" role="tabpanel">
+                                <h4 class="fw-bold">Exciting Offers Section</h4>
+                                <hr>
+
+                                <div class="border rounded p-4">
+                                    <h5 class="mb-4 text-primary">Banner 1 (Timer Banner)</h5>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Product Title</label>
+                                            <input type="hidden" name="group[promo_1_title]" value="exciting_offers">
+                                            <input type="text" name="promo_1_title" class="form-control" value="{{ get_setting('promo_1_title') }}">
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label class="form-label">Current Price</label>
+                                            <input type="hidden" name="group[promo_1_price]" value="exciting_offers">
+                                            <input type="text" name="promo_1_price" class="form-control" value="{{ get_setting('promo_1_price') }}">
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label class="form-label">Old Price</label>
+                                            <input type="hidden" name="group[promo_1_old_price]" value="exciting_offers">
+                                            <input type="text" name="promo_1_old_price" class="form-control" value="{{ get_setting('promo_1_old_price') }}">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Timer End Date & Time</label>
+                                            <input type="hidden" name="group[promo_1_timer]" value="exciting_offers">
+                                            <input type="datetime-local" name="promo_1_timer" class="form-control" value="{{ get_setting('promo_1_timer') }}">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Button Link</label>
+                                            <input type="hidden" name="group[promo_1_link]" value="exciting_offers">
+                                            <input type="text" name="promo_1_link" class="form-control" value="{{ get_setting('promo_1_link') }}">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Background Image</label>
+                                            <input type="hidden" name="group[promo_1_image]" value="exciting_offers">
+                                            <input type="file" name="promo_1_image" class="form-control">
+                                        </div>
+                                        <div class="col-md-6">
+                                            @if(get_setting('promo_1_image'))
+                                            <img src="{{ get_setting('promo_1_image') }}" height="60" class="mt-2 border rounded">
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="border rounded p-4 mt-3">
+                                    <h5 class="mb-4 text-primary">Banner 2 </h5>
+                                    <div class="row rounded">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Title</label>
+                                            <input type="hidden" name="group[promo_2_title]" value="exciting_offers">
+                                            <input type="text" name="promo_2_title" class="form-control" value="{{ get_setting('promo_2_title') }}" placeholder="New Arrival">
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label class="form-label">Discount Text</label>
+                                            <input type="hidden" name="group[promo_2_offer_text]" value="exciting_offers">
+                                            <input type="text" name="promo_2_offer_text" class="form-control" value="{{ get_setting('promo_2_offer_text') }}" placeholder="Up To 70% Off">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Button Link</label>
+                                            <input type="hidden" name="group[promo_2_link]" value="exciting_offers">
+                                            <input type="text" name="promo_2_link" class="form-control" value="{{ get_setting('promo_2_link') }}" placeholder="/shop">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Background Image</label>
+                                            <input type="hidden" name="group[promo_2_image]" value="exciting_offers">
+                                            <input type="file" name="promo_2_image" class="form-control">
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            @if(get_setting('promo_2_image'))
+                                            <img src="{{ get_setting('promo_2_image') }}" height="60" class="mt-2 border rounded">
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="border rounded p-4 mt-3">
+                                    <h5 class="mb-4 text-primary">Banner 3 (Mega New Year Sale)</h5>
+
+                                    <div class="custom-control custom-switch">
+                                        <input type="hidden" name="group[show_mega_new_year_sale]" value="exciting_offers">
+                                        <input type="hidden" name="show_mega_new_year_sale" value="0">
+                                        <input type="checkbox" class="custom-control-input" id="show_mega_new_year_sale" name="show_mega_new_year_sale" value="1" {{ get_setting('show_mega_new_year_sale') == '1' ? 'checked' : '' }}>
+                                        <label class="custom-control-label" for="show_mega_new_year_sale">Enable Mega "New Year Sale" Banner</label>
+                                        <small class="text-muted d-block mt-1">If disabled, this banner will not show on the website.</small>
+                                    </div>
                                 </div>
                             </div>
 

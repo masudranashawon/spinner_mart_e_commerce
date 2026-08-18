@@ -3,6 +3,7 @@
 use App\Models\Setting;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 if (!function_exists('get_setting')) {
     function get_setting(string $key, $default = null)
@@ -12,9 +13,11 @@ if (!function_exists('get_setting')) {
         });
 
         $value = $settings[$key] ?? $default;
-        $imageKeys = ['site_logo', 'site_favicon', 'footer_logo'];
+        $isImage = in_array($key, ['site_logo', 'site_favicon', 'footer_logo'])
+            || str_ends_with($key, '_image')
+            || str_ends_with($key, '_logo');
 
-        if (in_array($key, $imageKeys) && $value) {
+        if ($isImage && $value) {
             // External URL (http/https)
             if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
                 return $value;

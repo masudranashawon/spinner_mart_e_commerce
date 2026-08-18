@@ -44,6 +44,21 @@ class EcommerceSeeder extends Seeder
             ['key' => 'enable_announcement_bar', 'value' => '1', 'group' => 'enable_announcement_bar'],
             ['key' => 'announcement_text', 'value' => 'Exclusive Deals Available for a Limited Time.', 'group' => 'enable_announcement_bar'],
             ['key' => 'announcement_link', 'value' => '/products', 'group' => 'enable_announcement_bar'],
+            // Exciting Offers (Home Page)
+            // Promo 1
+            ['key' => 'promo_1_title', 'value' => 'Stylish Coat', 'group' => 'exciting_offers'],
+            ['key' => 'promo_1_price', 'value' => '$80', 'group' => 'exciting_offers'],
+            ['key' => 'promo_1_old_price', 'value' => '$150', 'group' => 'exciting_offers'],
+            ['key' => 'promo_1_timer', 'value' => now()->addDays(10)->format('Y-m-d H:i:s'), 'group' => 'exciting_offers'],
+            ['key' => 'promo_1_link', 'value' => '/shop', 'group' => 'exciting_offers'],
+            ['key' => 'promo_1_image', 'value' => 'frontend/assets/images/offer-bg.jpg', 'group' => 'exciting_offers'],
+            // Promo 2
+            ['key' => 'promo_2_title', 'value' => 'New Arrival', 'group' => 'exciting_offers'],
+            ['key' => 'promo_2_offer_text', 'value' => 'Up To 70% Off', 'group' => 'exciting_offers'],
+            ['key' => 'promo_2_link', 'value' => '/shop', 'group' => 'exciting_offers'],
+            ['key' => 'promo_2_image', 'value' => 'frontend/assets/images/banner-bg.jpg', 'group' => 'exciting_offers'],
+            // New Year Sale Banner Status (1 = True, 0 = False)
+            ['key' => 'show_mega_new_year_sale', 'value' => '1', 'group' => 'exciting_offers'],
         ];
 
         foreach ($settings as $setting) {
@@ -62,7 +77,7 @@ class EcommerceSeeder extends Seeder
 
             // Slider Creation
             Slider::create([
-                'title' => 'Mega Sale - Up to'.$i.'0% Off',
+                'title' => 'Mega Sale - Up to' . $i . '0% Off',
                 'media_id' => $media->id,
                 'btn_text' => 'Shop Now',
                 'btn_link' => '/shop',

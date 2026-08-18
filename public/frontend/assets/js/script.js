@@ -947,12 +947,13 @@
     }
 
 
-
     /*------------------------------------------
             = COUNTDOWN CLOCK
     -------------------------------------------*/
     if ($("#clock").length) {
-        $('#clock').countdown('2023/03/03', function (event) {
+        var dynamicDate = $('#clock').data('date'); // Get the date from the data attribute
+
+        $('#clock').countdown(dynamicDate, function (event) {
             var $this = $(this).html(event.strftime('' +
                 '<div class="box"><div><div class="time">%D</div> <span>Days</span> </div></div>' +
                 '<div class="box"><div><div class="time">%H</div> <span>Hours</span> </div></div>' +
@@ -965,7 +966,7 @@
             = COUNTDOWN CLOCK TWO
     -------------------------------------------*/
     if ($("#clock-s2").length) {
-        $('#clock-s2').countdown('2023/08/03', function (event) {
+        $('#clock-s2').countdown('2026/09/03', function (event) {
             var $this = $(this).html(event.strftime('' +
                 '<div class="box"><div><div class="time">%D</div> <span>Days</span> </div></div>' +
                 '<div class="box"><div><div class="time">%H</div> <span>Hours</span> </div></div>' +
@@ -977,7 +978,7 @@
             = COUNTDOWN CLOCK 3
     -------------------------------------------*/
     if ($("#clock-s3").length) {
-        $('#clock-s3').countdown('2023/06/03', function (event) {
+        $('#clock-s3').countdown('2026/10/03', function (event) {
             var $this = $(this).html(event.strftime('' +
                 '<div class="box"><div><div class="time">%D</div> <span>Days</span> </div></div>' +
                 '<div class="box"><div><div class="time">%H</div> <span>Hours</span> </div></div>' +
@@ -989,7 +990,7 @@
             = COUNTDOWN CLOCK 4
     -------------------------------------------*/
     if ($("#clock-s4").length) {
-        $('#clock-s4').countdown('2023/05/03', function (event) {
+        $('#clock-s4').countdown('2026/10/03', function (event) {
             var $this = $(this).html(event.strftime('' +
                 '<div class="box"><div><div class="time">%D</div> <span>Days</span> </div></div>' +
                 '<div class="box"><div><div class="time">%H</div> <span>Hours</span> </div></div>' +
