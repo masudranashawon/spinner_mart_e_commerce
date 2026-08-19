@@ -59,6 +59,14 @@ class EcommerceSeeder extends Seeder
             ['key' => 'promo_2_image', 'value' => 'frontend/assets/images/banner-bg.jpg', 'group' => 'exciting_offers'],
             // New Year Sale Banner Status (1 = True, 0 = False)
             ['key' => 'show_mega_new_year_sale', 'value' => '1', 'group' => 'exciting_offers'],
+            // About Us Page
+            ['key' => 'about_hero_heading', 'value' => 'We Help Your Digital <span style="color: #8cc63f;">&</span> Business Grow.', 'group' => 'about_page'],
+            ['key' => 'about_hero_description', 'value' => 'Aliquam erat volutpat. Duis ac turpis. Integer rutrum ante eu lacus. Vestibulum libero nisl, porta vel, scelerisque eget, malesuada at, neque. Vivamus eget nibh. Etiam cursus leo vel metus. Nulla facilisi.', 'group' => 'about_page'],
+            ['key' => 'about_hero_image', 'value' => 'frontend/assets/images/about.jpg', 'group' => 'about_page'],
+            ['key' => 'about_gallery_1_image', 'value' => 'frontend/assets/images/portfolio/1.jpg', 'group' => 'about_page'],
+            ['key' => 'about_gallery_2_image', 'value' => 'frontend/assets/images/portfolio/2.jpg', 'group' => 'about_page'],
+            ['key' => 'about_gallery_3_image', 'value' => 'frontend/assets/images/portfolio/3.jpg', 'group' => 'about_page'],
+            ['key' => 'about_gallery_4_image', 'value' => 'frontend/assets/images/portfolio/4.jpg', 'group' => 'about_page'],
         ];
 
         foreach ($settings as $setting) {

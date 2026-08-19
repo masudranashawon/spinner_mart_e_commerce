@@ -16,6 +16,7 @@
                         <a class="nav-link fw-bold rounded-0" id="v-pills-currency-tab" data-toggle="pill" href="#v-pills-currency" role="tab">Currency</a>
                         <a class="nav-link fw-bold rounded-0" id="v-pills-announcement-tab" data-toggle="pill" href="#v-pills-announcement" role="tab">Announcement</a>
                         <a class="nav-link fw-bold rounded-0" id="v-pills-offers-tab" data-toggle="pill" href="#v-pills-offers" role="tab">Exciting Offers</a>
+                        <a class="nav-link fw-bold rounded-0" id="v-pills-about-tab" data-toggle="pill" href="#v-pills-about" role="tab">About Page</a>
                     </div>
                 </div>
             </div>
@@ -206,93 +207,170 @@
                                 <h4 class="fw-bold">Exciting Offers Section</h4>
                                 <hr>
 
-                                <div class="border rounded p-4">
-                                    <h5 class="mb-4 text-primary">Banner 1 (Timer Banner)</h5>
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label">Product Title</label>
-                                            <input type="hidden" name="group[promo_1_title]" value="exciting_offers">
-                                            <input type="text" name="promo_1_title" class="form-control" value="{{ get_setting('promo_1_title') }}">
-                                        </div>
-                                        <div class="col-md-3 mb-3">
-                                            <label class="form-label">Current Price</label>
-                                            <input type="hidden" name="group[promo_1_price]" value="exciting_offers">
-                                            <input type="text" name="promo_1_price" class="form-control" value="{{ get_setting('promo_1_price') }}">
-                                        </div>
-                                        <div class="col-md-3 mb-3">
-                                            <label class="form-label">Old Price</label>
-                                            <input type="hidden" name="group[promo_1_old_price]" value="exciting_offers">
-                                            <input type="text" name="promo_1_old_price" class="form-control" value="{{ get_setting('promo_1_old_price') }}">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label">Timer End Date & Time</label>
-                                            <input type="hidden" name="group[promo_1_timer]" value="exciting_offers">
-                                            <input type="datetime-local" name="promo_1_timer" class="form-control" value="{{ get_setting('promo_1_timer') }}">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label">Button Link</label>
-                                            <input type="hidden" name="group[promo_1_link]" value="exciting_offers">
-                                            <input type="text" name="promo_1_link" class="form-control" value="{{ get_setting('promo_1_link') }}">
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <label class="form-label">Background Image</label>
-                                            <input type="hidden" name="group[promo_1_image]" value="exciting_offers">
-                                            <input type="file" name="promo_1_image" class="form-control">
-                                        </div>
-                                        <div class="col-md-6">
-                                            @if(get_setting('promo_1_image'))
-                                            <img src="{{ get_setting('promo_1_image') }}" height="60" class="mt-2 border rounded">
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="border rounded p-4 mt-3">
-                                    <h5 class="mb-4 text-primary">Banner 2 </h5>
-                                    <div class="row rounded">
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label">Title</label>
-                                            <input type="hidden" name="group[promo_2_title]" value="exciting_offers">
-                                            <input type="text" name="promo_2_title" class="form-control" value="{{ get_setting('promo_2_title') }}" placeholder="New Arrival">
-                                        </div>
-                                        <div class="col-md-3 mb-3">
-                                            <label class="form-label">Discount Text</label>
-                                            <input type="hidden" name="group[promo_2_offer_text]" value="exciting_offers">
-                                            <input type="text" name="promo_2_offer_text" class="form-control" value="{{ get_setting('promo_2_offer_text') }}" placeholder="Up To 70% Off">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label">Button Link</label>
-                                            <input type="hidden" name="group[promo_2_link]" value="exciting_offers">
-                                            <input type="text" name="promo_2_link" class="form-control" value="{{ get_setting('promo_2_link') }}" placeholder="/shop">
-                                        </div>
+                                <div class="card mb-4 shadow-none">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0 text-primary">Banner 1 (Timer Banner)</h5>
                                     </div>
 
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <label class="form-label">Background Image</label>
-                                            <input type="hidden" name="group[promo_2_image]" value="exciting_offers">
-                                            <input type="file" name="promo_2_image" class="form-control">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Product Title</label>
+                                                <input type="hidden" name="group[promo_1_title]" value="exciting_offers">
+                                                <input type="text" name="promo_1_title" class="form-control" value="{{ get_setting('promo_1_title') }}">
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label">Current Price</label>
+                                                <input type="hidden" name="group[promo_1_price]" value="exciting_offers">
+                                                <input type="text" name="promo_1_price" class="form-control" value="{{ get_setting('promo_1_price') }}">
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label">Old Price</label>
+                                                <input type="hidden" name="group[promo_1_old_price]" value="exciting_offers">
+                                                <input type="text" name="promo_1_old_price" class="form-control" value="{{ get_setting('promo_1_old_price') }}">
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Timer End Date & Time</label>
+                                                <input type="hidden" name="group[promo_1_timer]" value="exciting_offers">
+                                                <input type="datetime-local" name="promo_1_timer" class="form-control" value="{{ get_setting('promo_1_timer') }}">
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Button Link</label>
+                                                <input type="hidden" name="group[promo_1_link]" value="exciting_offers">
+                                                <input type="text" name="promo_1_link" class="form-control" value="{{ get_setting('promo_1_link') }}">
+                                            </div>
                                         </div>
-
-                                        <div class="col-md-6">
-                                            @if(get_setting('promo_2_image'))
-                                            <img src="{{ get_setting('promo_2_image') }}" height="60" class="mt-2 border rounded">
-                                            @endif
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Background Image</label>
+                                                <input type="hidden" name="group[promo_1_image]" value="exciting_offers">
+                                                <input type="file" name="promo_1_image" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                @if(get_setting('promo_1_image'))
+                                                <img src="{{ get_setting('promo_1_image') }}" height="60" class="mt-2 border rounded">
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="border rounded p-4 mt-3">
-                                    <h5 class="mb-4 text-primary">Banner 3 (Mega New Year Sale)</h5>
+                                <div class="card mb-4 shadow-none mt-3">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0 text-primary">Banner 2</h5>
+                                    </div>
 
-                                    <div class="custom-control custom-switch">
-                                        <input type="hidden" name="group[show_mega_new_year_sale]" value="exciting_offers">
-                                        <input type="hidden" name="show_mega_new_year_sale" value="0">
-                                        <input type="checkbox" class="custom-control-input" id="show_mega_new_year_sale" name="show_mega_new_year_sale" value="1" {{ get_setting('show_mega_new_year_sale') == '1' ? 'checked' : '' }}>
-                                        <label class="custom-control-label" for="show_mega_new_year_sale">Enable Mega "New Year Sale" Banner</label>
-                                        <small class="text-muted d-block mt-1">If disabled, this banner will not show on the website.</small>
+                                    <div class="card-body">
+                                        <div class="row rounded">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Title</label>
+                                                <input type="hidden" name="group[promo_2_title]" value="exciting_offers">
+                                                <input type="text" name="promo_2_title" class="form-control" value="{{ get_setting('promo_2_title') }}" placeholder="New Arrival">
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label">Discount Text</label>
+                                                <input type="hidden" name="group[promo_2_offer_text]" value="exciting_offers">
+                                                <input type="text" name="promo_2_offer_text" class="form-control" value="{{ get_setting('promo_2_offer_text') }}" placeholder="Up To 70% Off">
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Button Link</label>
+                                                <input type="hidden" name="group[promo_2_link]" value="exciting_offers">
+                                                <input type="text" name="promo_2_link" class="form-control" value="{{ get_setting('promo_2_link') }}" placeholder="/shop">
+                                            </div>
+                                        </div>
+    
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Background Image</label>
+                                                <input type="hidden" name="group[promo_2_image]" value="exciting_offers">
+                                                <input type="file" name="promo_2_image" class="form-control">
+                                            </div>
+    
+                                            <div class="col-md-6">
+                                                @if(get_setting('promo_2_image'))
+                                                <img src="{{ get_setting('promo_2_image') }}" height="60" class="mt-2 border rounded">
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card mb-4 shadow-none mt-3">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0 text-primary">Banner 3 (Mega New Year Sale)</h5>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div class="custom-control custom-switch">
+                                            <input type="hidden" name="group[show_mega_new_year_sale]" value="exciting_offers">
+                                            <input type="hidden" name="show_mega_new_year_sale" value="0">
+                                            <input type="checkbox" class="custom-control-input" id="show_mega_new_year_sale" name="show_mega_new_year_sale" value="1" {{ get_setting('show_mega_new_year_sale') == '1' ? 'checked' : '' }}>
+                                            <label class="custom-control-label" for="show_mega_new_year_sale">Enable Mega "New Year Sale" Banner</label>
+                                            <small class="text-muted d-block mt-1">If disabled, this banner will not show on the website.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- About Page Tab -->
+                            <div class="tab-pane fade" id="v-pills-about" role="tabpanel">
+                                <h4 class="fw-bold">About Us Page</h4>
+                                <hr>
+
+                                <!-- Hero Section Card -->
+                                <div class="card mb-4 shadow-none">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0 text-primary">About Hero Section</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12 mb-4">
+                                                <label class="form-label">Main Heading</label>
+                                                <input type="hidden" name="group[about_hero_heading]" value="about_page">
+                                                <input type="text" name="about_hero_heading" class="form-control" value="{{ get_setting('about_hero_heading') }}" placeholder="We Help Your Digital & Business Grow.">
+                                                <small class="text-muted mt-1 d-block">Tip: You can use HTML like &lt;span style="color:#8cc63f;"&gt;Text&lt;/span&gt; to highlight words.</small>
+                                            </div>
+                                            
+                                            <div class="col-md-12 mb-4">
+                                                <label class="form-label">Description</label>
+                                                <input type="hidden" name="group[about_hero_description]" value="about_page">
+                                                <textarea name="about_hero_description" class="form-control" rows="5" placeholder="Write something about your business...">{{ get_setting('about_hero_description') }}</textarea>
+                                            </div>
+
+                                            <div class="col-md-12 mb-3">
+                                                <label class="form-label">Hero Side Image</label>
+                                                <input type="hidden" name="group[about_hero_image]" value="about_page">
+                                                <input type="file" name="about_hero_image" class="form-control">
+                                                @if(get_setting('about_hero_image'))
+                                                    <div class="mt-3">
+                                                        <img src="{{ get_setting('about_hero_image') }}" height="120" class="border rounded object-fit-cover" alt="Hero Image">
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Image Gallery Card -->
+                                <div class="card shadow-none">
+                                    <div class="card-header">
+                                        <h5 class="card-title text-primary mb-0">Image Gallery Section</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            @for($i = 1; $i <= 4; $i++)
+                                            <div class="col-md-6 mb-4">
+                                                <label class="form-label">Gallery Image {{ $i }}</label>
+                                                <input type="hidden" name="group[about_gallery_{{ $i }}_image]" value="about_page">
+                                                <input type="file" name="about_gallery_{{ $i }}_image" class="form-control">
+                                                @if(get_setting('about_gallery_'.$i.'_image'))
+                                                    <div class="mt-3">
+                                                        <img src="{{ get_setting('about_gallery_'.$i.'_image') }}" height="100" width="150" class="border rounded object-fit-cover" alt="Gallery Image {{ $i }}">
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            @endfor
+                                        </div>
                                     </div>
                                 </div>
                             </div>
