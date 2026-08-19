@@ -20,7 +20,7 @@
             </thead>
             <tbody>
                 @forelse($messages as $key => $message)
-                <tr class="{{ !$message->is_read ? 'bg-light' : '' }}">
+                <tr class="email-list-item" style="{{!$message->is_read ? 'background-color: rgba(114, 124, 245, 0.09);' : '' }}">
                     <td class="text-center align-middle">{{ $messages->firstItem() + $key }}</td>
 
                     <td class="align-middle">

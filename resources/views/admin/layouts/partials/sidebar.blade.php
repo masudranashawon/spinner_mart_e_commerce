@@ -420,7 +420,10 @@ Noble<span>UI</span>
             <li class="nav-item nav-category">Sales & Promotions</li>
 
             <!-- Orders -->
-            @php $isOrderActive = request()->routeIs('admin.order.*'); @endphp
+            @php 
+            $isOrderActive = request()->routeIs('admin.order.*');
+            $orderCount = \App\Models\Order::where('order_status', 'pending')->count();
+             @endphp
             <li class="nav-item {{ $isOrderActive ? 'active' : '' }}">
                 <a class="nav-link" data-toggle="collapse" href="#orders" role="button" aria-expanded="{{ $isOrderActive ? 'true' : 'false' }}" aria-controls="orders">
                     <i class="link-icon" data-feather="shopping-cart"></i>
@@ -429,12 +432,17 @@ Noble<span>UI</span>
                 </a>
                 <div class="collapse {{ $isOrderActive ? 'show' : '' }}" id="orders">
                     <ul class="nav sub-menu">
-                        <li class="nav-item">
+                        <li class="nav-item d-flex align-items-center justify-content-between">
                             <a href="{{ route('admin.order.index') }}" class="nav-link {{ request()->routeIs('admin.order.*') ? 'active' : '' }}">All Orders</a>
+                            @if($orderCount > 0)
+                            <span class="badge badge-danger-muted text-white font-weight-bold float-right">{{ $orderCount }}</span>
+                            @endif
                         </li>
                     </ul>
                 </div>
             </li>
+
+
 
             <!-- Coupons -->
             @php $isCouponActive = request()->routeIs('coupon.*'); @endphp
@@ -464,7 +472,7 @@ Noble<span>UI</span>
                 </a>
 
                 @if($unreadContactCount > 0)
-                <span class="badge badge-danger">{{ $unreadContactCount }}</span>
+                <span class="badge badge-danger-muted text-white font-weight-bold float-right">{{ $unreadContactCount }}</span>
                 @endif
             </li>
 
