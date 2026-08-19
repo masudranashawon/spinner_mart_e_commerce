@@ -7,6 +7,7 @@ use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\NewsletterController;
 use App\Http\Controllers\Frontend\OrderController;
+use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\ProductReviewController;
 use App\Http\Controllers\Frontend\ProfileController;
 use App\Http\Controllers\Frontend\RecentViewController;
@@ -23,6 +24,11 @@ Route::post('/subscribe', [NewsletterController::class, 'store'])->name('newslet
 Route::controller(ContactController::class)->group(function () {
     Route::get('/contact', 'index')->name('contact.index');
     Route::post('/contact', 'store')->name('contact.store');
+});
+
+Route::controller(PageController::class)->group(function () {
+    Route::get('/about', 'about')->name('about');
+    Route::get('/faq', 'faq')->name('faq');
 });
 
 Route::controller(AuthController::class)->group(function () {

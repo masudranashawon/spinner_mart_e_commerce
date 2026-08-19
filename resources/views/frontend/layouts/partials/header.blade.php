@@ -278,7 +278,7 @@
                                 <li class="menu-item-has-children">
                                     <a href="{{ route('home') }}">Home</a>
                                 </li>
-                                <li><a href="about.html">About</a></li>
+                                <li><a href="{{ route('about') }}">About</a></li>
                                 <li class="menu-item-has-children">
                                     <a href="{{route('shop')}}">Shop</a>
                                 </li>
