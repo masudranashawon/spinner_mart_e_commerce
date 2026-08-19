@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-use App\Models\{Setting, Category, SubCategory, Brand, Color, Media, Size, Tag, Product, ProductDetails, ProductVariant, Slider};
+use App\Models\{Setting, Category, SubCategory, Brand, Color, Faq, Media, Size, Tag, Product, ProductDetails, ProductVariant, Slider};
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Cache;
 
@@ -170,6 +170,17 @@ class EcommerceSeeder extends Seeder
                     'current_stock' => rand(0, 50),
                 ]);
             }
+        }
+
+        // FAQ Seeder
+        $faqs = [
+            ['question' => 'What is your return policy?', 'answer' => 'You can return any product within 7 days of delivery if it is defective or damaged.'],
+            ['question' => 'How long does shipping take?', 'answer' => 'Shipping inside Dhaka takes 1-2 business days. Outside Dhaka takes 3-5 business days.'],
+            ['question' => 'Do you offer international shipping?', 'answer' => 'Currently, we only ship within Bangladesh.'],
+        ];
+
+        foreach ($faqs as $faq) {
+            Faq::updateOrCreate(['question' => $faq['question']], $faq);
         }
     }
 }

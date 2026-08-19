@@ -526,6 +526,14 @@ Noble<span>UI</span>
                     <span class="link-title">Hero Sliders</span>
                 </a>
             </li>
+
+            {{-- FAQs --}}
+            <li class="nav-item {{ request()->routeIs('admin.faqs.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.faqs.index') }}" class="nav-link">
+                    <i class="link-icon" data-feather="help-circle"></i>
+                    <span class="link-title">Faqs</span>
+                </a>
+            </li>
         </ul>
     </div>
 </nav>

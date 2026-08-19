@@ -283,7 +283,7 @@
                                     <a href="{{route('shop')}}">Shop</a>
                                 </li>
                                 <li class="menu-item-has-children">
-                                    <a href="#">FAQ</a>
+                                    <a href="{{ route('faq') }}">FAQ</a>
                                 </li>
                                 <li><a href="{{ route('contact.index') }}">Contact</a></li>
                             </ul>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\InventoryStockController;
 use App\Http\Controllers\Admin\NewsletterController;
 use App\Http\Controllers\Admin\OrderController;
@@ -95,7 +96,7 @@ Route::prefix("admin")->middleware(['auth', 'role:admin'])->group(function () {
     Route::put("/product/{product}/variants/{variant}/update", "update")->name("product.variants.update");
   });
 
-  // Product Reviews
+  // product review routes
   Route::controller(ProductReviewController::class)->group(function () {
     Route::get('/reviews', 'index')->name('admin.reviews.index');
     Route::post('/reviews/{review}/status', 'toggleStatus')->name('admin.reviews.status');
@@ -138,21 +139,21 @@ Route::prefix("admin")->middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/order/{order}/destroy', 'destroy')->name('admin.order.destroy');
   });
 
-  // Newsletter Subscribers
+  // newsletter subscriber routes
   Route::controller(NewsletterController::class)->group(function () {
     Route::get('/subscribers', 'index')->name('admin.subscribers.index');
     Route::post('/subscribers/{subscriber}/status', 'toggleStatus')->name('admin.subscribers.status');
     Route::delete('/subscribers/{subscriber}/destroy', 'destroy')->name('admin.subscribers.destroy');
   });
 
-  // Contact Messages
+  // contact message routes
   Route::controller(ContactMessageController::class)->group(function () {
     Route::get('/contact-messages', 'index')->name('admin.contact.index');
     Route::post('/contact-messages/{message}/status', 'toggleStatus')->name('admin.contact.status');
     Route::delete('/contact-messages/{message}/destroy', 'destroy')->name('admin.contact.destroy');
   });
 
-  // Hero Sliders
+  // hero slider routes
   Route::controller(SliderController::class)->group(function () {
     Route::get('/sliders', 'index')->name('admin.sliders.index');
     Route::post('/sliders', 'store')->name('admin.sliders.store');
@@ -160,6 +161,16 @@ Route::prefix("admin")->middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/sliders/{slider}', 'update')->name('admin.sliders.update');
     Route::delete('/sliders/{slider}', 'destroy')->name('admin.sliders.destroy');
     Route::post('/sliders/{slider}/status', 'toggleStatus')->name('admin.sliders.status');
+  });
+
+  // faq routes
+  Route::controller(FaqController::class)->group(function () {
+    Route::get('/faqs', 'index')->name('admin.faqs.index');
+    Route::post('/faqs', 'store')->name('admin.faqs.store');
+    Route::get('/faqs/{faq}/edit', 'edit')->name('admin.faqs.edit');
+    Route::put('/faqs/{faq}', 'update')->name('admin.faqs.update');
+    Route::delete('/faqs/{faq}', 'destroy')->name('admin.faqs.destroy');
+    Route::post('/faqs/{faq}/status', 'toggleStatus')->name('admin.faqs.status');
   });
 
   // settings routes
