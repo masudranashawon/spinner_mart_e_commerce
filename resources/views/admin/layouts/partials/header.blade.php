@@ -73,7 +73,7 @@
             <!-- Profile Dropdown -->
             <li class="nav-item dropdown nav-profile">
                 <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img src="{{ auth()->user()->thumbnail }}" alt="{{ auth()->user()->name }}" style="object-fit: cover;">
+                    <img src="{{ auth()->user()->thumbnail }}" alt="{{ auth()->user()->name }}" style="width: 40px; height: 40px; object-fit: cover;">
                 </a>
                 <div class="dropdown-menu" aria-labelledby="profileDropdown">
                     <div class="dropdown-header d-flex flex-column align-items-center">

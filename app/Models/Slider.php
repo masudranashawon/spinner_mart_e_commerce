@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 class Slider extends Model
 {
     protected $guarded = ['id'];
-    
+
     protected $casts = [
         'is_active' => 'boolean',
     ];
@@ -19,17 +19,33 @@ class Slider extends Model
         return $this->belongsTo(Media::class);
     }
 
-    // Thumbnail Accessor 
+    // Thumbnail Accessor Updated
     public function thumbnail(): Attribute
     {
-        $url = asset("placeholder.jpg");
-
-        if ($this->media && Storage::exists($this->media->src)) {
-            $url = Storage::url($this->media->src);
-        }
-
         return Attribute::make(
-            get: fn() => $url,
+            get: function () {
+                $url = asset("placeholder.jpg");
+
+                if ($this->media && $this->media->src) {
+                    $src = $this->media->src;
+
+                    // External URL
+                    if (str_starts_with($src, 'http://') || str_starts_with($src, 'https://')) {
+                        $url = $src;
+                    }
+                    
+                    // Uploaded from Admin (Storage)
+                    elseif (Storage::disk('public')->exists($src)) {
+                        $url = Storage::url($src);
+                    }
+                    // Default Theme Asset (From Seeder in public folder)
+                    elseif (file_exists(public_path($src))) {
+                        $url = asset($src);
+                    }
+                }
+
+                return $url;
+            }
         );
     }
 }

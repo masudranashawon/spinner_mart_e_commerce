@@ -8,10 +8,10 @@ class OrderItem extends Model
 {
     protected $guarded = ['id'];
 
-    // public function order()
-    // {
-    //     return $this->belongsTo(Order::class);
-    // }
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 
     public function product()
     {

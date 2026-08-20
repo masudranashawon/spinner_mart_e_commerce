@@ -54,6 +54,9 @@ class OrderItemsRepository extends Repository
                 $variantNameStr = !empty($attrs) ? implode(' | ', $attrs) : 'Default Variant';
             }
 
+            // Buying Price Snapshot Calculation
+            $buyPrice = $variant->buying_price ?? $product->buying_price ?? 0;
+
             // Create order item with Snapshot data
             self::create([
                 'order_id' => $order->id,
@@ -63,6 +66,7 @@ class OrderItemsRepository extends Repository
                 'variant_name' => $variantNameStr, // Snapshot added
                 'sku_code' => $variant->sku_code,
                 'price' => $item->price,
+                'buying_price' => $buyPrice,
                 'quantity' => $item->quantity,
                 'subtotal' => $item->quantity * $item->price,
             ]);

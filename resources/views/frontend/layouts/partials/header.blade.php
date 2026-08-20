@@ -22,9 +22,6 @@
                     <div class="contact-info">
                         <ul>
                             <li><a href="tel:{{get_setting('phone')}}"><span>Need help? Call Us:</span> {{get_setting('phone')}}</a></li>
-                            <li class="pl-0">
-                               | <a href="{{route('dynamic.page', 'help')}}" class="text-decoration-underline"> Help</a>
-                            </li>
                         </ul>
                     </div>
                 </div>

@@ -2,7 +2,7 @@
 @section('content')
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h5>Dynamic Pages</h5>
+        <h5>Create a new page</h5>
 
         <a href="{{ route('admin.pages.index') }}" class="d-flex justify-content-center align-items-center bg-primary rounded px-2 py-1 text-white">
             <i class="link-icon" data-feather="arrow-left"></i>
