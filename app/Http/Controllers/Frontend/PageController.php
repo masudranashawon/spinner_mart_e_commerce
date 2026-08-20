@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Faq;
+use App\Models\Page;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -18,5 +19,12 @@ class PageController extends Controller
         $faqs = Faq::where('is_active', 1)->latest()->get();
 
         return view('frontend.pages.faq', compact('faqs'));
+    }
+
+    public function showDynamicPage($slug = '')
+    {
+        $page = Page::where('slug', $slug)->where('is_active', 1)->firstOrFail();
+        
+        return view('frontend.pages.dynamic', compact('page'));
     }
 }

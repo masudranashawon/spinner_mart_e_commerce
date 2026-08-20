@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\InventoryStockController;
 use App\Http\Controllers\Admin\NewsletterController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -171,6 +172,17 @@ Route::prefix("admin")->middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/faqs/{faq}', 'update')->name('admin.faqs.update');
     Route::delete('/faqs/{faq}', 'destroy')->name('admin.faqs.destroy');
     Route::post('/faqs/{faq}/status', 'toggleStatus')->name('admin.faqs.status');
+  });
+
+  // Dynamic Pages (Privacy Policy, Terms etc.)
+  Route::controller(PageController::class)->group(function () {
+    Route::get('/pages', 'index')->name('admin.pages.index');
+    Route::get('/pages/create', 'create')->name('admin.pages.create');
+    Route::post('/pages', 'store')->name('admin.pages.store');
+    Route::get('/pages/{page}/edit', 'edit')->name('admin.pages.edit');
+    Route::put('/pages/{page}', 'update')->name('admin.pages.update');
+    Route::delete('/pages/{page}', 'destroy')->name('admin.pages.destroy');
+    Route::post('/pages/{page}/status', 'toggleStatus')->name('admin.pages.status');
   });
 
   // settings routes

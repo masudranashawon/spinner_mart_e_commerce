@@ -13,197 +13,72 @@
                 <input type="text" class="form-control" id="navbarForm" placeholder="Search here...">
             </div>
         </form>
+        
         <ul class="navbar-nav">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="flag-icon flag-icon-us mt-1" title="us"></i> <span class="font-weight-medium d-none d-md-inline-block ml-1 mr-1">English</span>
+            
+            <!-- View Site Button -->
+            <li class="nav-item">
+                <a href="{{ route('home') }}" target="_blank" class="nav-link text-primary border border-primary rounded-pill p-2 font-weight-bold d-flex" title="Visit Website">
+                    <i data-feather="globe" class="icon-md"></i>
+                    <span class="d-none d-md-inline-block ml-1 text-nowrap">View Site</span>
                 </a>
-                <div class="dropdown-menu" aria-labelledby="languageDropdown">
-                    <a href="javascript:;" class="dropdown-item py-2"><i class="flag-icon flag-icon-us" title="us" id="us"></i> <span class="ml-1"> English </span></a>
-                    <a href="javascript:;" class="dropdown-item py-2"><i class="flag-icon flag-icon-fr" title="fr" id="fr"></i> <span class="ml-1"> French </span></a>
-                    <a href="javascript:;" class="dropdown-item py-2"><i class="flag-icon flag-icon-de" title="de" id="de"></i> <span class="ml-1"> German </span></a>
-                    <a href="javascript:;" class="dropdown-item py-2"><i class="flag-icon flag-icon-pt" title="pt" id="pt"></i> <span class="ml-1"> Portuguese </span></a>
-                    <a href="javascript:;" class="dropdown-item py-2"><i class="flag-icon flag-icon-es" title="es" id="es"></i> <span class="ml-1"> Spanish </span></a>
-                </div>
             </li>
-            <li class="nav-item dropdown nav-apps">
-                <a class="nav-link dropdown-toggle" href="#" id="appsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i data-feather="grid"></i>
-                </a>
-                <div class="dropdown-menu" aria-labelledby="appsDropdown">
-                    <div class="dropdown-header d-flex align-items-center justify-content-between">
-                        <p class="font-weight-medium mb-0">Web Apps</p>
-                        <a href="javascript:;" class="text-muted">Edit</a>
-                    </div>
-                    <div class="dropdown-body">
-                        <div class="d-flex align-items-center apps">
-                            <a href="pages/apps/chat.html"><i data-feather="message-square" class="icon-lg"></i>
-                                <p>Chat</p>
-                            </a>
-                            <a href="pages/apps/calendar.html"><i data-feather="calendar" class="icon-lg"></i>
-                                <p>Calendar</p>
-                            </a>
-                            <a href="pages/email/inbox.html"><i data-feather="mail" class="icon-lg"></i>
-                                <p>Email</p>
-                            </a>
-                            <a href="pages/general/profile.html"><i data-feather="instagram" class="icon-lg"></i>
-                                <p>Profile</p>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="dropdown-footer d-flex align-items-center justify-content-center">
-                        <a href="javascript:;">View all</a>
-                    </div>
-                </div>
-            </li>
+
+            <!-- Messages Dropdown -->
+            @php
+                $unreadMessages = \App\Models\ContactMessage::where('is_read', false)->latest()->take(5)->get();
+                $unreadCount = \App\Models\ContactMessage::where('is_read', false)->count();
+            @endphp
+            
             <li class="nav-item dropdown nav-messages">
                 <a class="nav-link dropdown-toggle" href="#" id="messageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i data-feather="mail"></i>
-                </a>
-                <div class="dropdown-menu" aria-labelledby="messageDropdown">
-                    <div class="dropdown-header d-flex align-items-center justify-content-between">
-                        <p class="font-weight-medium mb-0">9 New Messages</p>
-                        <a href="javascript:;" class="text-muted">Clear all</a>
-                    </div>
-                    <div class="dropdown-body">
-                        <a href="javascript:;" class="dropdown-item">
-                            <div class="figure">
-                                <img src="https://via.placeholder.com/30x30" alt="userr">
-                            </div>
-                            <div class="content">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <p>Leonardo Payne</p>
-                                    <p class="sub-text text-muted">2 min ago</p>
-                                </div>
-                                <p class="sub-text text-muted">Project status</p>
-                            </div>
-                        </a>
-                        <a href="javascript:;" class="dropdown-item">
-                            <div class="figure">
-                                <img src="https://via.placeholder.com/30x30" alt="userr">
-                            </div>
-                            <div class="content">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <p>Carl Henson</p>
-                                    <p class="sub-text text-muted">30 min ago</p>
-                                </div>
-                                <p class="sub-text text-muted">Client meeting</p>
-                            </div>
-                        </a>
-                        <a href="javascript:;" class="dropdown-item">
-                            <div class="figure">
-                                <img src="https://via.placeholder.com/30x30" alt="userr">
-                            </div>
-                            <div class="content">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <p>Jensen Combs</p>
-                                    <p class="sub-text text-muted">1 hrs ago</p>
-                                </div>
-                                <p class="sub-text text-muted">Project updates</p>
-                            </div>
-                        </a>
-                        <a href="javascript:;" class="dropdown-item">
-                            <div class="figure">
-                                <img src="https://via.placeholder.com/30x30" alt="userr">
-                            </div>
-                            <div class="content">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <p>Amiah Burton</p>
-                                    <p class="sub-text text-muted">2 hrs ago</p>
-                                </div>
-                                <p class="sub-text text-muted">Project deadline</p>
-                            </div>
-                        </a>
-                        <a href="javascript:;" class="dropdown-item">
-                            <div class="figure">
-                                <img src="https://via.placeholder.com/30x30" alt="userr">
-                            </div>
-                            <div class="content">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <p>Yaretzi Mayo</p>
-                                    <p class="sub-text text-muted">5 hr ago</p>
-                                </div>
-                                <p class="sub-text text-muted">New record</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="dropdown-footer d-flex align-items-center justify-content-center">
-                        <a href="javascript:;">View all</a>
-                    </div>
-                </div>
-            </li>
-            <li class="nav-item dropdown nav-notifications">
-                <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i data-feather="bell"></i>
+                    <!-- Indicator for Unread Messages -->
+                    @if($unreadCount > 0)
                     <div class="indicator">
                         <div class="circle"></div>
                     </div>
+                    @endif
                 </a>
-                <div class="dropdown-menu" aria-labelledby="notificationDropdown">
+                <div class="dropdown-menu" aria-labelledby="messageDropdown" style="width: 350px;">
                     <div class="dropdown-header d-flex align-items-center justify-content-between">
-                        <p class="font-weight-medium mb-0">6 New Notifications</p>
-                        <a href="javascript:;" class="text-muted">Clear all</a>
+                        <p class="font-weight-medium mb-0">{{ $unreadCount }} New Messages</p>
                     </div>
                     <div class="dropdown-body">
-                        <a href="javascript:;" class="dropdown-item">
-                            <div class="icon">
-                                <i data-feather="user-plus"></i>
-                            </div>
-                            <div class="content">
-                                <p>New customer registered</p>
-                                <p class="sub-text text-muted">2 sec ago</p>
-                            </div>
-                        </a>
-                        <a href="javascript:;" class="dropdown-item">
-                            <div class="icon">
-                                <i data-feather="gift"></i>
-                            </div>
-                            <div class="content">
-                                <p>New Order Recieved</p>
-                                <p class="sub-text text-muted">30 min ago</p>
+                        
+                        @forelse($unreadMessages as $msg)
+                        <a href="{{ route('admin.contact.index') }}" class="dropdown-item">
+                            <div class="content w-100 pl-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p class="font-weight-bold">{{ $msg->name }}</p>
+                                    <p class="sub-text text-muted">{{ $msg->created_at->diffForHumans() }}</p>
+                                </div>
+                                <p class="sub-text text-muted">{{ Str::limit($msg->subject ?? $msg->message, 35) }}</p>
                             </div>
                         </a>
-                        <a href="javascript:;" class="dropdown-item">
-                            <div class="icon">
-                                <i data-feather="alert-circle"></i>
-                            </div>
-                            <div class="content">
-                                <p>Server Limit Reached!</p>
-                                <p class="sub-text text-muted">1 hrs ago</p>
-                            </div>
-                        </a>
-                        <a href="javascript:;" class="dropdown-item">
-                            <div class="icon">
-                                <i data-feather="layers"></i>
-                            </div>
-                            <div class="content">
-                                <p>Apps are ready for update</p>
-                                <p class="sub-text text-muted">5 hrs ago</p>
-                            </div>
-                        </a>
-                        <a href="javascript:;" class="dropdown-item">
-                            <div class="icon">
-                                <i data-feather="download"></i>
-                            </div>
-                            <div class="content">
-                                <p>Download completed</p>
-                                <p class="sub-text text-muted">6 hrs ago</p>
-                            </div>
-                        </a>
+                        @empty
+                        <div class="p-4 text-center text-muted">
+                            <i data-feather="check-circle" class="mb-2"></i>
+                            <p>No new messages.</p>
+                        </div>
+                        @endforelse
+
                     </div>
                     <div class="dropdown-footer d-flex align-items-center justify-content-center">
-                        <a href="javascript:;">View all</a>
+                        <a href="{{ route('admin.contact.index') }}">View all messages</a>
                     </div>
                 </div>
             </li>
+
+            <!-- Profile Dropdown -->
             <li class="nav-item dropdown nav-profile">
                 <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img src="{{ auth()->user()->thumbnail }}" alt="{{ auth()->user()->name }}" class="object-fit-cover">
+                    <img src="{{ auth()->user()->thumbnail }}" alt="{{ auth()->user()->name }}" style="object-fit: cover;">
                 </a>
                 <div class="dropdown-menu" aria-labelledby="profileDropdown">
                     <div class="dropdown-header d-flex flex-column align-items-center">
                         <div class="figure mb-3 text-center">
-                            <img src="{{ auth()->user()->thumbnail }}" alt="{{ auth()->user()->name }}" class="object-fit-cover" style="width: 60px; height: 60px;">
+                            <img src="{{ auth()->user()->thumbnail }}" alt="{{ auth()->user()->name }}" style="width: 60px; height: 60px; object-fit: cover;">
                         </div>
                         <div class="info text-center">
                             <p class="name font-weight-bold mb-0">{{ auth()->user()->name }}</p>
@@ -213,7 +88,7 @@
                     <div class="dropdown-body">
                         <ul class="profile-nav p-0 pt-3">
                             <li class="nav-item">
-                                <a href="{{route('admin.profile.index')}}" class="nav-link">
+                                <a href="{{ route('admin.profile.index') }}" class="nav-link">
                                     <i data-feather="user"></i>
                                     <span>Profile</span>
                                 </a>

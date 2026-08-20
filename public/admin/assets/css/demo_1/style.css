@@ -12904,7 +12904,7 @@ address p {
       .navbar .sidebar-toggler {
         display: flex; } }
   .navbar .search-form {
-    width: 100%;
+    width: 80%;
     margin-right: 60px; }
     .navbar .search-form .input-group .input-group-prepend .input-group-text {
       padding: 0;

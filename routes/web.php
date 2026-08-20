@@ -29,6 +29,7 @@ Route::controller(ContactController::class)->group(function () {
 Route::controller(PageController::class)->group(function () {
     Route::get('/about', 'about')->name('about');
     Route::get('/faq', 'faq')->name('faq');
+    Route::get('/page/{slug}', 'showDynamicPage')->name('dynamic.page');
 });
 
 Route::controller(AuthController::class)->group(function () {
