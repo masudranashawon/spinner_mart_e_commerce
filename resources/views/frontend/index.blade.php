@@ -55,7 +55,7 @@
             </a>
         </li>
         @endif
-        
+
         @if(get_setting('youtube_url'))
         <li><a href="{{ get_setting('youtube_url') }}"><i class="ti-youtube"></i></a></li>
         @endif
@@ -108,7 +108,7 @@
             @foreach($brands as $brand)
             <div class="col">
                 <div class="brand-item border rounded px-3 py-4 text-center">
-                    <a href="#">
+                    <a href="{{ route('shop', ['brand' => $brand->slug]) }}">
                         <img src="{{ $brand->thumbnail }}" alt="{{ $brand->name }}" class="img-fluid brand-logo" loading="lazy">
                     </a>
                 </div>

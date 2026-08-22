@@ -67,6 +67,23 @@ class ShopController extends Controller
             }
         }
 
+        // Single Brand Check
+        if ($request->filled('brand')) {
+            
+            // Check if brand exists
+            $singleBrand = Brand::where('slug', $request->brand)->first();
+
+            if ($singleBrand) {
+                $existingBrands = $request->input('brands', []);
+
+                // Check if brand is already added
+                if (!in_array($singleBrand->id, $existingBrands)) {
+                    $existingBrands[] = $singleBrand->id;
+                    $request->merge(['brands' => $existingBrands]);
+                }
+            }
+        }
+
         // Category Filter
         if ($request->filled('categories')) {
             $query->whereHas('details', function ($q) use ($request) {
