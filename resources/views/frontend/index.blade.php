@@ -7,13 +7,13 @@
 <div class="wpo-hero-slider">
     <div class="container-fluid-sm container">
         <div class="hero-slider">
-            
+
             @forelse($sliders as $slider)
             <div class="hero-slider-item">
                 <div class="slider-bg">
                     <img src="{{ $slider->thumbnail }}" alt="Hero Slider">
                 </div>
-                
+
                 @if($slider->btn_text)
                 <div class="slider-content">
                     <div class="slide-title">
@@ -36,7 +36,7 @@
 
         </div>
     </div>
-    
+
     <ul class="hero-social">
         <li><a href="#"><i class="ti-facebook"></i></a></li>
         <li><a href="#"><i class="ti-instagram"></i></a></li>
@@ -59,22 +59,48 @@
         <div class="featured-categorie-slider owl-carousel">
             @foreach($categories ?? [] as $category)
 
-                <div class="featured-item">
-                        <div class="images">
-                            <a href="{{ route('shop', ['category' => $category->slug]) }}">
-                                <img src="{{ $category?->thumbnail }}" alt="{{$category?->name}}" class="w-100 h-100 object-fit-contain" style="object-fit:contain !important;">
-                            </a>
-                        </div>
-                        <div class="text">
-                            <h2><a href="{{ route('shop', ['category' => $category->slug]) }}">{{$category?->name}}</a></h2>
-                        </div>
+            <div class="featured-item">
+                <div class="images">
+                    <a href="{{ route('shop', ['category' => $category->slug]) }}">
+                        <img src="{{ $category?->thumbnail }}" alt="{{$category?->name}}" class="w-100 h-100 object-fit-contain" style="object-fit:contain !important;">
+                    </a>
                 </div>
-          
+                <div class="text">
+                    <h2><a href="{{ route('shop', ['category' => $category->slug]) }}">{{$category?->name}}</a></h2>
+                </div>
+            </div>
+
             @endforeach
         </div>
     </div>
 </section>
 <!-- end of themart-featured-section -->
+
+<!-- Brands Section Start -->
+<section class="brands-section mt-3 mt-md-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="wpo-section-title">
+                    <h2>Our Brands</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-3 justify-content-center">
+            @foreach($brands as $brand)
+            <div class="col">
+                <div class="brand-item border rounded px-3 py-4 text-center">
+                    <a href="#">
+                        <img src="{{ $brand->thumbnail }}" alt="{{ $brand->name }}" class="img-fluid brand-logo" loading="lazy">
+                    </a>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+<!-- Brands Section End -->
 
 <!-- start of themart-offer-section -->
 <section class="themart-offer-section section-padding">
@@ -97,9 +123,9 @@
 
                         <div class="count-up">
                             @php
-                                $timerDate = get_setting('promo_1_timer') ? \Carbon\Carbon::parse(get_setting('promo_1_timer'))->format('Y/m/d H:i:s') : '2026/12/31 23:59:59';
+                            $timerDate = get_setting('promo_1_timer') ? \Carbon\Carbon::parse(get_setting('promo_1_timer'))->format('Y/m/d H:i:s') : '2026/12/31 23:59:59';
                             @endphp
-                            
+
                             <div id="clock" data-date="{{ $timerDate }}"></div>
                         </div>
                         <a class="theme-btn-s2" href="{{ get_setting('promo_1_link') }}">Shop Now</a>
@@ -132,10 +158,10 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="product-wrap">
             <div>
-                <div  class="row row-cols-lg-4 row-cols-md-6 row-cols-sm-12">
+                <div class="row row-cols-lg-4 row-cols-md-6 row-cols-sm-12">
                     @foreach($interestedProducts as $product)
                     <x-product-card :product="$product" />
                     @endforeach
@@ -262,7 +288,7 @@
 <!-- end of themart-special-product-section -->
 
 <!-- start of themart-trendingproduct-section -->
-@if($trendingProducts->count() > 0)    
+@if($trendingProducts->count() > 0)
 <section class="themart-trendingproduct-section section-padding">
     <div class="container">
         <div class="row">
@@ -297,25 +323,35 @@
                                 <img src="{{ $product?->thumbnail }}" alt="{{$product?->name}}" class="w-100 h-100" style="object-fit: cover;">
                             </div>
                         </div>
+
                         <div class="content">
-                            <h3><a href="product.html" class="text-truncate" style="max-width:180px">{{$product?->name}}</a></h3>
+                            <h3><a href="{{route('productDetails', $product->slug)}}" class="text-truncate" style="max-width:180px">{{$product?->name}}</a></h3>
+
+                            {{-- Rating --}}
                             <div class="rating-product">
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <span>{{$product?->rating}}</span>
+                                @for($i = 1; $i <= 5; $i++) @if($i <=$product->rating)
+                                    <i class="fi flaticon-star"></i>
+                                    @else
+                                    <i class="fi flaticon-star empty-star"></i>
+                                    @endif
+                                    @endfor
+                                    <span class="text-muted ms-1">({{ $product->reviews }})</span>
                             </div>
+
                             <div class="price">
-                                <span class="present-price">{{$product?->discount_price}} </span>
-                                <del class="old-price">{{$product?->selling_price}}</del>
+                                @if($product->discount_price > 0)
+                                <span class="present-price">{{ format_price($product->discount_price) }}</span>
+                                <del class="old-price">{{ format_price($product->selling_price) }}</del>
+                                @else
+                                <span class="present-price">{{ format_price($product->selling_price) }}</span>
+                                @endif
                             </div>
                         </div>
                     </div>
                     @endforeach
                 </div>
             </div>
+
             <div class="col-lg-4 col-md-6 col-12">
                 <div class="highlight-wrap">
                     <h2>Recently added</h2>
@@ -326,94 +362,71 @@
                                 <img src="{{ $product?->thumbnail }}" alt="{{$product?->name}}" class="w-100 h-100" style="object-fit: cover;">
                             </div>
                         </div>
+
                         <div class="content">
-                            <h3><a href="product.html" class="text-truncate" style="max-width:180px">{{$product?->name}}</a></h3>
+                            <h3><a href="{{route('productDetails', $product->slug)}}" class="text-truncate" style="max-width:180px">{{$product?->name}}</a></h3>
+
+                            {{-- Rating --}}
                             <div class="rating-product">
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <span>{{$product?->rating}}</span>
+                                @for($i = 1; $i <= 5; $i++) @if($i <=$product->rating)
+                                    <i class="fi flaticon-star"></i>
+                                    @else
+                                    <i class="fi flaticon-star empty-star"></i>
+                                    @endif
+                                    @endfor
+                                    <span class="text-muted ms-1">({{ $product->reviews }})</span>
                             </div>
+
                             <div class="price">
-                                <span class="present-price">{{$product?->discount_price}} </span>
-                                <del class="old-price">{{$product?->selling_price}}</del>
+                                @if($product->discount_price > 0)
+                                <span class="present-price">{{ format_price($product->discount_price) }}</span>
+                                <del class="old-price">{{ format_price($product->selling_price) }}</del>
+                                @else
+                                <span class="present-price">{{ format_price($product->selling_price) }}</span>
+                                @endif
                             </div>
                         </div>
                     </div>
                     @endforeach
                 </div>
             </div>
+
             <div class="col-lg-4 col-md-6 col-12">
                 <div class="highlight-wrap">
                     <h2>Top Rated</h2>
+                    @foreach($topRatedProducts ?? [] as $product)
                     <div class="product-card">
                         <div class="card-image">
-                            <div class="image">
-                                <img src="{{ asset('frontend/assets/images/top-rated/1.png') }}" alt="">
+                            <div class="image overflow-hidden">
+                                <img src="{{ $product?->thumbnail }}" alt="{{$product?->name}}" class="w-100 h-100" style="object-fit: cover;">
                             </div>
                         </div>
+
                         <div class="content">
-                            <h3><a href="product.html">Kids Shoes</a></h3>
+                            <h3><a href="{{route('productDetails', $product->slug)}}" class="text-truncate" style="max-width:180px">{{$product?->name}}</a></h3>
+
+                            {{-- Rating --}}
                             <div class="rating-product">
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <span>120</span>
+                                @for($i = 1; $i <= 5; $i++) @if($i <=$product->rating)
+                                    <i class="fi flaticon-star"></i>
+                                    @else
+                                    <i class="fi flaticon-star empty-star"></i>
+                                    @endif
+                                    @endfor
+                                    <span class="text-muted ms-1">({{ $product->reviews }})</span>
                             </div>
+
                             <div class="price">
-                                <span class="present-price">$120.00</span>
-                                <del class="old-price">$150.00</del>
+                                @if($product->discount_price > 0)
+                                <span class="present-price">{{ format_price($product->discount_price) }}</span>
+                                <del class="old-price">{{ format_price($product->selling_price) }}</del>
+                                @else
+                                <span class="present-price">{{ format_price($product->selling_price) }}</span>
+                                @endif
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
-                        <div class="card-image">
-                            <div class="image">
-                                <img src="{{ asset('frontend/assets/images/top-rated/2.png') }}" alt="">
-                            </div>
-                        </div>
-                        <div class="content">
-                            <h3><a href="product.html">Stylish Earrings</a></h3>
-                            <div class="rating-product">
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <span>230</span>
-                            </div>
-                            <div class="price">
-                                <span class="present-price">$150.00</span>
-                                <del class="old-price">$200.00</del>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="card-image">
-                            <div class="image">
-                                <img src="{{ asset('frontend/assets/images/top-rated/3.png') }}" alt="">
-                            </div>
-                        </div>
-                        <div class="content">
-                            <h3><a href="product.html">Yellow Hats</a></h3>
-                            <div class="rating-product">
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <i class="fi flaticon-star"></i>
-                                <span>130</span>
-                            </div>
-                            <div class="price">
-                                <span class="present-price">$170.00</span>
-                                <del class="old-price">$250.00</del>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -430,6 +443,8 @@
                     <div class="cta-content">
                         <h2>Subscribe Our Newsletter & <br>
                             Get 30% Discounts For Next Order</h2>
+
+                        {{-- Newsletter Form --}}
                         <form id="newsletter-form">
                             <div class="input-1">
                                 <input type="email" name="email" id="newsletter-email" placeholder="Enter your email address" class="form-control" required>
@@ -445,18 +460,61 @@
     </div>
 </section>
 <!-- end of themart-cta-section -->
+
+{{-- Custom Brand Style --}}
+<style>
+    /* Base styles */
+    .brand-item {
+        background-color: #ffffff;
+        transition: all 0.3s ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 80px;
+    }
+
+    .brand-logo {
+        max-height: 50px;
+        opacity: 0.7;
+        transition: all 0.3s ease;
+    }
+
+    /* Hover Effects */
+    .brand-item:hover {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        border-color: #F1E2CC !important;
+    }
+
+    .brand-item:hover .brand-logo {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+    /* Desktop Styles (Media Query) */
+    @media (min-width: 768px) {
+        .brand-item {
+            min-height: 110px;
+        }
+
+        .brand-logo {
+            max-height: 70px;
+        }
+    }
+
+</style>
+
 @endsection
 
-@push('script') 
+@push('script')
 <script>
     $(document).ready(function() {
         $('#newsletter-form').on('submit', function(e) {
             e.preventDefault();
-            
+
             let email = $('#newsletter-email').val();
             let btn = $('#newsletter-btn');
             let originalText = btn.text();
-            
+
             btn.text('Wait...').prop('disabled', true);
 
             // Send AJAX request to server
@@ -470,14 +528,14 @@
 
                 success: function(response) {
                     if (response.status === 'success') {
-                        
+
                         Toast.fire({
                             icon: "success",
                             title: response.message
                         });
                         $('#newsletter-form')[0].reset();
                     } else {
-                        
+
                         Toast.fire({
                             icon: "info",
                             title: response.message
@@ -496,7 +554,7 @@
                         title: errorMessage
                     });
                 },
-                
+
                 complete: function() {
                     // Reset button text and enable button
                     btn.text(originalText).prop('disabled', false);
@@ -504,5 +562,6 @@
             });
         });
     });
+
 </script>
 @endpush

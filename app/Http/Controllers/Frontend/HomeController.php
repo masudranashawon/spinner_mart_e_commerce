@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Slider;
@@ -14,6 +15,11 @@ class HomeController extends Controller
     {
         $categories = Category::latest('id')->get();
         $sliders = Slider::with('media')->where('is_active', 1)->orderBy('serial', 'asc')->get();
+        $brands = Brand::latest('id')->get();
+        $topRatedProducts = Product::where('is_active', 1)
+        ->orderBy('rating', 'desc')
+        ->take(3)
+        ->get();
 
         $interestedProducts = Product::where('is_active', 1)
             ->inRandomOrder()
@@ -42,6 +48,8 @@ class HomeController extends Controller
         return view('frontend.index', compact(
             'sliders',
             'categories',
+            'brands',
+            'topRatedProducts',
             'interestedProducts',
             'dealsOfTheDay',
             'trendingProducts',
