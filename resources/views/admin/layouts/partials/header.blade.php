@@ -20,7 +20,7 @@
             <li class="nav-item">
                 <a href="{{ route('home') }}" target="_blank" class="nav-link text-primary border border-primary rounded-pill p-2 font-weight-bold d-flex" title="Visit Website">
                     <i data-feather="globe" class="icon-md"></i>
-                    <span class="d-none d-md-inline-block ml-1 text-nowrap">View Site</span>
+                    <span class="d-none d-md-inline-block ml-1 text-nowrap">Visit Store</span>
                 </a>
             </li>
 

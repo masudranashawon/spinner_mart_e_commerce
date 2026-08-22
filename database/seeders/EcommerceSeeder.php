@@ -70,8 +70,8 @@ class EcommerceSeeder extends Seeder
             ['key' => 'about_hero_image', 'value' => 'frontend/assets/images/about.jpg', 'group' => 'about_page'],
             ['key' => 'about_gallery_1_image', 'value' => 'frontend/assets/images/portfolio/1.jpg', 'group' => 'about_page'],
             ['key' => 'about_gallery_2_image', 'value' => 'frontend/assets/images/portfolio/2.jpg', 'group' => 'about_page'],
-            ['key' => 'about_gallery_3_image', 'value' => 'frontend/assets/images/portfolio/3.jpg', 'group' => 'about_page'],
-            ['key' => 'about_gallery_4_image', 'value' => 'frontend/assets/images/portfolio/4.jpg', 'group' => 'about_page'],
+            ['key' => 'about_gallery_3_image', 'value' => 'frontend/assets/images/portfolio/4.jpg', 'group' => 'about_page'],
+            ['key' => 'about_gallery_4_image', 'value' => 'frontend/assets/images/portfolio/3.jpg', 'group' => 'about_page'],
 
             // Social Media
             ['key' => 'facebook_url', 'value' => 'https://www.facebook.com/spinnerfashion', 'group' => 'social_media'],
