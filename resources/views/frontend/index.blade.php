@@ -38,10 +38,27 @@
     </div>
 
     <ul class="hero-social">
-        <li><a href="#"><i class="ti-facebook"></i></a></li>
-        <li><a href="#"><i class="ti-instagram"></i></a></li>
-        <li><a href="#"><i class="ti-linkedin"></i></a></li>
-        <li><a href="#"><i class="ti-twitter-alt"></i></a></li>
+        @if(get_setting('facebook_url'))
+        <li><a href="{{ get_setting('facebook_url') }}"><i class="ti-facebook"></i></a></li>
+        @endif
+
+        @if(get_setting('instagram_url'))
+        <li><a href="{{ get_setting('instagram_url') }}"><i class="ti-instagram"></i></a></li>
+        @endif
+
+        @if(get_setting('tiktok_url'))
+        <li>
+            <a href="{{ get_setting('tiktok_url') }}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-3.77V2h-3.45v13.67a2.89 2.89 0 1 1-2.89-2.89c.3 0 .59.05.86.13V9.4a6.34 6.34 0 1 0 5.48 6.28V8.26a8.16 8.16 0 0 0 4.77 1.53V6.34a4.83 4.83 0 0 1-1-.65z"/>
+                </svg>
+            </a>
+        </li>
+        @endif
+        
+        @if(get_setting('youtube_url'))
+        <li><a href="{{ get_setting('youtube_url') }}"><i class="ti-youtube"></i></a></li>
+        @endif
     </ul>
 </div>
 <!-- end of wpo-hero-section -->

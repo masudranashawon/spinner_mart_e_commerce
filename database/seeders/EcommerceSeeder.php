@@ -25,40 +25,45 @@ class EcommerceSeeder extends Seeder
             ['key' => 'footer_logo', 'value' => 'frontend/assets/images/logo-2.png', 'group' => 'branding'],
             ['key' => 'site_favicon', 'value' => 'frontend/assets/images/favicon.png', 'group' => 'branding'],
             ['key' => 'footer_about_text', 'value' => 'Spinner Mart brings trendy fashion, premium quality, and affordable prices for every style. Shop clothing, footwear, watches, and accessories confidently.', 'group' => 'branding'],
+            
             // Contact
             ['key' => 'phone', 'value' => '+880 1711-000000', 'group' => 'contact'],
             ['key' => 'secondary_phone', 'value' => '+880 1911-000000', 'group' => 'contact'],
             ['key' => 'email', 'value' => 'support@spinnerfashion.com', 'group' => 'contact'],
             ['key' => 'address', 'value' => 'Dhanmondi, Dhaka, Bangladesh', 'group' => 'contact'],
             ['key' => 'address_map', 'value' => '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3689.791320041214!2d91.80976827586767!3d22.361507040672958!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30acd93610428915%3A0xad43a0cf6701a547!2sSpinner%20Fashion!5e0!3m2!1sen!2sbd!4v1786905989125!5m2!1sen!2sbd" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>', 'group' => 'contact'],
+
             // Order & Delivery
             ['key' => 'vat_percentage', 'value' => '5', 'group' => 'order'],
             ['key' => 'shipping_inside_dhaka', 'value' => '60', 'group' => 'order'],
             ['key' => 'return_policy_days', 'value' => '7', 'group' => 'order'],
             ['key' => 'shipping_outside_dhaka', 'value' => '120', 'group' => 'order'],
             ['key' => 'invoice_prefix', 'value' => 'SP-', 'group' => 'order'],
+
             // Currency
             ['key' => 'currency_symbol', 'value' => '৳', 'group' => 'currency'],
             ['key' => 'currency_code', 'value' => 'BDT', 'group' => 'currency'],
+
             // Announcement
             ['key' => 'enable_announcement_bar', 'value' => '1', 'group' => 'enable_announcement_bar'],
             ['key' => 'announcement_text', 'value' => 'Exclusive Deals Available for a Limited Time.', 'group' => 'enable_announcement_bar'],
             ['key' => 'announcement_link', 'value' => '/products', 'group' => 'enable_announcement_bar'],
+
             // Exciting Offers (Home Page)
-            // Promo 1
             ['key' => 'promo_1_title', 'value' => 'Stylish Coat', 'group' => 'exciting_offers'],
             ['key' => 'promo_1_price', 'value' => '$80', 'group' => 'exciting_offers'],
             ['key' => 'promo_1_old_price', 'value' => '$150', 'group' => 'exciting_offers'],
             ['key' => 'promo_1_timer', 'value' => now()->addDays(10)->format('Y-m-d H:i:s'), 'group' => 'exciting_offers'],
             ['key' => 'promo_1_link', 'value' => '/shop', 'group' => 'exciting_offers'],
             ['key' => 'promo_1_image', 'value' => 'frontend/assets/images/offer-bg.jpg', 'group' => 'exciting_offers'],
+
             // Promo 2
             ['key' => 'promo_2_title', 'value' => 'New Arrival', 'group' => 'exciting_offers'],
             ['key' => 'promo_2_offer_text', 'value' => 'Up To 70% Off', 'group' => 'exciting_offers'],
             ['key' => 'promo_2_link', 'value' => '/shop', 'group' => 'exciting_offers'],
             ['key' => 'promo_2_image', 'value' => 'frontend/assets/images/banner-bg.jpg', 'group' => 'exciting_offers'],
-            // New Year Sale Banner Status (1 = True, 0 = False)
             ['key' => 'show_mega_new_year_sale', 'value' => '1', 'group' => 'exciting_offers'],
+
             // About Us Page
             ['key' => 'about_hero_heading', 'value' => 'We Help Your Digital <span style="color: #8cc63f;">&</span> Business Grow.', 'group' => 'about_page'],
             ['key' => 'about_hero_description', 'value' => 'Aliquam erat volutpat. Duis ac turpis. Integer rutrum ante eu lacus. Vestibulum libero nisl, porta vel, scelerisque eget, malesuada at, neque. Vivamus eget nibh. Etiam cursus leo vel metus. Nulla facilisi.', 'group' => 'about_page'],
@@ -67,6 +72,12 @@ class EcommerceSeeder extends Seeder
             ['key' => 'about_gallery_2_image', 'value' => 'frontend/assets/images/portfolio/2.jpg', 'group' => 'about_page'],
             ['key' => 'about_gallery_3_image', 'value' => 'frontend/assets/images/portfolio/3.jpg', 'group' => 'about_page'],
             ['key' => 'about_gallery_4_image', 'value' => 'frontend/assets/images/portfolio/4.jpg', 'group' => 'about_page'],
+
+            // Social Media
+            ['key' => 'facebook_url', 'value' => 'https://www.facebook.com/spinnerfashion', 'group' => 'social_media'],
+            ['key' => 'instagram_url', 'value' => 'https://www.instagram.com/spinnerfashion', 'group' => 'social_media'],
+            ['key' => 'tiktok_url', 'value' => 'https://www.tiktok.com/@spinnerfashion', 'group' => 'social_media'],
+            ['key' => 'youtube_url', 'value' => '', 'group' => 'social_media'],
         ];
 
         foreach ($settings as $setting) {

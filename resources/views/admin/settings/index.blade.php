@@ -17,6 +17,7 @@
                         <a class="nav-link fw-bold rounded-0" id="v-pills-announcement-tab" data-toggle="pill" href="#v-pills-announcement" role="tab">Announcement</a>
                         <a class="nav-link fw-bold rounded-0" id="v-pills-offers-tab" data-toggle="pill" href="#v-pills-offers" role="tab">Exciting Offers</a>
                         <a class="nav-link fw-bold rounded-0" id="v-pills-about-tab" data-toggle="pill" href="#v-pills-about" role="tab">About Page</a>
+                        <a class="nav-link fw-bold rounded-0" id="v-pills-social-media-tab" data-toggle="pill" href="#v-pills-social-media" role="tab">Social Media</a>
                     </div>
                 </div>
             </div>
@@ -278,14 +279,14 @@
                                                 <input type="text" name="promo_2_link" class="form-control" value="{{ get_setting('promo_2_link') }}" placeholder="/shop">
                                             </div>
                                         </div>
-    
+
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label class="form-label">Background Image</label>
                                                 <input type="hidden" name="group[promo_2_image]" value="exciting_offers">
                                                 <input type="file" name="promo_2_image" class="form-control">
                                             </div>
-    
+
                                             <div class="col-md-6">
                                                 @if(get_setting('promo_2_image'))
                                                 <img src="{{ get_setting('promo_2_image') }}" height="60" class="mt-2 border rounded">
@@ -330,7 +331,7 @@
                                                 <input type="text" name="about_hero_heading" class="form-control" value="{{ get_setting('about_hero_heading') }}" placeholder="We Help Your Digital & Business Grow.">
                                                 <small class="text-muted mt-1 d-block">Tip: You can use HTML like &lt;span style="color:#8cc63f;"&gt;Text&lt;/span&gt; to highlight words.</small>
                                             </div>
-                                            
+
                                             <div class="col-md-12 mb-4">
                                                 <label class="form-label">Description</label>
                                                 <input type="hidden" name="group[about_hero_description]" value="about_page">
@@ -342,9 +343,9 @@
                                                 <input type="hidden" name="group[about_hero_image]" value="about_page">
                                                 <input type="file" name="about_hero_image" class="form-control">
                                                 @if(get_setting('about_hero_image'))
-                                                    <div class="mt-3">
-                                                        <img src="{{ get_setting('about_hero_image') }}" height="120" class="border rounded object-fit-cover" alt="Hero Image">
-                                                    </div>
+                                                <div class="mt-3">
+                                                    <img src="{{ get_setting('about_hero_image') }}" height="120" class="border rounded object-fit-cover" alt="Hero Image">
+                                                </div>
                                                 @endif
                                             </div>
                                         </div>
@@ -358,15 +359,15 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            @for($i = 1; $i <= 4; $i++)
+                                            @for($i = 1; $i <= 4; $i++) 
                                             <div class="col-md-6 mb-4">
                                                 <label class="form-label">Gallery Image {{ $i }}</label>
                                                 <input type="hidden" name="group[about_gallery_{{ $i }}_image]" value="about_page">
                                                 <input type="file" name="about_gallery_{{ $i }}_image" class="form-control">
                                                 @if(get_setting('about_gallery_'.$i.'_image'))
-                                                    <div class="mt-3">
-                                                        <img src="{{ get_setting('about_gallery_'.$i.'_image') }}" height="100" width="150" class="border rounded object-fit-cover" alt="Gallery Image {{ $i }}">
-                                                    </div>
+                                                <div class="mt-3">
+                                                    <img src="{{ get_setting('about_gallery_'.$i.'_image') }}" height="100" width="150" class="border rounded object-fit-cover" alt="Gallery Image {{ $i }}">
+                                                </div>
                                                 @endif
                                             </div>
                                             @endfor
@@ -375,12 +376,38 @@
                                 </div>
                             </div>
 
+                            <!-- Social Media Tab -->
+                            <div class="tab-pane fade" id="v-pills-social-media" role="tabpanel">
+                                <h4>Social Media Settings</h4>
+                                <hr>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Facebook URL</label>
+                                    <input type="hidden" name="group[facebook_url]" value="social_media">
+                                    <input type="text" name="facebook_url" class="form-control" value="{{ get_setting('facebook_url') }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Instagram URL</label>
+                                    <input type="hidden" name="group[instagram_url]" value="social_media">
+                                    <input type="text" name="instagram_url" class="form-control" value="{{ get_setting('instagram_url') }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Tiktok URL</label>
+                                    <input type="hidden" name="group[tiktok_url]" value="social_media">
+                                    <input type="text" name="tiktok_url" class="form-control" value="{{ get_setting('tiktok_url') }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">YouTube URL</label>
+                                    <input type="hidden" name="group[youtube_url]" value="social_media">
+                                    <input type="text" name="youtube_url" class="form-control" value="{{ get_setting('youtube_url') }}">
+                                </div>
+                            </div>
+
                         </div> <!-- End Tab Content -->
 
                         <div class="text-end mt-4">
                             <button type="submit" class="btn btn-primary px-4">Save Settings</button>
                         </div>
-
                     </form>
                 </div>
             </div>
