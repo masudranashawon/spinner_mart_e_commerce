@@ -13,7 +13,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $categories = Category::latest('id')->get();
+        $categories = Category::get();
         $sliders = Slider::with('media')->where('is_active', 1)->orderBy('serial', 'asc')->get();
         $brands = Brand::latest('id')->get();
         $topRatedProducts = Product::where('is_active', 1)
