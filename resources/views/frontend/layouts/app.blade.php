@@ -99,7 +99,7 @@
                                     <div class="product-single-img">
                                         <div class="modal-product">
                                             <div class="item">
-                                                <img id="qv-img" src="" alt="" class="img-fluid rounded w-100" style="object-fit: cover;">
+                                                <img id="qv-img" src="" alt="" class="img-fluid rounded w-100">
                                             </div>
                                         </div>
                                     </div>
@@ -113,8 +113,9 @@
                                             {{-- Product ID & Variant ID --}}
                                             <input type="hidden" name="product_id" id="qv-product-id">
                                             <input type="hidden" name="variant_id" id="qv-variant-id">
-
-                                            <h3 id="qv-title" class="mb-2 text-start me-3 me-xl-5"></h3>
+                                            <h3 class="mb-2 text-start me-3 me-xl-5"><a href="" id="qv-title"   
+                                            onmouseover="this.style.color='#83B735'"
+                                            onmouseout="this.style.color='#233d50'"></a></h3>
 
                                             <div class="price mb-3">
                                                 <span id="qv-price" class="present-price"></span>
@@ -226,6 +227,8 @@
 
     </script>
 
+
+    {{-- Quick View --}}
     <script>
         $(document).ready(function() {
             let currencySymbol = "{{ get_setting('currency_symbol') }}";
@@ -243,7 +246,7 @@
                 currentVariants = product.variants;
 
                 $('#qv-product-id').val(product.id);
-                $('#qv-title').text(product.name);
+                $('#qv-title').text(product.name).attr('href', '/products/' + product.slug);
                 $('#qv-img').attr('src', product.image);
                 $('#qv-desc').text(product.short_desc);
                 $('#qv-qty').val(1);

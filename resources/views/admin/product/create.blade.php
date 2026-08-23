@@ -98,8 +98,9 @@
                     <div class="col-md-6">
                         <x-select name="brand" label="Select Brand">
                             <option value="">Select Brand</option>
+
                             @foreach ($brands ?? [] as $brand)
-                            <option value="{{ $brand?->id }}">{{ $brand->name }}</option>
+                            <option value="{{ $brand?->id }}" @selected(old('brand') == $brand->id)>{{ $brand->name }}</option>
                             @endforeach
                         </x-select>
                     </div>
@@ -109,8 +110,9 @@
                     <div class="col-md-6">
                         <x-select name="category" id="category" label="Select Category">
                             <option value="">Select Category</option>
+
                             @foreach ($categories ?? [] as $category)
-                            <option value="{{ $category?->id }}">{{ $category->name }}</option>
+                            <option value="{{ $category?->id }}" @selected(old('category') == $category->id)>{{ $category->name }}</option>
                             @endforeach
                         </x-select>
                     </div>
@@ -118,8 +120,14 @@
                     <div class="col-md-6">
                         <x-select name="sub_category" label="Select Sub Category">
                             <option value="">Select Sub Category</option>
+
                             @foreach ($subCategories ?? [] as $subCategory)
-                            <option value="{{ $subCategory?->id }}">{{ $subCategory->name }}</option>
+                                <option
+                                    value="{{ $subCategory->id }}"
+                                    data-category="{{ $subCategory->category_id }}"
+                                >
+                                    {{ $subCategory->name }}
+                                </option>
                             @endforeach
                         </x-select>
                     </div>
@@ -426,4 +434,47 @@
     });
 
 </script>
+
+
+@push('script')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const categorySelect = document.getElementById('category');
+        const subCategorySelect = document.getElementById('sub_category');
+
+        const allSubCategories = Array.from(
+            subCategorySelect.querySelectorAll('option[data-category]')
+        );
+
+        const oldSubCategory = "{{ old('sub_category') }}";
+
+        // Load sub categories for selected category
+        function loadSubCategories(categoryId) {
+            subCategorySelect.innerHTML =
+                '<option value="">Select Sub Category</option>';
+
+            allSubCategories.forEach(option => {
+                if (option.getAttribute('data-category') === categoryId) {
+                    const newOption = option.cloneNode(true);
+
+                    if (newOption.value === oldSubCategory) {
+                        newOption.selected = true;
+                    }
+
+                    subCategorySelect.appendChild(newOption);
+                }
+            });
+        }
+
+        categorySelect.addEventListener('change', function() {
+            loadSubCategories(this.value);
+        });
+
+        // Load sub categories on page load
+        if (categorySelect.value) {
+            loadSubCategories(categorySelect.value);
+        }
+    });
+</script>
+@endpush
 @endpush

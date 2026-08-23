@@ -64,7 +64,7 @@
                         <div class="filter-item">
                             <div class="shop-filter-item category-widget">
                                 <h2>Categories</h2>
-                                <ul>
+                                <ul style="max-height: 300px; overflow-y: auto;">
                                     @foreach($categories as $category)
                                     <li>
                                         {{-- Parent Category --}}

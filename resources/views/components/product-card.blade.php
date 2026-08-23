@@ -4,6 +4,7 @@
 $qvData = [
 'id' => $product->id,
 'name' => $product->name,
+'slug' => $product->slug,
 'image' => asset($product->thumbnail),
 'short_desc' => \Illuminate\Support\Str::limit($product->details?->short_description ?? 'No description available', 120),
 'base_price' => $product->discount_price > 0 ? $product->discount_price : $product->selling_price,
@@ -29,13 +30,13 @@ return [
 <div class="product-item min-w-0">
     <div class="image position-relative">
         {{-- Product Thumbnail --}}
-        <img src="{{ asset($product->thumbnail) }}" alt="{{ $product->name }}" style="width: 100%; object-fit: cover;">
+        <img src="{{ asset($product->thumbnail) }}" alt="{{ $product->name }}" style="height: 100%; object-fit: contain;">
 
         {{-- Tags Wrapper --}}
         <div class="tags-wrapper position-absolute z-index-2" style="top: 8%; left: 5%;">
             <div class="d-flex flex-wrap gap-1 flex-column">
                 {{-- 7 Days 'New' Logic --}}
-                @if($product->created_at->diffInDays(now()) <= 7) 
+                @if($product->created_at->diffInDays(now()) <= 3) 
                 <div class="px-1 rounded fw-bold text-uppercase text-white w-fit" style="background: linear-gradient(180deg, #95CD2F 0%, #63911F 100%); padding: 2px 10px; font-size: 11px;">
                     New
                 </div>

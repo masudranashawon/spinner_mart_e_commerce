@@ -57,7 +57,6 @@
                 <div class="col-lg-4 col-12">
                     <div class="middle-right">
                         <ul>
-                            <li><a href="compare.html"><i class="fi flaticon-right-and-left"></i><span>Compare</span></a></li>
 
                             @if($user)
                             <li class="nav-item dropdown">
@@ -239,7 +238,7 @@
                     </div>
                     <div class="col-lg-1 col-md-6 col-sm-5 col-6 d-block d-lg-none">
                         <div class="navbar-header">
-                            <a class="navbar-brand" href="index.html"><img src="{{ asset('frontend/assets/images/logo.svg') }}" alt="logo"></a>
+                            <a class="navbar-brand" href="index.html"><img src="{{ get_setting('site_logo') }}" alt="logo"></a>
                         </div>
                     </div>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-3">
@@ -272,16 +271,10 @@
                         <div id="navbar" class="navbar-collapse navigation-holder collapse">
                             <button class="menu-close"><i class="ti-close"></i></button>
                             <ul class="nav navbar-nav mb-lg-0 mb-2">
-                                <li class="menu-item-has-children">
-                                    <a href="{{ route('home') }}">Home</a>
-                                </li>
+                                <li><a href="{{ route('home') }}">Home</a></li>
                                 <li><a href="{{ route('about') }}">About</a></li>
-                                <li class="menu-item-has-children">
-                                    <a href="{{route('shop')}}">Shop</a>
-                                </li>
-                                <li class="menu-item-has-children">
-                                    <a href="{{ route('faq') }}">FAQ</a>
-                                </li>
+                                <li><a href="{{ route('shop') }}">Shop</a></li>
+                                <li><a href="{{ route('faq') }}">FAQs</a></li>
                                 <li><a href="{{ route('contact.index') }}">Contact</a></li>
                             </ul>
 

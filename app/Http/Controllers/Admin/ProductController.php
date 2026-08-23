@@ -20,15 +20,15 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::latest("id")->get();
+        $products = Product::with(['details.category', 'details.brand'])->latest("id")->get();
 
         return view('admin.product.index', compact("products"));
     }
 
     public function create()
     {
-        $categories = Category::latest("id")->get();
-        $subCategories = SubCategory::latest("id")->get();
+        $categories = Category::all();
+        $subCategories = SubCategory::all();
         $brands = Brand::latest("id")->get();
         $tags = Tag::latest("id")->get();
 
@@ -78,8 +78,8 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        $categories = Category::latest("id")->get();
-        $subCategories = SubCategory::latest("id")->get();
+        $categories = Category::all();
+        $subCategories = SubCategory::all();
         $brands = Brand::latest("id")->get();
         $tags = Tag::latest("id")->get();
 

@@ -177,17 +177,15 @@
         </div>
 
         <div class="product-wrap">
-            <div>
-                <div class="row row-cols-lg-4 row-cols-md-6 row-cols-sm-12">
-                    @foreach($interestedProducts as $product)
-                    <x-product-card :product="$product" />
-                    @endforeach
-                </div>
-
-                <div class="more-btn">
-                    <a class="theme-btn-s2" href="{{ route('shop') }}">View All</a>
-                </div>
+            <div class="row row-cols-lg-4 row-cols-md-6 row-cols-sm-12">
+                @foreach($interestedProducts as $product)
+                <div class="col"><x-product-card :product="$product" /></div >
+                @endforeach
             </div>
+
+            <div class="more-btn">
+                <a class="theme-btn-s2" href="{{ route('shop') }}">View All</a>
+            </div>   
         </div>
     </div>
 </section>
@@ -267,7 +265,7 @@
                 <ul class="special-product">
                     <li>
                         <div class="product-item">
-                            <div class="image w-50">
+                            <div class="image deals-of-the-day w-50">
                                 <img src="{{ asset($product->thumbnail) }}" alt="{{ $product->name }}">
                             </div>
                             <div class="text w-50 p-2 p-md-4">

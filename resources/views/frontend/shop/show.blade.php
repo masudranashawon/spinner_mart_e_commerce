@@ -159,12 +159,17 @@
                                 </span>
                             </li>
                             <li>Category: <span>{{ $product->details->category->name }}</span></li>
-                            <li>
-                                Tags: 
-                                @foreach($product->tags as $tag)
-                                <span class="badge bg-secondary px-2 py-0 small text-light fw-normal mb-2 mb-md-0">{{ $tag->name }}</span>
-                                @endforeach
-                            </li>
+
+                            @if($product->tags->isNotEmpty())
+                                <li>
+                                    Tags:
+                                    @foreach($product->tags as $tag)
+                                        <span class="badge bg-secondary px-2 py-0 small text-light fw-normal mb-2 mb-md-0">
+                                            {{ $tag->name }}
+                                        </span>
+                                    @endforeach
+                                </li>
+                            @endif
                         </ul>
                     </form>
                 </div>

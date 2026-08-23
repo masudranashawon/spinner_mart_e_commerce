@@ -1,6 +1,6 @@
-  <div class="product-wrapper row row-cols-xl-4 row-cols-md-3 row-cols-sm-2 row-cols-1 m-0 p-0" style="transition: all 0.3s ease;">
+  <div class="product-wrapper row row-cols-xl-3 row-cols-md-3 row-cols-sm-2 row-cols-1 m-0 p-0" style="transition: all 0.3s ease;">
       @foreach($products ?? [] as $product)
-      <div class="col">
+      <div class="col mb-3">
           <x-product-card :product="$product" />
       </div>
       @endforeach
