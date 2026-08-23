@@ -198,6 +198,18 @@
                                                     <i class="fi flaticon-star"></i>
                                                     <span>{{$product?->rating}}</span>
                                                 </div>
+
+                                                <div class="rating-product">
+                                                    @for($i = 1; $i <= 5; $i++) 
+                                                        @if($i <= $product?->rating)
+                                                        <i class="fi flaticon-star"></i>
+                                                        @else
+                                                        <i class="fi flaticon-star empty-star"></i>
+                                                        @endif
+                                                    @endfor
+                                                        <span class="text-muted ms-1">({{ $product?->reviews }})</span>
+                                                </div>
+
                                                 <div class="price">
                                                     <span class="present-price">{{$product?->discount_price}} </span>
                                                     <del class="old-price">{{$product?->selling_price}}</del>

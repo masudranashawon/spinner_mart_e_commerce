@@ -102,12 +102,14 @@
 
                                                     <li>
                                                         <div class="rating-product">
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <i class="fi flaticon-star"></i>
-                                                            <span>{{$cart->product->rating}}</span>
+                                                            @for($i = 1; $i <= 5; $i++) 
+                                                                @if($i <= $cart->product->rating)
+                                                                <i class="fi flaticon-star"></i>
+                                                                @else
+                                                                <i class="fi flaticon-star empty-star"></i>
+                                                                @endif
+                                                            @endfor
+                                                                <span class="text-muted ms-1">{{ $cart->product->reviews }}</span>
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -190,9 +192,11 @@
         <div class="cart-prodact">
             <h2>You May be Interested in…</h2>
 
-            <div class="row row-cols-lg-4 row-cols-md-6 row-cols-sm-12">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-3 row-cols-xxl-4">
                 @foreach ( $recentViewProducts as $product )
-                <x-product-card :product="$product" />
+                <div class="col">
+                    <x-product-card :product="$product" />
+                </div>
                 @endforeach
             </div>
         </div>

@@ -338,12 +338,6 @@
 </div>
 <!-- product-single-section  end-->
 
-{{-- <style>
-    .product-single-section .product-tab-area .rating-section .comments-area .comments-meta .rating-product i.empty-star {
-        background: #d3d3d3 !important; 
-        background-clip: text !important;
-    }
-</style> --}}
 @endsection
 
 @push('script')

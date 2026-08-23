@@ -263,36 +263,58 @@
         </div>
         <div class="row g-0">
             @foreach($dealsOfTheDay as $product)
-            <div class="col-lg-6 col-12">
+            <div class="col-12 col-md-6">
                 <ul class="special-product">
                     <li>
-                        <div class="product-item row">
-                            <div class="image deals-of-the-day col-12 col-lg-6">
-                                <img src="{{ asset($product->thumbnail) }}" alt="{{ $product->name }}">
+                        <div class="product-item d-flex flex-column flex-lg-row">
+
+                            <div class="image deals-of-the-day w-100">
+                                <img src="{{ asset($product->thumbnail) }}"
+                                    alt="{{ $product->name }}">
                             </div>
-                            <div class="text col-12 col-lg-6 p-2 p-md-4">
-                                <h2><a href="{{route('productDetails', $product->slug)}}">{{$product->name}}</a></h2>
+
+                            <div class="text w-100 p-2 p-md-4">
+                                <h2>
+                                    <a href="{{ route('productDetails', $product->slug) }}">
+                                        {{ $product->name }}
+                                    </a>
+                                </h2>
+
                                 <div class="rating-product">
-                                    <i class="fi flaticon-star"></i>
-                                    <i class="fi flaticon-star"></i>
-                                    <i class="fi flaticon-star"></i>
-                                    <i class="fi flaticon-star"></i>
-                                    <i class="fi flaticon-star"></i>
-                                    <span>{{$product->rating}}</span>
+                                    @for($i = 1; $i <= 5; $i++) 
+                                        @if($i <=$product->rating)
+                                        <i class="fi flaticon-star"></i>
+                                        @else
+                                        <i class="fi flaticon-star empty-star"></i>
+                                        @endif
+                                    @endfor
+                                        <span class="text-muted ms-1">({{ $product->reviews }})</span>
                                 </div>
+
                                 <div class="price">
                                     @if($product->discount_price > 0)
-                                    {{-- If discount price is greater than 0 --}}
-                                    <span class="present-price">{{ format_price($product->discount_price) }}</span>
-                                    <del class="old-price">{{ format_price($product->selling_price) }}</del>
+                                        <span class="present-price">
+                                            {{ format_price($product->discount_price) }}
+                                        </span>
+
+                                        <del class="old-price">
+                                            {{ format_price($product->selling_price) }}
+                                        </del>
                                     @else
-                                    <span class="present-price">{{ format_price($product->selling_price) }}</span>
+                                        <span class="present-price">
+                                            {{ format_price($product->selling_price) }}
+                                        </span>
                                     @endif
                                 </div>
+
                                 <div class="shop-btn">
-                                    <a class="theme-btn-s2" href="{{route('productDetails', $product->slug)}}">Shop Now</a>
+                                    <a class="theme-btn-s2"
+                                    href="{{ route('productDetails', $product->slug) }}">
+                                        Shop Now
+                                    </a>
                                 </div>
                             </div>
+
                         </div>
                     </li>
                 </ul>
@@ -346,12 +368,13 @@
 
                             {{-- Rating --}}
                             <div class="rating-product">
-                                @for($i = 1; $i <= 5; $i++) @if($i <=$product->rating)
+                                @for($i = 1; $i <= 5; $i++) 
+                                    @if($i <=$product->rating)
                                     <i class="fi flaticon-star"></i>
                                     @else
                                     <i class="fi flaticon-star empty-star"></i>
                                     @endif
-                                    @endfor
+                                @endfor
                                     <span class="text-muted ms-1">({{ $product->reviews }})</span>
                             </div>
 
@@ -385,12 +408,13 @@
 
                             {{-- Rating --}}
                             <div class="rating-product">
-                                @for($i = 1; $i <= 5; $i++) @if($i <=$product->rating)
+                                @for($i = 1; $i <= 5; $i++) 
+                                    @if($i <=$product->rating)
                                     <i class="fi flaticon-star"></i>
                                     @else
                                     <i class="fi flaticon-star empty-star"></i>
                                     @endif
-                                    @endfor
+                                @endfor
                                     <span class="text-muted ms-1">({{ $product->reviews }})</span>
                             </div>
 
@@ -424,12 +448,13 @@
 
                             {{-- Rating --}}
                             <div class="rating-product">
-                                @for($i = 1; $i <= 5; $i++) @if($i <=$product->rating)
+                                @for($i = 1; $i <= 5; $i++) 
+                                    @if($i <=$product->rating)
                                     <i class="fi flaticon-star"></i>
                                     @else
                                     <i class="fi flaticon-star empty-star"></i>
                                     @endif
-                                    @endfor
+                                @endfor
                                     <span class="text-muted ms-1">({{ $product->reviews }})</span>
                             </div>
 

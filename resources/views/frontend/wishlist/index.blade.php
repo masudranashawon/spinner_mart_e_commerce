@@ -66,13 +66,16 @@
                                             <ul>
                                                 <li class="first-cart"><a href="{{ route('productDetails', $wishlist->product->slug) }}"style="color:#233D50;">{{$wishlist->product->name}}</a></li>
                                                 <li>
+                                                    {{-- Rating --}}
                                                     <div class="rating-product">
-                                                        <i class="fi flaticon-star"></i>
-                                                        <i class="fi flaticon-star"></i>
-                                                        <i class="fi flaticon-star"></i>
-                                                        <i class="fi flaticon-star"></i>
-                                                        <i class="fi flaticon-star"></i>
-                                                        <span>{{$wishlist->product->rating}}</span>
+                                                        @for($i = 1; $i <= 5; $i++)
+                                                            @if($i <= $wishlist->product->rating)
+                                                                <i class="fi flaticon-star"></i> 
+                                                            @else
+                                                                <i class="fi flaticon-star empty-star"></i>
+                                                            @endif
+                                                        @endfor
+                                                        <span class="text-muted ms-1">({{ $wishlist->product->rating }})</span> 
                                                     </div>
                                                 </li>
                                             </ul>

@@ -6710,6 +6710,8 @@ img {
 
 .themart-special-product-section .special-product li .product-item .image img {
   width: 100%;
+  height: 100%;
+  object-fit: cover
 }
 
 .themart-special-product-section .special-product li .product-item .image .cart-wrap {

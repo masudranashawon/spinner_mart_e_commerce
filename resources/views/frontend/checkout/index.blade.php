@@ -175,12 +175,14 @@
                                             <li class="first-cart">{{Str::limit($item?->product?->name, 10)}} (x{{$item?->quantity}})</li>
                                             <li>
                                                 <div class="rating-product">
-                                                    <i class="fi flaticon-star"></i>
-                                                    <i class="fi flaticon-star"></i>
-                                                    <i class="fi flaticon-star"></i>
-                                                    <i class="fi flaticon-star"></i>
-                                                    <i class="fi flaticon-star"></i>
-                                                    <span>{{$item?->product?->rating}}</span>
+                                                    @for($i = 1; $i <= 5; $i++) 
+                                                        @if($i <= $item?->product?->rating)
+                                                        <i class="fi flaticon-star"></i>
+                                                        @else
+                                                        <i class="fi flaticon-star empty-star"></i>
+                                                        @endif
+                                                    @endfor
+                                                        <span class="text-muted ms-1">({{ $item?->product?->reviews }})</span>
                                                 </div>
                                             </li>
                                         </ul>
