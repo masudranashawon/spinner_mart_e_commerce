@@ -26,208 +26,220 @@
     <div class="container">
         <div class="row">
             {{-- ================= SIDEBAR FILTERS ================= --}}
-            <div class="col-lg-3">
-                <form id="filterForm">
-                    <div class="shop-filter-wrap">
-                        <!-- Search -->
-                        <div class="filter-item">
-                            <div class="shop-filter-item">
-                                <div class="shop-filter-search">
-                                    <div>
-                                        <input type="text" name="search" id="searchInput" class="form-control" placeholder="Search product...">
+            <div class="col-lg-3 col-12">
+                <div class="filter-overlay d-lg-none" id="filter-overlay"></div>
+
+                <div class="shop-filter-sidebar-wrapper" id="filter-sidebar">
+                    <!-- Mobile Header & Close Button -->
+                    <div class="filter-close-btn d-lg-none border-bottom pb-3 mb-3 d-flex justify-content-between align-items-center">
+                        <h5 class="m-0 fw-bold">Filter Products</h5>
+                        <button type="button" class="btn-close-filter text-danger" style="background: none; border: none; font-size: 22px;"><i class="ti-close"></i></button>
+                    </div>
+
+                    <form id="filterForm" class="w-100">
+                        <div class="shop-filter-wrap">
+                            <!-- Search -->
+                            <div class="filter-item">
+                                <div class="shop-filter-item">
+                                    <div class="shop-filter-search">
+                                        <div>
+                                            <input type="text" name="search" id="searchInput" class="form-control" placeholder="Search product...">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Brands -->
-                        <div class="filter-item">
-                            <div class="shop-filter-item">
-                                <h2>Brands</h2>
-                                <ul style="max-height: 300px; overflow-y: auto;">
-                                    @foreach($brands as $brand)
-                                    <div class="form-check position-relative mt-3">
-                                        {{-- Checkbox --}}
-                                        <input class="form-check-input filter-checkbox m-0 p-0" type="checkbox" name="brands[]" value="{{ $brand->id }}" id="brand_{{ $brand->id }}" {{ in_array($brand->id, (array) request()->input('brands', [])) ? 'checked' : '' }} style="width: 18px; height: 18px; cursor: pointer;">
-
-                                        {{-- Label --}}
-                                        <label class="form-check-label m-0 ms-2 p-0" for="brand_{{ $brand->id }}" style="cursor: pointer; user-select: none; font-size: 16px;">
-                                            {{ $brand->name }}
-                                        </label>
-                                    </div>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Categories -->
-                        <div class="filter-item">
-                            <div class="shop-filter-item category-widget">
-                                <h2>Categories</h2>
-                                <ul style="max-height: 300px; overflow-y: auto;">
-                                    @foreach($categories as $category)
-                                    <li>
-                                        {{-- Parent Category --}}
+                            <!-- Brands -->
+                            <div class="filter-item">
+                                <div class="shop-filter-item">
+                                    <h2>Brands</h2>
+                                    <ul style="max-height: 300px; overflow-y: auto;">
+                                        @foreach($brands as $brand)
                                         <div class="form-check position-relative mt-3">
-                                            <input class="form-check-input filter-checkbox m-0 p-0" type="checkbox" name="categories[]" value="{{ $category->id }}" id="cat_{{ $category->id }}" {{ in_array($category->id, (array) request()->input('categories', [])) ? 'checked' : '' }} style="width: 18px; height: 18px; cursor: pointer;">
+                                            {{-- Checkbox --}}
+                                            <input class="form-check-input filter-checkbox m-0 p-0" type="checkbox" name="brands[]" value="{{ $brand->id }}" id="brand_{{ $brand->id }}" {{ in_array($brand->id, (array) request()->input('brands', [])) ? 'checked' : '' }} style="width: 18px; height: 18px; cursor: pointer;">
 
-                                            <label class="form-check-label m-0 ms-2 p-0 fw-bold" for="cat_{{ $category->id }}" style="cursor: pointer; user-select: none;">
-                                                {{ $category->name }}
+                                            {{-- Label --}}
+                                            <label class="form-check-label m-0 ms-2 p-0" for="brand_{{ $brand->id }}" style="cursor: pointer; user-select: none; font-size: 16px;">
+                                                {{ $brand->name }}
                                             </label>
                                         </div>
-
-                                        {{-- Sub Categories (If available) --}}
-                                        @if($category->subCategories && $category->subCategories->count() > 0)
-                                        <ul class="ps-3 pt-3">
-                                            @foreach($category->subCategories as $subCat)
-                                            <li class="pt-1">
-                                                <div class="form-check position-relative">
-                                                    <input class="form-check-input filter-checkbox m-0 p-0" type="checkbox" name="subcategories[]" value="{{ $subCat->id }}" id="subcat_{{ $subCat->id }}" {{ in_array($subCat->id, (array) request()->input('subcategories', [])) ? 'checked' : '' }} style="width: 16px; height: 16px; cursor: pointer;">
-
-                                                    <label class="form-check-label m-0 ms-2 p-0" for="subcat_{{ $subCat->id }}" style="cursor: pointer; user-select: none; font-size: 16px;">
-                                                        {{ $subCat->name }}
-                                                    </label>
-                                                </div>
-                                            </li>
-                                            @endforeach
-                                        </ul>
-                                        @endif
-                                    </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Price -->
-                        <div class="filter-item">
-                            <div class="shop-filter-item">
-                                <h2>Filter by price</h2>
-                                <div class="shopWidgetWraper">
-                                    <div class="d-flex">
-                                        <div class="col-lg-6 pe-2">
-                                            <label class="form-label">Min</label>
-                                            <input type="number" name="min_price" id="min_price" class="form-control price-filter" placeholder="0" value="0">
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <label class="form-label">Max</label>
-                                            <input type="number" name="max_price" id="max_price" class="form-control price-filter" placeholder="Max" value="100000">
-                                        </div>
-                                    </div>
+                                        @endforeach
+                                    </ul>
                                 </div>
                             </div>
 
-                        </div>
+                            <!-- Categories -->
+                            <div class="filter-item">
+                                <div class="shop-filter-item category-widget">
+                                    <h2>Categories</h2>
+                                    <ul style="max-height: 300px; overflow-y: auto;">
+                                        @foreach($categories as $category)
+                                        <li>
+                                            {{-- Parent Category --}}
+                                            <div class="form-check position-relative mt-3">
+                                                <input class="form-check-input filter-checkbox m-0 p-0" type="checkbox" name="categories[]" value="{{ $category->id }}" id="cat_{{ $category->id }}" {{ in_array($category->id, (array) request()->input('categories', [])) ? 'checked' : '' }} style="width: 18px; height: 18px; cursor: pointer;">
 
-                        <!-- Color -->
-                        <div class="filter-item">
-                            <div class="shop-filter-item">
-                                <h2>Color</h2>
-                                <ul style="max-height: 300px; overflow-y: auto;">
-                                    @foreach($colors as $color)
-                                    <div class="form-check position-relative mt-3">
-                                        {{-- Checkbox --}}
-                                        <input class=" form-check-input filter-checkbox m-0 p-0" type="checkbox" name="colors[]" value="{{ $color->id }}" id="color_{{ $color->id }}" {{ in_array($color->id, (array) request()->input('colors', [])) ? 'checked' : '' }} style="width: 18px; height: 18px; cursor: pointer;">
-
-                                        {{-- Label --}}
-                                        <label class="form-check-label m-0 ms-2 p-0" for="color_{{ $color->id }}" style="cursor: pointer; user-select: none; font-size: 16px;">
-                                            {{ $color->name }}
-                                        </label>
-                                    </div>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Size -->
-                        <div class="filter-item">
-                            <div class="shop-filter-item">
-                                <h2>Size</h2>
-                                <ul style="max-height: 300px; overflow-y: auto;">
-                                    @foreach($sizes as $size)
-                                    <div class="form-check position-relative mt-3">
-                                        {{-- Checkbox --}}
-                                        <input class=" form-check-input filter-checkbox m-0 p-0" type="checkbox" name="sizes[]" value="{{ $size->id }}" id="size_{{ $size->id }}" {{ in_array($size->id, (array) request()->input('sizes', [])) ? 'checked' : '' }} style="width: 18px; height: 18px; cursor: pointer;">
-
-                                        {{-- Label --}}
-                                        <label class="form-check-label m-0 ms-2 p-0" for="size_{{ $size->id }}" style="cursor: pointer; user-select: none; font-size: 16px;">
-                                            {{ $size->name }}
-                                        </label>
-                                    </div>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Tags -->
-                        <div class="filter-item">
-                            <div class="shop-filter-item tag-widget">
-                                <h2>Popular Tags</h2>
-                                <ul class="d-flex flex-wrap gap-2" style="max-height: 300px; overflow-y: auto;">
-                                    @foreach($tags as $tag)
-                                    <label class="tag-label" style="cursor: pointer;">
-                                        <input type="checkbox" name="tags[]" value="{{ $tag->id }}" class="d-none filter-checkbox">
-                                        <span class="badge border text-dark p-2">{{ $tag->name }}</span>
-                                    </label>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Recent products -->
-                        <div class="filter-item">
-                            <div class="shop-filter-item new-product">
-                                <h2>New Products</h2>
-                                <ul>
-                                    @foreach($recentlyAdded ?? [] as $product)
-                                    <li>
-                                        <div class="recent-prod row align-items-center mb-4">
-                                            <div class="card-image col-lg-4">
-                                                <a href="{{ route('productDetails', $product->slug) }}">
-                                                    <div class="image">
-                                                        <img src="{{ $product?->thumbnail }}" alt="{{$product?->name}}">
-                                                    </div>
-                                                </a>
+                                                <label class="form-check-label m-0 ms-2 p-0 fw-bold" for="cat_{{ $category->id }}" style="cursor: pointer; user-select: none;">
+                                                    {{ $category->name }}
+                                                </label>
                                             </div>
-                                            <div class="content col-lg-8 p-0">
-                                                <h5><a href="{{ route('productDetails', $product->slug) }}" class="text-truncate d-block">{{$product?->name}}</a></h5>
-                                                <div class="rating-product">
-                                                    <i class="fi flaticon-star"></i>
-                                                    <i class="fi flaticon-star"></i>
-                                                    <i class="fi flaticon-star"></i>
-                                                    <i class="fi flaticon-star"></i>
-                                                    <i class="fi flaticon-star"></i>
-                                                    <span>{{$product?->rating}}</span>
-                                                </div>
 
-                                                <div class="rating-product">
-                                                    @for($i = 1; $i <= 5; $i++) 
-                                                        @if($i <= $product?->rating)
-                                                        <i class="fi flaticon-star"></i>
-                                                        @else
-                                                        <i class="fi flaticon-star empty-star"></i>
-                                                        @endif
-                                                    @endfor
-                                                        <span class="text-muted ms-1">({{ $product?->reviews }})</span>
-                                                </div>
+                                            {{-- Sub Categories (If available) --}}
+                                            @if($category->subCategories && $category->subCategories->count() > 0)
+                                            <ul class="ps-3 pt-3">
+                                                @foreach($category->subCategories as $subCat)
+                                                <li class="pt-1">
+                                                    <div class="form-check position-relative">
+                                                        <input class="form-check-input filter-checkbox m-0 p-0" type="checkbox" name="subcategories[]" value="{{ $subCat->id }}" id="subcat_{{ $subCat->id }}" {{ in_array($subCat->id, (array) request()->input('subcategories', [])) ? 'checked' : '' }} style="width: 16px; height: 16px; cursor: pointer;">
 
-                                                <div class="price">
-                                                    <span class="present-price">{{$product?->discount_price}} </span>
-                                                    <del class="old-price">{{$product?->selling_price}}</del>
-                                                </div>
+                                                        <label class="form-check-label m-0 ms-2 p-0" for="subcat_{{ $subCat->id }}" style="cursor: pointer; user-select: none; font-size: 16px;">
+                                                            {{ $subCat->name }}
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                                @endforeach
+                                            </ul>
+                                            @endif
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Price -->
+                            <div class="filter-item">
+                                <div class="shop-filter-item">
+                                    <h2>Filter by price</h2>
+                                    <div class="shopWidgetWraper">
+                                        <div class="d-flex">
+                                            <div class="col-lg-6 pe-2">
+                                                <label class="form-label">Min</label>
+                                                <input type="number" name="min_price" id="min_price" class="form-control price-filter" placeholder="0" value="0">
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label class="form-label">Max</label>
+                                                <input type="number" name="max_price" id="max_price" class="form-control price-filter" placeholder="Max" value="100000">
                                             </div>
                                         </div>
-                                    </li>
-                                    @endforeach
-                                </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Color -->
+                            <div class="filter-item">
+                                <div class="shop-filter-item">
+                                    <h2>Color</h2>
+                                    <ul style="max-height: 300px; overflow-y: auto;">
+                                        @foreach($colors as $color)
+                                        <div class="form-check position-relative mt-3">
+                                            {{-- Checkbox --}}
+                                            <input class=" form-check-input filter-checkbox m-0 p-0" type="checkbox" name="colors[]" value="{{ $color->id }}" id="color_{{ $color->id }}" {{ in_array($color->id, (array) request()->input('colors', [])) ? 'checked' : '' }} style="width: 18px; height: 18px; cursor: pointer;">
+
+                                            {{-- Label --}}
+                                            <label class="form-check-label m-0 ms-2 p-0" for="color_{{ $color->id }}" style="cursor: pointer; user-select: none; font-size: 16px;">
+                                                {{ $color->name }}
+                                            </label>
+                                        </div>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Size -->
+                            <div class="filter-item">
+                                <div class="shop-filter-item">
+                                    <h2>Size</h2>
+                                    <ul style="max-height: 300px; overflow-y: auto;">
+                                        @foreach($sizes as $size)
+                                        <div class="form-check position-relative mt-3">
+                                            {{-- Checkbox --}}
+                                            <input class=" form-check-input filter-checkbox m-0 p-0" type="checkbox" name="sizes[]" value="{{ $size->id }}" id="size_{{ $size->id }}" {{ in_array($size->id, (array) request()->input('sizes', [])) ? 'checked' : '' }} style="width: 18px; height: 18px; cursor: pointer;">
+
+                                            {{-- Label --}}
+                                            <label class="form-check-label m-0 ms-2 p-0" for="size_{{ $size->id }}" style="cursor: pointer; user-select: none; font-size: 16px;">
+                                                {{ $size->name }}
+                                            </label>
+                                        </div>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Tags -->
+                            <div class="filter-item">
+                                <div class="shop-filter-item tag-widget">
+                                    <h2>Popular Tags</h2>
+                                    <ul class="d-flex flex-wrap gap-2" style="max-height: 300px; overflow-y: auto;">
+                                        @foreach($tags as $tag)
+                                        <label class="tag-label" style="cursor: pointer;">
+                                            <input type="checkbox" name="tags[]" value="{{ $tag->id }}" class="d-none filter-checkbox">
+                                            <span class="badge border text-dark p-2">{{ $tag->name }}</span>
+                                        </label>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Recent products -->
+                            <div class="filter-item">
+                                <div class="shop-filter-item new-product">
+                                    <h2>New Products</h2>
+                                    <ul>
+                                        @foreach($recentlyAdded ?? [] as $product)
+                                        <li>
+                                            <div class="recent-prod row align-items-center text-center mb-4">
+                                                <div class="card-image col-12">
+                                                    <a href="{{ route('productDetails', $product->slug) }}">
+                                                        <div class="image">
+                                                            <img src="{{ $product?->thumbnail }}" alt="{{$product?->name}}">
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="content col-12 p-0">
+                                                    <h5><a href="{{ route('productDetails', $product->slug) }}" class="text-truncate d-block">{{$product?->name}}</a></h5>
+
+                                                    <div class="rating-product">
+                                                        @for($i = 1; $i <= 5; $i++) 
+                                                            @if($i <= $product?->rating)
+                                                            <i class="fi flaticon-star"></i>
+                                                            @else
+                                                            <i class="fi flaticon-star empty-star"></i>
+                                                            @endif
+                                                        @endfor
+                                                            <span class="text-muted ms-1">({{ $product?->reviews }})</span>
+                                                    </div>
+
+                                                    <div class="price">
+                                                        <span class="present-price">{{$product?->discount_price}} </span>
+                                                        <del class="old-price">{{$product?->selling_price}}</del>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+
+                </div>
             </div>
 
             {{-- ================= PRODUCT AREA ================= --}}
             <div class="col-lg-9">
-                <div class="shop-section-top-inner">
+                    
+                <div class="shop-section-top-inner gap-2">
+
+                    <div class="d-lg-none mb-2 mb-md-0 ms-auto me-md-auto ms-md-0">
+                        <button class="btn theme-btn-s2 px-4 py-2" type="button" id="mobile-filter-toggle">
+                            <i class="ti-filter"></i> Filter
+                        </button>
+                    </div>
+
+                    
                     <div class="shoping-product">
                         <p>We found <span id="total-count">{{$products->total()}} items</span> for you! </p>
                     </div>
@@ -301,6 +313,44 @@
         background-clip: text;
     }
 
+    @media (max-width: 991px) {
+        .shop-filter-sidebar-wrapper {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 320px;
+            height: 100vh;
+            background: #fff;
+            z-index: 9999;
+            overflow-y: auto;
+            transition: all 0.4s ease-in-out;
+            padding: 20px;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+        }
+        
+        .shop-filter-sidebar-wrapper.active {
+            left: 0;
+        }
+
+        .filter-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0,0,0,0.5);
+            z-index: 9998;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.4s ease-in-out;
+        }
+
+        .filter-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+
 </style>
 @endsection
 
@@ -368,6 +418,17 @@
             $('html, body').animate({
                 scrollTop: $(".shop-section-top-inner").offset().top - 100
             }, 500);
+        });
+
+        // Mobile Filter Sidebar Toggle
+        $('#mobile-filter-toggle').on('click', function() {
+            $('#filter-sidebar, #filter-overlay').addClass('active');
+            $('body').css('overflow', 'hidden');
+        });
+
+        $('.btn-close-filter, #filter-overlay').on('click', function() {
+            $('#filter-sidebar, #filter-overlay').removeClass('active');
+            $('body').css('overflow', 'auto');
         });
     });
 
