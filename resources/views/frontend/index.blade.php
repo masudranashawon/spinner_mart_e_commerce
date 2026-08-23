@@ -177,9 +177,11 @@
         </div>
 
         <div class="product-wrap">
-            <div class="row row-cols-lg-4 row-cols-md-6 row-cols-sm-12">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-3 row-cols-xxl-4">
                 @foreach($interestedProducts as $product)
-                <div class="col"><x-product-card :product="$product" /></div >
+                <div class="col">
+                    <x-product-card :product="$product" />
+                </div >
                 @endforeach
             </div>
 
@@ -253,7 +255,7 @@
 <section class="themart-special-product-section">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-6">
+            <div class="col-lg-6 col-12">
                 <div class="wpo-section-title">
                     <h2>Deals Of The Day</h2>
                 </div>
@@ -264,11 +266,11 @@
             <div class="col-lg-6 col-12">
                 <ul class="special-product">
                     <li>
-                        <div class="product-item">
-                            <div class="image deals-of-the-day w-50">
+                        <div class="product-item row">
+                            <div class="image deals-of-the-day col-12 col-lg-6">
                                 <img src="{{ asset($product->thumbnail) }}" alt="{{ $product->name }}">
                             </div>
-                            <div class="text w-50 p-2 p-md-4">
+                            <div class="text col-12 col-lg-6 p-2 p-md-4">
                                 <h2><a href="{{route('productDetails', $product->slug)}}">{{$product->name}}</a></h2>
                                 <div class="rating-product">
                                     <i class="fi flaticon-star"></i>
