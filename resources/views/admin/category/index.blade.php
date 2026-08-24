@@ -3,12 +3,12 @@
 @section('content')
   <div class="row">
     {{-- All Categories --}}
-    <div class="col-md-7">
+    <div class="col-lg-7 order-2 order-lg-0 mt-4 mt-lg-0">
       <div class="card">
         <div class="card-header">
           <h5>All Categories</h5>
         </div>
-        <div class="card-footer">
+        <div class="card-footer table-responsive">
           <table class="data-table table-hover table">
             <thead>
               <tr>
@@ -51,7 +51,7 @@
     </div>
 
     {{-- Add new Category --}}
-    <div class="col-md-5">
+    <div class="col-lg-5">
       <div class="card">
         <div class="card-header">
           <h5 class="card-title">Add New Category</h5>

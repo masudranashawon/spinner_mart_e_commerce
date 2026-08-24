@@ -25,9 +25,9 @@
     </div>
 
     {{-- Product Images and Info --}}
-    <div class="row">
+    <div class="row g-2">
       {{-- Product Images --}}
-      <div class="col-md-4">
+      <div class="col-md-6 col-xl-4">
         <div class="card mb-3">
 
           <div class="row card-body text-center">
@@ -63,7 +63,7 @@
       </div>
 
       {{-- Product Info  --}}
-      <div class="col-md-3">
+      <div class="col-md-6 col-xl-3">
         <div class="card">
           <div class="card-body">
 
@@ -135,7 +135,7 @@
       </div>
 
       {{-- Stock Info  --}}
-      <div class="col-md-5">
+      <div class="mt-3 col-12 mt-lg-0 col-xl-5">
         <div class="card">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="font-weight-bold">Stock Information</h5>

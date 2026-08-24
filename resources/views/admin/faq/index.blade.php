@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-7">
+     <div class="col-lg-7 order-2 order-lg-0 mt-4 mt-lg-0">
         <div class="card">
             <div class="card-header">
                 <h5>All FAQs</h5>
@@ -52,7 +52,7 @@
         </div>
     </div>
 
-    <div class="col-md-5">
+    <div class="col-lg-5">
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title">Add New FAQ</h5>

@@ -209,6 +209,15 @@
                         </div>
                         @endif
 
+                        <!-- Review Button (Only for delivered/returned products) -->
+                        @if(in_array($order->order_status, ['delivered', 'return_requested', 'returned']))
+                            <div class="mt-2">
+                                <a href="{{ route('productDetails', $item->product->slug) }}" class="btn btn-outline-warning w-100 text-dark rounded-pill px-3 py-2" style="font-size: 12px; font-weight: 500;">
+                                    <i class="fi flaticon-star"></i> Write a Review
+                                </a>
+                            </div>
+                        @endif
+
                         <!-- Conditional Action Buttons -->
                         <div class="mt-4 border-top pt-3">
                             @if($order->order_status === 'pending')

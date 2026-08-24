@@ -61,11 +61,12 @@ class OrderController extends Controller
         return view('frontend.order.invoice', compact('order', 'billingAddress', 'shippingAddress'));
     }
 
+
     public function destroy(Order $order)
     {
-        // Delete order
-        $order->delete();
+        // Delete the order and restore stock and coupons
+        OrderRepository::deleteOrderForAdmin($order);
 
-        return to_route('admin.order.index')->with('success', 'Order deleted successfully.');
+        return to_route('admin.order.index')->with('success', 'Order deleted successfully. Stock and coupons have been restored.');
     }
 }

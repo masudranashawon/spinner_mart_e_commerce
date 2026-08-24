@@ -6,10 +6,10 @@
 <div class="container-fluid">
     <div class="row">
         <!-- Settings Tabs -->
-        <div class="col-md-2">
+        <div class="col-lg-3 col-xl-2 mb-3 mb-lg-0">
             <div class="card">
                 <div class="card-body p-0">
-                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <div class="nav nav-pills flex-row flex-lg-column" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         <a class="nav-link fw-bold active rounded-0" id="v-pills-branding-tab" data-toggle="pill" href="#v-pills-branding" role="tab">Branding</a>
                         <a class="nav-link fw-bold rounded-0" id="v-pills-contact-tab" data-toggle="pill" href="#v-pills-contact" role="tab">Contact Info</a>
                         <a class="nav-link fw-bold rounded-0" id="v-pills-order-tab" data-toggle="pill" href="#v-pills-order" role="tab">Order & Delivery</a>
@@ -24,7 +24,7 @@
         </div>
 
         <!-- Settings Content -->
-        <div class="col-md-10">
+        <div class="col-lg-9 col-xl-10">
             <div class="card">
                 <div class="card-body">
                     <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
@@ -52,7 +52,7 @@
                                         <input type="hidden" name="group[site_logo]" value="branding">
                                         <input type="file" name="site_logo" class="form-control">
                                     </div>
-                                    <div class="col-md-6 d-flex align-items-center">
+                                    <div class="col-md-6 d-flex align-items-center mt-3 mt-md-0">
                                         @if(get_setting('site_logo'))
                                         <img src="{{ get_setting('site_logo') }}" alt="Logo" height="45">
                                         @endif
@@ -65,7 +65,7 @@
                                         <input type="hidden" name="group[footer_logo]" value="branding">
                                         <input type="file" name="footer_logo" class="form-control">
                                     </div>
-                                    <div class="col-md-6 d-flex align-items-center">
+                                    <div class="col-md-6 d-flex align-items-center mt-3 mt-md-0">
                                         @if(get_setting('footer_logo'))
                                         <img src="{{ get_setting('footer_logo') }}" alt="Footer Logo" height="45">
                                         @endif
@@ -78,7 +78,7 @@
                                         <input type="hidden" name="group[site_favicon]" value="branding">
                                         <input type="file" name="site_favicon" class="form-control">
                                     </div>
-                                    <div class="col-md-6 d-flex align-items-center">
+                                    <div class="col-md-6 d-flex align-items-center mt-3 mt-md-0">
                                         @if(get_setting('site_favicon'))
                                         <img src="{{ get_setting('site_favicon') }}" alt="Favicon" height="40">
                                         @endif
@@ -416,20 +416,33 @@
 </div>
 
 <style>
-    /* Styling for the nav pills to match standard admin panel look */
     .nav-pills .nav-link {
         color: #495057;
         font-weight: 500;
         padding: 12px 20px;
-        border-left: 3px solid transparent;
+        border-bottom: 3px solid transparent;
+        border-left: 0;
     }
 
     .nav-pills .nav-link.active,
-    .nav-pills .show>.nav-link {
+    .nav-pills .show > .nav-link {
         color: #727cf5;
         background-color: #f8f9fa;
-        border-left: 3px solid #727cf5;
+        border-bottom: 3px solid #727cf5;
     }
 
+    /* Desktop: vertical tabs */
+    @media (min-width: 992px) {
+        .nav-pills .nav-link {
+            border-bottom: 0;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-pills .nav-link.active,
+        .nav-pills .show > .nav-link {
+            border-left: 3px solid #727cf5;
+            border-bottom: 0;
+        }
+    }
 </style>
 @endsection

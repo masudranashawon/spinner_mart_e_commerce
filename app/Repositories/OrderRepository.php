@@ -133,6 +133,13 @@ class OrderRepository extends Repository
                     $product->decrement('sold_count', $item->quantity);
                 }
             }
+
+            if ($order->coupon_id) {
+                $coupon = Coupon::find($order->coupon_id);
+                if ($coupon && $coupon->total_applied > 0) {
+                    $coupon->decrement('total_applied');
+                }
+            }
         });
     }
 
@@ -163,11 +170,25 @@ class OrderRepository extends Repository
             // Restore Stock (If moving to Cancelled/Returned from normal status)
             if ($newIsRestock && !$oldWasRestocked) {
                 self::adjustStockForAdmin($order, true, $newStatus);
-            }
 
-            // Deduct Stock (If admin un-cancels an order back to processing/shipped)
-            elseif (!$newIsRestock && $oldWasRestocked) {
+                // ===== Restore Coupon =====
+                if ($order->coupon_id) {
+                    $coupon = Coupon::find($order->coupon_id);
+
+                    if ($coupon && $coupon->total_applied > 0) {
+                        $coupon->decrement('total_applied');
+                    }
+                }
+            } elseif (!$newIsRestock && $oldWasRestocked) {
+                // Deduct Stock (If moving from Cancelled/Returned to normal status)
                 self::adjustStockForAdmin($order, false, $newStatus);
+
+                if ($order->coupon_id) {
+                    $coupon = Coupon::find($order->coupon_id);
+                    if ($coupon) {
+                        $coupon->increment('total_applied');
+                    }
+                }
             }
 
             // update new status
@@ -246,5 +267,32 @@ class OrderRepository extends Repository
                 }
             }
         }
+    }
+
+    public static function deleteOrderForAdmin(Order $order)
+    {
+        DB::transaction(function () use ($order) {
+
+            $restockStates = [
+                OrderStatusEnums::CANCELLED->value,
+                OrderStatusEnums::RETURNED->value
+            ];
+
+            // Restore Stock (If moving to Cancelled/Returned from normal status)
+            if (!in_array($order->order_status, $restockStates)) {
+                self::adjustStockForAdmin($order, true, 'Order Deleted');
+            }
+
+
+            if ($order->coupon_id) {
+                $coupon = Coupon::find($order->coupon_id);
+                if ($coupon && $coupon->total_applied > 0) {
+                    $coupon->decrement('total_applied');
+                }
+            }
+
+            // Delete the order and its related items
+            $order->delete();
+        });
     }
 }

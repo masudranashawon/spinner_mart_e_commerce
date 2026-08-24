@@ -3,13 +3,13 @@
 @section('content')
 <div class="row">
     {{-- All Coupons --}}
-    <div class="col-md-8">
+    <div class="col-lg-8 order-2 order-lg-0 mt-4 mt-lg-0">
         <div class="card">
             <div class="card-header">
                 <h5>All Coupons</h5>
             </div>
-            <div class="card-footer">
-                <table class="data-table table-hover table table-responsive">
+            <div class="card-footer table-responsive">
+                <table class="data-table table-hover table">
                     <thead>
                         <tr>
                             <th>SL</th>
@@ -66,7 +66,7 @@
     </div>
 
     {{-- Add new Coupon --}}
-    <div class="col-md-4">
+    <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title">Add New Coupon</h5>

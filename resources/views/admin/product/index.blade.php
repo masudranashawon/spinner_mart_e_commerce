@@ -13,7 +13,7 @@
       </a>
     </div>
 
-    <div class="card-footer">
+    <div class="card-footer table-responsive">
       <table class="data-table table-hover table">
         <thead>
           <tr>

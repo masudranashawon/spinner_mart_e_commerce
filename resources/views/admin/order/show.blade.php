@@ -88,22 +88,22 @@ use App\Enums\PaymentStatusEnums;
     </div>
 
     <!-- Warning/Info Alerts for Cancelled or Returned Orders -->
-    @if($order->status === 'cancelled' && $order->cancel_reason)
+    @if($order->order_status === OrderStatusEnums::CANCELLED->value && $order->cancel_reason)
     <div class="alert alert-danger shadow-sm">
         <strong><i data-feather="alert-circle" class="icon-sm mr-1"></i> Cancel Reason:</strong> {{ $order->cancel_reason }}
     </div>
-    @elseif($order->order_status === 'return_requested')
+    @elseif($order->order_status === OrderStatusEnums::RETURN_REQUESTED->value)
     <div class="alert alert-danger shadow-sm">
         <strong><i data-feather="alert-triangle" class="icon-sm mr-1"></i> Return Requested! Reason:</strong> {{ $order->return_reason }}
     </div>
-    @elseif($order->order_status === 'returned')
+    @elseif($order->order_status === OrderStatusEnums::RETURNED->value)
     <div class="alert alert-danger shadow-sm">
         <strong><i data-feather="alert-triangle" class="icon-sm mr-1"></i> Return Reason:</strong> {{ $order->return_reason }}
     </div>
     @endif
 
     <!-- If admin changes order status to returned, show return reason -->
-    @if ($order->return_reason !== null && $order->order_status !== 'return_requested' && $order->order_status !== 'returned')
+    @if ($order->return_reason !== null && $order->order_status !== OrderStatusEnums::RETURN_REQUESTED->value && $order->order_status !== OrderStatusEnums::RETURNED->value)
     <div class="alert alert-danger shadow-sm">
         <strong><i data-feather="alert-triangle" class="icon-sm mr-1"></i> Return Requested! Reason:</strong> {{ $order->return_reason }}
     </div>
