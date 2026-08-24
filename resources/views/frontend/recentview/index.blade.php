@@ -34,7 +34,7 @@
         @endif
 
         <div class="product-wrap">
-            <div class="row row-cols-lg-4 row-cols-md-6 row-cols-sm-12">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-3 row-cols-xxl-4">
                 @foreach ( $products as $product )
                 <div class="col"><x-product-card :product="$product" /></div>
                 @endforeach

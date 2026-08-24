@@ -215,6 +215,15 @@
                                     </div>
                                 </div>
                             </li>
+
+                            <li class="d-lg-none">
+                                <a 
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Recent Views" href="{{ route('recent-view.index') }}">
+                                    <i class="fi flaticon-refresh ms-2" style="font-size: 1.4rem;"></i>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -238,7 +247,7 @@
                     </div>
                     <div class="col-lg-1 col-md-6 col-sm-5 col-6 d-block d-lg-none">
                         <div class="navbar-header">
-                            <a class="navbar-brand" href="index.html"><img src="{{ get_setting('site_logo') }}" alt="logo"></a>
+                            <a class="navbar-brand" href="{{ route('home') }}"><img src="{{ get_setting('site_logo') }}" alt="logo"></a>
                         </div>
                     </div>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-3">
