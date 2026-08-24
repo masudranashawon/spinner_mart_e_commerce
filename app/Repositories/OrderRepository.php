@@ -53,7 +53,7 @@ class OrderRepository extends Repository
             $coupon = Coupon::find($couponId);
 
             if ($coupon && $coupon->status == 1 && ($coupon->limit == 0 || $coupon->limit > $coupon->total_applied)) {
-                $discount = $coupon->coupon_type === 'percentage'
+                $discount = $coupon->coupon_type->value === 'percentage'
                     ? ($subTotal * $coupon->discount) / 100
                     : $coupon->discount;
 

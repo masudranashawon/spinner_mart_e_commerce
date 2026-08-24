@@ -39,8 +39,8 @@
             <div class="cart-wrapper">
                 <div class="row">
                     @if(count($wishlists) > 0)
-                    <div class="col-12">
-                        <table class="table-responsive cart-wrap">
+                    <div class="col-12 table-responsive">
+                        <table class=" cart-wrap">
                             <thead>
                                 <tr>
                                     <th class="images images-b">Product</th>
@@ -83,8 +83,8 @@
                                     </td>
                                     <td class="ptice">
                                         @if($wishlist?->product?->discount_price)
-                                        <del class="me-1">{{ format_price($wishlist?->product?->selling_price) }}</del>
                                         {{ format_price($wishlist?->product?->discount_price) }}
+                                        <del class="me-1">{{ format_price($wishlist?->product?->selling_price) }}</del>
                                         @else
                                         {{ format_price($wishlist?->product?->selling_price) }}
                                         @endif

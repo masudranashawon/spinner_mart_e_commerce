@@ -117,8 +117,8 @@
                                         </td>
                                         <td class="ptice">
                                             @if($cart->variant->discount_price)
-                                            <del class="me-1">{{ format_price($cart->variant->selling_price) }}</del>
                                             {{ format_price($cart->variant->discount_price) }}
+                                            <del class="me-1">{{ format_price($cart->variant->selling_price) }}</del>
                                             @else
                                             {{ format_price($cart->variant->selling_price) }}
                                             @endif

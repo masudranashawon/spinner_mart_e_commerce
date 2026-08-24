@@ -28,7 +28,7 @@ class CheckoutController extends Controller
         if ($coupon && $coupon->status) {
             // Calculate actual subtotal from DB (Price * Quantity)
             if ($coupon->min_amount <= 0 || $subtotal >= $coupon->min_amount) {
-                if ($coupon->coupon_type === 'percentage') {
+                if ($coupon->coupon_type->value === 'percentage') {
                     $discountAmount = ($subtotal * $coupon->discount) / 100;
                 } else {
                     $discountAmount = $coupon->discount;

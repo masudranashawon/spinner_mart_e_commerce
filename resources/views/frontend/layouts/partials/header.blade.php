@@ -126,8 +126,8 @@
 
                                                         <span class="mini-cart-item-price">
                                                             @if($item->product->discount_price)
-                                                            <del class="me-1">{{ format_price($item->product->selling_price) }}</del>
                                                             {{ format_price($item->product->discount_price) }}
+                                                            <del class="me-1">{{ format_price($item->product->selling_price) }}</del>
                                                             @else
                                                             {{ format_price($item->product->selling_price) }}
                                                             @endif
@@ -184,8 +184,8 @@
                                                     <span class="mini-cart-item-price">
 
                                                         @if($item->variant->discount_price)
-                                                        <del class="me-1">{{ format_price($item->variant->selling_price) }}</del>
                                                         {{ format_price($item->variant->discount_price) }}
+                                                        <del class="me-1">{{ format_price($item->variant->selling_price) }}</del>
                                                         @else
                                                         {{ format_price($item->variant->selling_price) }}
                                                         @endif

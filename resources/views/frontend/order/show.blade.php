@@ -44,7 +44,7 @@
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-body p-4">
                         <h5 class="mb-4 border-bottom pb-2">Items Overview</h5>
-                        <div>
+                        <div class="table-responsive">
                             <table class="table table-borderless align-middle">
                                 <thead class="text-muted bg-light">
                                     <tr>
@@ -57,7 +57,7 @@
                                 <tbody>
                                     @foreach($order->items as $item)
                                     <tr class="border-bottom">
-                                        <td>
+                                        <td class="text-nowrap">
                                             <div class="d-flex align-items-center">
                                                 <img src="{{ $item?->product?->thumbnail}}" alt="{{ $item->product_name }}" class="rounded" width="60">
                                                 <div class="ms-3">
@@ -73,9 +73,9 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>{{ format_price($item->price) }}</td>
-                                        <td class="text-center">{{ $item->quantity }}</td>
-                                        <td class="text-end fw-bold">{{ format_price($item->subtotal) }}</td>
+                                        <td class="text-nowrap">{{ format_price($item->price) }}</td>
+                                        <td class="text-center text-nowrap">{{ $item->quantity }}</td>
+                                        <td class="text-end fw-bold text-nowrap">{{ format_price($item->subtotal) }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -110,7 +110,7 @@
 
                                         @if($order->coupon_code)
                                         <tr>
-                                            <td class="text-muted">Coupon Discount:</td>
+                                            <td class="text-muted">Coupon Discount ({{ $order->coupon_code }}):</td>
                                             <td class="text-end text-danger fw-bold">- {{ format_price($order->discount_amount) }}</td>
                                         </tr>
                                         @endif
@@ -364,6 +364,12 @@
         height: 28px !important;
         border-radius: 0.25rem !important;
         line-height: 0px !important;
+    }
+
+    @media (max-width: 575.98px) {
+        .table-responsive table {
+            min-width: 600px;
+        }
     }
 
 </style>
