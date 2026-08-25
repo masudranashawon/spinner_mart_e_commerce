@@ -20,7 +20,11 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with(['details.category', 'details.brand'])->latest("id")->get();
+        $products = Product::with(['details.category', 'details.brand'])
+        ->withCount('variants')
+        ->withSum('variants', 'current_stock')
+        ->latest("id")
+        ->get();
 
         return view('admin.product.index', compact("products"));
     }

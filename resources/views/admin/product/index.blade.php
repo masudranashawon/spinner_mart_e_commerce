@@ -31,9 +31,27 @@
         <tbody>
           @forelse($products ?? [] as $key => $product)
             <tr>
-              <td><img src="{{ $product?->thumbnail }}" alt="{{ $product?->name }}" class="object-fit-cover"
-                  style="object-fit:cover;"></td>
-              <td>{{ $product?->sku_code }}</td>
+              <td>
+                <img src="{{ $product?->thumbnail }}" alt="{{ $product?->name }}" class="object-fit-cover"
+                  style="object-fit:cover;">
+              </td>
+              <td>
+              <span>{{ $product?->sku_code }}</span>
+                <small class="text-muted d-block mt-1" style="font-size: 11px;">
+                  <span class="mr-2">
+                      <strong>Total Variants:</strong> {{ $product?->variants_count ?? 0 }}
+                  </span>
+                  ||
+                  <span class="ml-2">
+                      <strong>Total Stock:</strong> 
+                      @if($product?->variants_sum_current_stock > 0)
+                          <span class="text-success fw-bold">{{ $product?->variants_sum_current_stock }}</span>
+                      @else
+                          <span class="text-danger fw-bold">Out of Stock</span>
+                      @endif
+                  </span>
+                </small>
+              </td>
               <td>{{ $product?->name }}</td>
               <td>{{ $product?->details?->category->name }}</td>
               <td>{{ $product?->details?->subCategory->name }}</td>
