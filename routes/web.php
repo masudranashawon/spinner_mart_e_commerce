@@ -13,6 +13,7 @@ use App\Http\Controllers\Frontend\ProfileController;
 use App\Http\Controllers\Frontend\RecentViewController;
 use App\Http\Controllers\Frontend\ShopController;
 use App\Http\Controllers\Frontend\WishlistController;
+use App\Http\Middleware\PreventAdminShopping;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -41,33 +42,43 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::controller(CartController::class)->group(function () {
-        Route::get('/carts', 'index')->name('cart.index');
-        Route::post('/cart/store', 'store')->name('cart.store');
-        Route::post('/cart/update', 'update')->name('cart.update');
-        Route::post('/cart/coupon/apply', 'cardCouponApply')->name('cart.coupon.apply');
-        Route::delete('/cart/{cart}/destroy', 'destroy')->name('cart.destroy');
+
+    // =======================================================
+    // 🚫 ADMIN BLOCKED AREA
+    // =======================================================
+    Route::middleware([PreventAdminShopping::class])->group(function () {
+
+        Route::controller(CartController::class)->group(function () {
+            Route::get('/carts', 'index')->name('cart.index');
+            Route::post('/cart/store', 'store')->name('cart.store');
+            Route::post('/cart/update', 'update')->name('cart.update');
+            Route::post('/cart/coupon/apply', 'cardCouponApply')->name('cart.coupon.apply');
+            Route::delete('/cart/{cart}/destroy', 'destroy')->name('cart.destroy');
+        });
+
+        Route::controller(WishlistController::class)->group(function () {
+            Route::get('/wishlists', 'index')->name('wishlist.index');
+            Route::post('/wishlist/store', 'store')->name('wishlist.store');
+            Route::delete('/wishlist/destroy', 'destroy')->name('wishlist.destroy');
+        });
+
+        Route::controller(CheckoutController::class)->group(function () {
+            Route::get('/checkout', 'index')->name('checkout.index');
+        });
+
+        Route::controller(OrderController::class)->group(function () {
+            Route::get('/orders', 'index')->name('order.index');
+            Route::post('/order/store', 'store')->name('order.store');
+            Route::get('/order/{order}/details', 'show')->name('order.show');
+            Route::get('/order/{orderNumber}/invoice', 'invoice')->name('order.invoice');
+            Route::post('/order/{order}/cancel', 'cancelOrder')->name('order.cancel');
+            Route::post('/order/{order}/return', 'returnRequest')->name('order.return');
+        });
     });
 
-    Route::controller(WishlistController::class)->group(function () {
-        Route::get('/wishlists', 'index')->name('wishlist.index');
-        Route::post('/wishlist/store', 'store')->name('wishlist.store');
-        Route::delete('/wishlist/destroy', 'destroy')->name('wishlist.destroy');
-    });
-
-    Route::controller(CheckoutController::class)->group(function () {
-        Route::get('/checkout', 'index')->name('checkout.index');
-    });
-
-    Route::controller(OrderController::class)->group(function () {
-        Route::get('/orders', 'index')->name('order.index');
-        Route::post('/order/store', 'store')->name('order.store');
-        Route::get('/order/{order}/details', 'show')->name('order.show');
-        Route::get('/order/{orderNumber}/invoice', 'invoice')->name('order.invoice');
-        Route::post('/order/{order}/cancel', 'cancelOrder')->name('order.cancel');
-        Route::post('/order/{order}/return', 'returnRequest')->name('order.return');
-    });
-
+    // =======================================================
+    // ✅ ALLOWED AREA
+    // =======================================================
     Route::controller(ProfileController::class)->group(function () {
         Route::get('/profile', 'index')->name('profile.index');
         Route::put('/profile', 'update')->name('profile.update');

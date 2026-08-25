@@ -76,7 +76,7 @@ class OrderController extends Controller
             'cancel_reason' => 'required|string|max:1000',
         ]);
 
-        if ($order->user_id !== $userId) {
+        if ((int) $order->user_id !== (int) $userId) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -98,7 +98,7 @@ class OrderController extends Controller
             'return_reason' => 'required|string|max:1000',
         ]);
 
-        if ($order->user_id !== $userId) {
+        if ((int) $order->user_id !== (int) $userId) {
             abort(403, 'Unauthorized action.');
         }
 

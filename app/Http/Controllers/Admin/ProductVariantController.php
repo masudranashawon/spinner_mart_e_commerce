@@ -24,7 +24,7 @@ class ProductVariantController extends Controller
 
     public function destroy(Product $product, ProductVariant $variant)
     {
-        if ($variant->product_id !== $product->id) {
+        if ((int) $variant->product_id !== (int) $product->id) {
             abort(403, 'Unauthorized action.');
         }
 

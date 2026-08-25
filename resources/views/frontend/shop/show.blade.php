@@ -495,7 +495,7 @@
                 Swal.fire({
                     toast: true, 
                     position: 'top-end',
-                    icon: response.status === 'success' ? 'success' : 'info',
+                    icon: response.status === 'success' ? 'success' : (response.status === 'error' ? 'error' : 'info'),
                     title: response.message,
                     showConfirmButton: false,
                     timer: 1800,
@@ -511,12 +511,17 @@
                     window.location.href = "{{ route('login') }}";
                     return;
                 }
+
+                let errorMsg = 'Failed to process request!';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMsg = xhr.responseJSON.message;
+                }
     
                 Swal.fire({
                     toast: true,
                     position: 'top-end',
                     icon: 'error',
-                    title: 'Failed to add wishlist!',
+                    title: errorMsg,
                     showConfirmButton: false,
                     timer: 2200,
                 });
@@ -542,7 +547,7 @@
             Swal.fire({
                 toast: true, 
                 position: 'top-end',
-                icon: response.status === 'success' ? 'success' : 'info',
+                icon: response.status === 'success' ? 'success' : (response.status === 'error' ? 'error' : 'info'),
                 title: response.message,
                 showConfirmButton: false,
                 timer: 1800,
@@ -554,11 +559,21 @@
         },
 
         error: function(xhr) {
+            if (xhr.status === 401 || xhr.status === 403 || xhr.status === 419 || xhr.status === 302) {
+                    window.location.href = "{{ route('login') }}";
+                    return;
+                }
+
+            let errorMsg = 'Failed to process request!';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMsg = xhr.responseJSON.message;
+            }
+
             Swal.fire({
                 toast: true,
                 position: 'top-end',
                 icon: 'error',
-                title: 'Failed to remove wishlist!',
+                title: errorMsg,
                 showConfirmButton: false,
                 timer: 2200,
             });
